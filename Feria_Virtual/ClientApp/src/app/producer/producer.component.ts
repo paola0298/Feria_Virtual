@@ -35,25 +35,25 @@ export class ProducerComponent implements OnInit {
   loadCanton(province: string): void {
     switch (province) {
       case this.provinces[0]:
-        this.cantones = this.cantonSJ;
+        this.cantons = this.cantonSJ;
         break;
       case this.provinces[1]:
-        this.cantones = this.cantonAlaj;
+        this.cantons = this.cantonAlaj;
         break;
       case this.provinces[2]:
-        this.cantones = this.cantonHere;
+        this.cantons = this.cantonHere;
         break;
       case this.provinces[3]:
-        this.cantones = this.cantonCart;
+        this.cantons = this.cantonCart;
         break;
       case this.provinces[4]:
-        this.cantones = this.cantonGua;
+        this.cantons = this.cantonGua;
         break;
       case this.provinces[5]:
-        this.cantones = this.cantonPunt;
+        this.cantons = this.cantonPunt;
         break;
       case this.provinces[6]:
-        this.cantones = this.cantonLim;
+        this.cantons = this.cantonLim;
         break;
     }
     
