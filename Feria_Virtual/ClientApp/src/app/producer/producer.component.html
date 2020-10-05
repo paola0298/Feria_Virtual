@@ -54,7 +54,7 @@
                         aria-expanded="false">
                   Provincia
                 </button>
-                <div class="dropdown-menu" aria-labelledby="provinceDDM" >
+                <div class="dropdown-menu" aria-labelledby="provinceDDM">
                   <a *ngFor="let prov of provinces" class="dropdown-item" (click)="loadCanton(prov)">{{ prov }}</a>
                 </div>
               </div>
@@ -82,7 +82,7 @@
                   Distrito
                 </button>
                 <div class="dropdown-menu" aria-labelledby="districtDDM">
-                  <a *ngFor="let district of districts" class="dropdown-item">{{ district }}</a>
+                  <a *ngFor="let district of districts" class="dropdown-item" (click)="setActualDistrict(district)">{{ district }}</a>
                   <!--Colocar distritos de canton seleccionado-->
                 </div>
               </div>
@@ -97,11 +97,105 @@
         </div>
 
         <div class="col md-form">
-          <label>Lugares de entrega</label>
-          <!--Colocar campos para agregar las direcciones de entrega-->
+          <div class="row md-form margin-div">
+            <label for="deliver">Lugares de entrega:</label>
+            <input type="text" class="form-control" id="deliver" name="deliver">
+          </div>
+          <div class="row md-form">
+            <button type="submit" class="btn btn-outline-success btn-lg" data-toggle="modal"
+                    data-target="#saveMsj" (click)="saveProducer()">
+              Guardar
+            </button>
+            <!--Modal to open when error-->
+            <div class="modal fade" id="saveMsj" tabindex="-1" role="dialog" aria-labelledby="saveMsjLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+                    <h4 class="modal-title" id="saveMsjLabel"></h4> <!--El texto se coloca en script-->
+                  </div>
+                  <div class="modal-body">
+                    <a class="custom-close" id="msjText"></a>  <!--El texto se coloca en script--> 
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Cerrar</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-outline-success"> Guardar </button>
     </form>
+
+    <div class="margin-div">
+      <h2>Productores registrados</h2>
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th class="text-center align-middle" scope="col">Identificacion</th>
+            <th class="text-center align-middle" scope="col">Nombre</th>
+            <th class="text-center align-middle" scope="col">Primer Apellido</th>
+            <th class="text-center align-middle" scope="col">Segundo Apellido</th>
+            <th class="text-center align-middle" scope="col">Sinpe Movil</th>
+            <th class="text-center align-middle" scope="col">Telefono</th>
+            <th class="text-center align-middle" scope="col">Fecha de nacimiento</th>
+            <th class="text-center align-middle" scope="col">Provincia</th>
+            <th class="text-center align-middle" scope="col">Canton</th>
+            <th class="text-center align-middle" scope="col">Distrito</th>
+            <th class="text-center align-middle" scope="col">Direccion exacta</th>
+            <th class="text-center align-middle" scope="col">Lugares de entrega</th>
+          </tr>
+        </thead>
+
+        <tbody *ngFor="let producer of producers">
+
+          <tr>
+            <td class="text-center align-middle">{{ producer.id }}</td>
+            <td class="text-center align-middle">{{ producer.name }}</td>
+            <td class="text-center align-middle">{{ producer.lastName }}</td>
+            <td class="text-center align-middle">{{ producer.lastName2 }}</td>
+            <td class="text-center align-middle">{{ producer.sinpe }}</td>
+            <td class="text-center align-middle">{{ producer.phone }}</td>
+            <td class="text-center align-middle">{{ producer.birth }}</td>
+            <td class="text-center align-middle">{{ producer.province }}</td>
+            <td class="text-center align-middle">{{ producer.canton }}</td>
+            <td class="text-center align-middle">{{ producer.district }}</td>
+            <td class="text-center align-middle">{{ producer.dir }}</td>
+            <td class="text-center align-middle">{{ producer.deliver }}</td>
+          </tr>
+
+        </tbody>
+        <!--
+    <tbody>
+
+      <tr>
+        <td class="text-center align-middle">4</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+        <td class="text-center align-middle">f</td>
+      </tr>
+    </tbody>
+
+      -->
+      </table>
+      <div class="dropdown-menu" aria-labelledby="tableMenu" id="menu">
+        <a class="dropdown-item" (click)="updateProducer('402390083')">Actualizar</a>  <!--Obtener el id del productor-->
+        <a class="dropdown-item" (click)="deleteProducer('402390083')">Eliminar</a> <!--Obtener el id del productor-->
+      </div>
+
+    </div>
+    
   </div>
 </body>
+
+
