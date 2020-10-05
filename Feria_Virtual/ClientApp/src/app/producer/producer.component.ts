@@ -32,25 +32,26 @@ export class ProducerComponent implements OnInit {
     district: 'Vara Blanca',
     dir: 'Minisuper Vara Blanca',
     deliver: 'Heredia'
+    },
+    {
+      id: 122200589521,
+      name: 'Marlon',
+      lastName: 'Vega',
+      lastName2: 'Chinchilla',
+      sinpe: 123456789,
+      phone: 70143773,
+      birth: '11-01-1999',
+      province: 'San Jose',
+      canton: 'Escazu',
+      district: 'San Antonio',
+      dir: 'Residencial Vista de Oro',
+      deliver: 'San Jose'
     }
   ];
+  actualProducer;
 
   constructor() { }
   ngOnInit(): void {
-    $("td").on('contextmenu', function (e) {
-      $('td').css('box-shadow', 'none');
-      var top = e.pageY - 10;
-      var left = e.pageX - 120;
-      $(this).css('box-shadow', 'inset 1px 1px 0px 0px red, inset -1px -1px 0px 0px red');
-      $("#menu").css({
-        display: "block",
-        top: top,
-        left: left
-      });
-      return false; //blocks default Webbrowser right click menu
-
-    });
-
     $("body").on("click", function () {
       if ($("#menu").css('display') == 'block') {
         $(" #menu ").hide();
@@ -62,6 +63,36 @@ export class ProducerComponent implements OnInit {
       $(this).parent().hide();
     });
 
+    
+    //$(document).ready(() => $("td").on('contextmenu', this.showContextMenu));
+  }
+
+  /**
+   *Metodo que se llama cuando se presiona click derecho en el item de la tabla
+   * @param $event Evento de click derecho
+   * @param producer Productor seleccionado
+   */
+  onProducerClick($event: any, producer: any): boolean {
+    this.showContextMenu($event);
+    // console.log(producer);
+    this.actualProducer = producer;
+    return false;
+  }
+
+  /**
+   * Metodo para mostrar el menu contextual al presionar click derecho
+   * @param event
+   */
+  showContextMenu(event: JQuery.ContextMenuEvent): boolean {
+    $('td').css('box-shadow', 'none');
+    var top = event.pageY - 10;
+    var left = event.pageX - 120;
+    $("#menu").css({
+      display: "block",
+      top: top,
+      left: left
+    });
+    return false;
   }
 
   /**
@@ -153,11 +184,26 @@ export class ProducerComponent implements OnInit {
 
   }
 
-  updateProducer(id: string): void {
-    console.log("Updating producer: " + id);
+  /**
+   * Metodo para actualizar la informacion de un productor
+   */
+  updateProducer(): void {
+    console.log("Updating producer: " + this.actualProducer.name);
+    // Cargar los datos del productor en el formulario y deshabilitar el campo de id
   }
 
-  deleteProducer(id: string): void {
-    console.log("Deleting producer: " + id);
+  /**
+   * Metodo para eliminar a un productor
+   */
+  askUserTodeleteProducer(): void {
+    $('#optionMsj').modal('show');
+    document.getElementById("optionMsjLabel").textContent = "Eliminar";
+    document.getElementById("optionText").textContent = "Esta seguro que desea eliminar al productor con la identificacion " + this.actualProducer.id;
+  }
+
+  deleteProducer(): void {
+    console.log("Deleting producer: " + this.actualProducer.name);
+    const index = this.producers.indexOf(this.actualProducer, 0);
+    this.producers.splice(index, 1);
   }
 }
