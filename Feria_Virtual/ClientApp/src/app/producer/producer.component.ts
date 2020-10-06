@@ -1,5 +1,6 @@
+import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { provinces, cantonSJ, cantonAlaj, cantonCart, cantonGua, cantonHere, cantonLim, cantonPunt, distrSJ } from '../directions';
+import { parseJSON } from 'jquery';
 
 @Component({
   selector: 'app-producer',
@@ -7,15 +8,7 @@ import { provinces, cantonSJ, cantonAlaj, cantonCart, cantonGua, cantonHere, can
   styleUrls: ['./producer.component.css']
 })
 export class ProducerComponent implements OnInit {
-  provinces = provinces;
-  cantonSJ = cantonSJ;
-  cantonAlaj = cantonAlaj;
-  cantonHere = cantonHere;
-  cantonCart = cantonCart;
-  cantonGua = cantonGua;
-  cantonPunt = cantonPunt;
-  cantonLim = cantonLim;
-  distrSJ = distrSJ;
+  provinces = [];
   cantons = [];
   districts = [];
   producers = [
@@ -71,6 +64,50 @@ export class ProducerComponent implements OnInit {
         menuItems[i].parentElement.style.setProperty('display', 'none');
       })
     }
+
+
+  }
+
+  getProvinces() {
+    const Http = new XMLHttpRequest();
+    const url = 'https://ubicaciones.paginasweb.cr/provincias.json';
+    Http.open('GET', url);
+    Http.send();
+    var self = this;
+    Http.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var json = JSON.parse(Http.responseText);
+        self.provinces = Object.values(json);
+      }
+    }
+  }
+
+  getCantons(provinceId: string ): void {
+    const Http = new XMLHttpRequest();
+    const url = 'https://ubicaciones.paginasweb.cr/provincia/' + provinceId + '/cantones.json';
+    Http.open('GET', url);
+    Http.send();
+    var self = this;
+    Http.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var json = JSON.parse(Http.responseText);
+        self.cantons = Object.values(json);
+      }
+    }
+  }
+
+  getDistricts(idCanton: string, idProvince: string): void {
+    const Http = new XMLHttpRequest();
+    const url = 'https://ubicaciones.paginasweb.cr/provincia/' + idProvince + '/canton/' + idCanton + '/distritos.json';
+    Http.open('GET', url);
+    Http.send();
+    var self = this;
+    Http.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var json = JSON.parse(Http.responseText);
+        self.districts = Object.values(json);
+      }
+    }
   }
 
   /**
@@ -112,30 +149,8 @@ export class ProducerComponent implements OnInit {
   loadCanton(province: string): void {
 
     document.getElementById("provinceDDM").textContent = province;
-
-    switch (province) {
-      case this.provinces[0]:
-        this.cantons = this.cantonSJ;
-        break;
-      case this.provinces[1]:
-        this.cantons = this.cantonAlaj;
-        break;
-      case this.provinces[2]:
-        this.cantons = this.cantonHere;
-        break;
-      case this.provinces[3]:
-        this.cantons = this.cantonCart;
-        break;
-      case this.provinces[4]:
-        this.cantons = this.cantonGua;
-        break;
-      case this.provinces[5]:
-        this.cantons = this.cantonPunt;
-        break;
-      case this.provinces[6]:
-        this.cantons = this.cantonLim;
-        break;
-    }
+    var index = this.provinces.indexOf(province) + 1;
+    this.getCantons(index.toString());
   }
 
   /**
@@ -144,9 +159,10 @@ export class ProducerComponent implements OnInit {
    */
   loadDistrict(canton: string): void {
     document.getElementById("cantonDDM").textContent = canton;
-    if (canton == 'San Jose') {
-      this.districts = distrSJ; 
-    }
+    var idCanton = this.cantons.indexOf(canton) + 1;
+    var idProvince = this.provinces.indexOf(document.getElementById("provinceDDM").textContent) + 1;
+    console.log(idCanton + '\n' + idProvince);
+    this.getDistricts(idCanton.toString(), idProvince.toString());
   }
 
   /**
