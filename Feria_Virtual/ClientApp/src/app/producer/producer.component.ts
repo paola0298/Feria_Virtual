@@ -1,6 +1,4 @@
-import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { parseJSON } from 'jquery';
 
 @Component({
   selector: 'app-producer',
