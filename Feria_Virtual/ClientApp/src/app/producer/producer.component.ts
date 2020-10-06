@@ -109,38 +109,6 @@ export class ProducerComponent implements OnInit {
   }
 
   /**
-   *Metodo que se llama cuando se presiona click derecho en el item de la tabla
-   * @param event Evento de click derecho
-   * @param producer Productor seleccionado
-   */
-  onProducerClick(event: any, producer: any): boolean {
-    this.showContextMenu(event);
-    // console.log(producer);
-    this.actualProducer = producer;
-    return false;
-  }
-
-  /**
-   * Metodo para mostrar el menu contextual al presionar click derecho
-   * @param event
-   */
-  showContextMenu(event: MouseEvent): boolean {
-    var tds = document.getElementsByTagName('td');
-    for (let i = 0; i < tds.length; i++) {
-      tds[i].style.setProperty('box-shadow', 'none');
-    }
-    
-    var top = event.pageY - 10;
-    var left = event.pageX - 120;
-
-    var menu = document.getElementById('context-menu');
-    menu.style.setProperty('display', 'block');
-    menu.style.setProperty('top', top.toString() + 'px')
-    menu.style.setProperty('left', left.toString() + 'px');
-    return false;
-  }
-
-  /**
    * Metodo para agregar los cantones correspondientes a una provincia
    * @param province Provincia seleccionada
    */
@@ -172,6 +140,40 @@ export class ProducerComponent implements OnInit {
   }
 
   /**
+   *Metodo que se llama cuando se presiona click derecho en el item de la tabla
+   * @param event Evento de click derecho
+   * @param producer Productor seleccionado
+   */
+  onProducerClick(event: any, producer: any): boolean {
+    this.showContextMenu(event);
+    // console.log(producer);
+    this.actualProducer = producer;
+    return false;
+  }
+
+  /**
+   * Metodo para mostrar el menu contextual al presionar click derecho
+   * @param event
+   */
+  showContextMenu(event: MouseEvent): boolean {
+    var tds = document.getElementsByTagName('td');
+    for (let i = 0; i < tds.length; i++) {
+      tds[i].style.setProperty('box-shadow', 'none');
+    }
+    
+    var top = event.pageY - 10;
+    var left = event.pageX - 120;
+
+    var menu = document.getElementById('context-menu');
+    menu.style.setProperty('display', 'block');
+    menu.style.setProperty('top', top.toString() + 'px')
+    menu.style.setProperty('left', left.toString() + 'px');
+    return false;
+  }
+
+  
+
+  /**
    * Metodo para almacenar el nuevo productor
    */
   saveProducer(): void {
@@ -192,6 +194,8 @@ export class ProducerComponent implements OnInit {
       'birth:' + birth + '\n' + 'province:' + province + '\n' + 'canton:' + canton + '\n' +
       'district:' + district + '\n' + 'dir:' + dir + '\n' + 'deliver:' + deliver);
 
+    
+
     // TODO verificar que se haya ingresado alguna provincia, canton y distrito
     if (id == '' || name == '' || lastName1 == '' || lastName2 == '' || sinpe == '' || phone == '' || birth == '' ||
       dir == '' || deliver == '') {
@@ -200,9 +204,28 @@ export class ProducerComponent implements OnInit {
       document.getElementById("msjText").textContent = "Por favor complete todos los campos.";
     } else {
       // TODO guardar productor
+      let idN = Number(id);
+      let phoneN = Number(phone);
+      let sinpeN = Number(sinpe);
+
       document.getElementById('saveMsj').style.setProperty('display', 'block');
       document.getElementById("saveMsjLabel").textContent = "Exito";
       document.getElementById("msjText").textContent = "Nuevo productor guardado correctamente.";
+      var producer = {
+        id: idN,
+        name: name,      
+        lastName: lastName1,
+        lastName2: lastName2,
+        sinpe: sinpeN,
+        phone: phoneN,
+        birth: birth,
+        province: province,
+        canton: canton,
+        district: district,
+        dir: dir,
+        deliver: deliver};
+      this.producers.push(producer);
+      console.log(this.producers);
       // TODO actualizar la tabla de productores
     }
 
