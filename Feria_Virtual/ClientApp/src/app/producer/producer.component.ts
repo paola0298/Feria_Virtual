@@ -51,29 +51,35 @@ export class ProducerComponent implements OnInit {
   actualProducer;
 
   constructor() { }
+
   ngOnInit(): void {
-    $("body").on("click", function () {
-      if ($("#menu").css('display') == 'block') {
-        $(" #menu ").hide();
-      }
-      $('td').css('box-shadow', 'none');
-    });
-
-    $("#menu a").on("click", function () {
-      $(this).parent().hide();
-    });
-
     
-    //$(document).ready(() => $("td").on('contextmenu', this.showContextMenu));
+    document.getElementsByTagName('body')[0].addEventListener('click', (e: Event) => {
+      var menu = document.getElementById('context-menu');
+      if (menu.style.getPropertyValue('display') == 'block') {
+        menu.style.setProperty('display', 'none');
+      }
+      var tds = document.getElementsByTagName('td');
+      for (let i = 0; i < tds.length; i++) {
+        tds[i].style.setProperty('box-shadow', 'none');
+      }
+    });
+
+    var menuItems = document.getElementById('context-menu').getElementsByTagName('a');
+    for (let i = 0; i<menuItems.length; i++) {
+      menuItems[i].addEventListener('click', (e:Event) => {
+        menuItems[i].parentElement.style.setProperty('display', 'none');
+      })
+    }
   }
 
   /**
    *Metodo que se llama cuando se presiona click derecho en el item de la tabla
-   * @param $event Evento de click derecho
+   * @param event Evento de click derecho
    * @param producer Productor seleccionado
    */
-  onProducerClick($event: any, producer: any): boolean {
-    this.showContextMenu($event);
+  onProducerClick(event: any, producer: any): boolean {
+    this.showContextMenu(event);
     // console.log(producer);
     this.actualProducer = producer;
     return false;
@@ -83,15 +89,19 @@ export class ProducerComponent implements OnInit {
    * Metodo para mostrar el menu contextual al presionar click derecho
    * @param event
    */
-  showContextMenu(event: JQuery.ContextMenuEvent): boolean {
-    $('td').css('box-shadow', 'none');
+  showContextMenu(event: MouseEvent): boolean {
+    var tds = document.getElementsByTagName('td');
+    for (let i = 0; i < tds.length; i++) {
+      tds[i].style.setProperty('box-shadow', 'none');
+    }
+    
     var top = event.pageY - 10;
     var left = event.pageX - 120;
-    $("#menu").css({
-      display: "block",
-      top: top,
-      left: left
-    });
+
+    var menu = document.getElementById('context-menu');
+    menu.style.setProperty('display', 'block');
+    menu.style.setProperty('top', top.toString() + 'px')
+    menu.style.setProperty('left', left.toString() + 'px');
     return false;
   }
 
@@ -135,7 +145,7 @@ export class ProducerComponent implements OnInit {
   loadDistrict(canton: string): void {
     document.getElementById("cantonDDM").textContent = canton;
     if (canton == 'San Jose') {
-      this.districts = distrSJ;
+      this.districts = distrSJ; 
     }
   }
 
@@ -171,12 +181,12 @@ export class ProducerComponent implements OnInit {
     // TODO verificar que se haya ingresado alguna provincia, canton y distrito
     if (id == '' || name == '' || lastName1 == '' || lastName2 == '' || sinpe == '' || phone == '' || birth == '' ||
       dir == '' || deliver == '') {
-      $('#saveMsj').modal('show');
+      document.getElementById('saveMsj').style.setProperty('display', 'block');
       document.getElementById("saveMsjLabel").textContent = "Error al guardar el nuevo productor";
       document.getElementById("msjText").textContent = "Por favor complete todos los campos.";
     } else {
       // TODO guardar productor
-      $('#saveMsj').modal('show');
+      document.getElementById('saveMsj').style.setProperty('display', 'block');
       document.getElementById("saveMsjLabel").textContent = "Exito";
       document.getElementById("msjText").textContent = "Nuevo productor guardado correctamente.";
       // TODO actualizar la tabla de productores
@@ -195,13 +205,19 @@ export class ProducerComponent implements OnInit {
   /**
    * Metodo para eliminar a un productor
    */
-  askUserTodeleteProducer(): void {
-    $('#optionMsj').modal('show');
+  askUser(): void {
+    console.log("Deleting producer: " + this.actualProducer.name);
+
+    var modal = document.getElementById('optionMsj');
+    modal.style.setProperty('display', 'block');
+    modal.style.setProperty('opacity', '100');
+    
     document.getElementById("optionMsjLabel").textContent = "Eliminar";
     document.getElementById("optionText").textContent = "Esta seguro que desea eliminar al productor con la identificacion " + this.actualProducer.id;
   }
 
   deleteProducer(): void {
+    document.getElementById('optionMsj').style.setProperty('display', 'none');
     console.log("Deleting producer: " + this.actualProducer.name);
     const index = this.producers.indexOf(this.actualProducer, 0);
     this.producers.splice(index, 1);
