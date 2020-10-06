@@ -48,7 +48,7 @@
           <div class="row md-form">
             <div class="form-group col">
               <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle"
+                <button class="btn btn-outline-secondary dropdown-toggle"
                         type="button" id="provinceDDM"
                         data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
@@ -61,7 +61,7 @@
             </div>
             <div class="form-group col">
               <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle"
+                <button class="btn btn-outline-secondary dropdown-toggle"
                         type="button" id="cantonDDM"
                         data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
@@ -75,7 +75,7 @@
             </div>
             <div class="form-group col">
               <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle"
+                <button class="btn btn-outline-secondary dropdown-toggle"
                         type="button" id="districtDDM"
                         data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
@@ -102,27 +102,11 @@
             <input type="text" class="form-control" id="deliver" name="deliver">
           </div>
           <div class="row md-form">
-            <button type="submit" class="btn btn-outline-success btn-lg" data-toggle="modal"
+            <button type="submit" class="btn btn-outline-success" data-toggle="modal"
                     data-target="#saveMsj" (click)="saveProducer()">
               Guardar
             </button>
-            <!--Modal to open when error-->
-            <div class="modal fade" id="saveMsj" tabindex="-1" role="dialog" aria-labelledby="saveMsjLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-                    <h4 class="modal-title" id="saveMsjLabel"></h4> <!--El texto se coloca en script-->
-                  </div>
-                  <div class="modal-body">
-                    <a class="custom-close" id="msjText"></a>  <!--El texto se coloca en script-->
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Cerrar</button>
-                  </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+            
           </div>
         </div>
       </div>
@@ -168,11 +152,31 @@
         </tbody>
 
       </table>
-      <div class="dropdown-menu" aria-labelledby="tableMenu" id="menu">
-        <a class="dropdown-item" (click)="updateProducer()">Actualizar</a>  <!--Obtener el id del productor-->
-        <a class="dropdown-item" (click)="askUserTodeleteProducer()">Eliminar</a> <!--Obtener el id del productor-->
+      <div class="dropdown-menu" aria-labelledby="tableMenu" id="context-menu">
+        <a class="dropdown-item btn btn-default" (click)="updateProducer()">Actualizar</a>  <!--Obtener el id del productor-->
+        <a class="dropdown-item btn" (click)="askUser()">Eliminar</a> <!--Obtener el id del productor-->
       </div>
     </div>
+
+
+    <!--Modal to open when error-->
+    <div class="modal fade" id="saveMsj" tabindex="-1" role="dialog" aria-labelledby="saveMsjLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+            <h4 class="modal-title" id="saveMsjLabel"></h4> <!--El texto se coloca en script-->
+          </div>
+          <div class="modal-body">
+            <a class="custom-close" id="msjText"></a>  <!--El texto se coloca en script-->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
     <!--Modal to open when option is needed-->
     <div class="modal fade" id="optionMsj" tabindex="-1" role="dialog" aria-labelledby="optionMsjLabel" aria-hidden="true">
       <div class="modal-dialog">
