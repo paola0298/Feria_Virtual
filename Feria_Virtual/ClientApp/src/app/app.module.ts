@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ProducerComponent } from './producer/producer.component';
+import { CategoryComponent } from './category/category.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ProducerComponent } from './producer/producer.component';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    ProducerComponent
+    ProducerComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -28,7 +30,8 @@ import { ProducerComponent } from './producer/producer.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'producer', component: ProducerComponent }
+      { path: 'producer', component: ProducerComponent },
+      { path: 'category', component: CategoryComponent},
     ])
   ],
   providers: [],
