@@ -64,8 +64,6 @@ export class ProducerComponent implements OnInit {
         menuItems[i].parentElement.style.setProperty('display', 'none');
       })
     }
-
-
   }
 
   getProvinces() {
@@ -237,8 +235,8 @@ export class ProducerComponent implements OnInit {
         document.getElementById("msjText").textContent = "Nuevo productor guardado correctamente.";
         this.producers.push(producer);
       }
+      this.cleanFields();
     }
-    this.cleanFields();
   }
 
   /**
@@ -297,5 +295,9 @@ export class ProducerComponent implements OnInit {
     console.log("Deleting producer: " + this.actualProducer.name);
     const index = this.producers.indexOf(this.actualProducer, 0);
     this.producers.splice(index, 1);
+  }
+
+  closeModal(id: string): void {
+    document.getElementById(id).style.setProperty('display', 'none');
   }
 }
