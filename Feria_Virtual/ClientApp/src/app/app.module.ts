@@ -12,6 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ProducerComponent } from './producer/producer.component';
 import { CategoryComponent } from './category/category.component';
 import { ProducerAffiliationComponent } from './producer-affiliation/producer-affiliation.component';
+import { ProductComponent } from './product/product.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ProducerAffiliationComponent } from './producer-affiliation/producer-af
     FetchDataComponent,
     ProducerComponent,
     CategoryComponent,
-    ProducerAffiliationComponent
+    ProducerAffiliationComponent,
+    ProductComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -35,6 +37,7 @@ import { ProducerAffiliationComponent } from './producer-affiliation/producer-af
       { path: 'producer', component: ProducerComponent },
       { path: 'category', component: CategoryComponent},
       { path: 'producer-affiliation', component: ProducerAffiliationComponent},
+      { path: 'product', component: ProductComponent},
     ])
   ],
   providers: [],
