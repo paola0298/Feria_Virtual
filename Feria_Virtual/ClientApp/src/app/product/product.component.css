@@ -1,0 +1,14 @@
+.dropdown-margin {
+    margin-top: 30px;
+    text-align: center;
+
+}
+
+.dropdown-margin button {
+    width: 60%;
+}
+
+.margin-up-down {
+    margin-bottom: 25px;
+    margin-top: 25px;
+}
