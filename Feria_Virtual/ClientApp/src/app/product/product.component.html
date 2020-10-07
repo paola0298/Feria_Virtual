@@ -1,1 +1,128 @@
-<p>product works!</p>
+<head>
+    <title>Gestion de productos</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div>
+        <h2>Gestion de Productos</h2>
+        <form>
+            <div class="row">
+                <div class="form-group col">
+                    <label for="productName">Nombre:</label>
+                    <input type="text" class="form-control" id="productName" name="productName">
+                </div>
+                <div class="form-group col">
+                    <label for="availability">Disponibilidad:</label>
+                    <input type="number" class="form-control" id="availability" name="availability">
+                </div>
+                <div class="form-group col">
+                    <label for="price">Precio:</label>
+                    <input type="text" class="form-control" id="price" name="price">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col">
+                    <label for="productImage">Imagen del producto</label>
+                    <input type="file" class="form-control" name="productImage" id="productImage" accept=".png, .jpg, .jpeg">
+                </div>
+                <div class="form-group col dropdown-margin">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="categoryDropdown"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            (click) = "getCategories()">
+                            Categoria
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <a *ngFor="let category of categories" class="dropdown-item" (click)="setCategory(category)"> {{ category }}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col dropdown-margin">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="saleModeDropdown"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Modo de venta
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="saleModeDropdown">
+                            <a *ngFor="let saleMode of modesSale" class="dropdown-item" (click)="setSaleMode(saleMode)"> {{ saleMode }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row md-form">
+                <button type="submit" class="btn btn-outline-success" data-toggle="modal"
+                        data-target="#saveMsj" (click)="saveProduct()">
+                  Guardar
+                </button> 
+            </div>
+        </form>
+
+        <div>
+            <h2 class="margin-up-down">Productos registrados</h2>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center align-middle" scope="col">Nombre</th>
+                        <th class="text-center align-middle" scope="col">Disponibilidad</th>
+                        <th class="text-center align-middle" scope="col">Precio</th>
+                        <th class="text-center align-middle" scope="col">Imagen</th>
+                        <th class="text-center align-middle" scope="col">Categoria</th>
+                        <th class="text-center align-middle" scope="col">Modo de venta</th>
+                    </tr>
+                </thead>
+
+                <tbody *ngFor="let product of products; let i = index">
+                    <tr>
+                        <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.name }}</td>
+                        <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.availability }}</td>
+                        <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.price }}</td>
+                        <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.image }}</td>
+                        <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.category }}</td>
+                        <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.saleMode }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="dropdown-menu" aria-labelledby="tableMenu" id="context-menu">
+                <a class="dropdown-item btn btn-default" (click)="updateProduct()">Actualizar</a>  <!--Obtener el id del productor-->
+                <a class="dropdown-item btn" (click)="askUser()">Eliminar</a> <!--Obtener el id del productor-->
+            </div>
+        </div>
+        <!--Modal to open when message-->
+        <div class="modal fade" id="saveMsj" tabindex="-1" role="dialog" aria-labelledby="saveMsjLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+                  <h4 class="modal-title" id="saveMsjLabel"></h4> <!--El texto se coloca en script-->
+                </div>
+                <div class="modal-body">
+                  <a class="custom-close" id="msjText"></a>  <!--El texto se coloca en script-->
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" data-dismiss="modal">Cerrar</button>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!--Modal to open when option is needed-->
+        <div class="modal fade" id="optionMsj" tabindex="-1" role="dialog" aria-labelledby="optionMsjLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="optionMsjLabel"></h4> <!--El texto se coloca en script-->
+                </div>
+                <div class="modal-body">
+                  <a class="custom-close" id="optionText"></a>  <!--El texto se coloca en script-->
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" data-dismiss="modal" (click)="deleteProduct()">Si</button>
+                  <button type="button" class="btn btn-info" data-dismiss="modal" (click)="closeModal('optionMsj')">No</button>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+
+</body>
