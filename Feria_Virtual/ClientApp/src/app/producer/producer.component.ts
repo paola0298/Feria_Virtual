@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./producer.component.css']
 })
 export class ProducerComponent implements OnInit {
+
+  updating: boolean = false;
   provinces = [];
   cantons = [];
   districts = [];
@@ -200,7 +202,7 @@ export class ProducerComponent implements OnInit {
     if (id == '' || name == '' || lastName1 == '' || lastName2 == '' || sinpe == '' || phone == '' || birth == '' ||
       dir == '' || deliver == '') {
       document.getElementById('saveMsj').style.setProperty('display', 'block');
-      document.getElementById("saveMsjLabel").textContent = "Error al guardar el nuevo productor";
+      document.getElementById("saveMsjLabel").textContent = "Error";
       document.getElementById("msjText").textContent = "Por favor complete todos los campos.";
     } else {
       // TODO guardar productor
@@ -225,10 +227,21 @@ export class ProducerComponent implements OnInit {
         dir: dir,
         deliver: deliver};
       this.producers.push(producer);
-      console.log(this.producers);
-      // TODO actualizar la tabla de productores
-    }
+      
 
+      if (this.updating) {
+        document.getElementById("saveMsjLabel").textContent = "Exito";
+        document.getElementById("msjText").textContent = "Productor actualizado correctamente.";
+        let indexProducer = this.producers.indexOf(this.actualProducer);
+        this.producers[indexProducer] = producer;
+        this.updating = false;
+        document.getElementById("id").setAttribute('disabled', 'false');
+      } else {
+        document.getElementById("saveMsjLabel").textContent = "Exito";
+        document.getElementById("msjText").textContent = "Nuevo productor guardado correctamente.";
+      }
+    }
+    this.cleanFields();
   }
 
   /**
@@ -236,7 +249,36 @@ export class ProducerComponent implements OnInit {
    */
   updateProducer(): void {
     console.log("Updating producer: " + this.actualProducer.name);
+    document.getElementById("id").setAttribute('disabled', 'true');
+    this.updating = true;
     // Cargar los datos del productor en el formulario y deshabilitar el campo de id
+    (document.getElementById("id") as HTMLInputElement).value = this.actualProducer.id;
+    (document.getElementById("name") as HTMLInputElement).value = this.actualProducer.name;
+    (document.getElementById("last-name1") as HTMLInputElement).value = this.actualProducer.lastName;
+    (document.getElementById("last-name2") as HTMLInputElement).value = this.actualProducer.lastName2;
+    (document.getElementById("sinpe") as HTMLInputElement).value = this.actualProducer.sinpe;
+    (document.getElementById("phone") as HTMLInputElement).value = this.actualProducer.phone;
+    (document.getElementById("birth") as HTMLInputElement).valueAsDate = this.actualProducer.birth;
+    document.getElementById("provinceDDM").textContent = this.actualProducer.province;
+    document.getElementById("cantonDDM").textContent = this.actualProducer.canton;
+    document.getElementById("districtDDM").textContent = this.actualProducer.district;
+    (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.dir;
+    (document.getElementById("deliver") as HTMLInputElement).value = this.actualProducer.deliver;
+  }
+
+  cleanFields() {
+    (document.getElementById("id") as HTMLInputElement).value = "";
+    (document.getElementById("name") as HTMLInputElement).value = "";
+    (document.getElementById("last-name1") as HTMLInputElement).value = "";
+    (document.getElementById("last-name2") as HTMLInputElement).value = "";
+    (document.getElementById("sinpe") as HTMLInputElement).value = "";
+    (document.getElementById("phone") as HTMLInputElement).value = "";
+    (document.getElementById("birth") as HTMLInputElement).value = "";
+    document.getElementById("provinceDDM").textContent = "Provincia";
+    document.getElementById("cantonDDM").textContent = "Canton";
+    document.getElementById("districtDDM").textContent = "Distrito";
+    (document.getElementById("dir") as HTMLInputElement).value = "";
+    (document.getElementById("deliver") as HTMLInputElement).value = "";
   }
 
   /**
