@@ -11,6 +11,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ProducerComponent } from './producer/producer.component';
 import { CategoryComponent } from './category/category.component';
+import { ProducerAffiliationComponent } from './producer-affiliation/producer-affiliation.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CategoryComponent } from './category/category.component';
     CounterComponent,
     FetchDataComponent,
     ProducerComponent,
-    CategoryComponent
+    CategoryComponent,
+    ProducerAffiliationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -32,6 +34,7 @@ import { CategoryComponent } from './category/category.component';
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'producer', component: ProducerComponent },
       { path: 'category', component: CategoryComponent},
+      { path: 'producer-affiliation', component: ProducerAffiliationComponent},
     ])
   ],
   providers: [],
