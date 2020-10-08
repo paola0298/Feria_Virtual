@@ -28,54 +28,9 @@ export class ProductComponent implements OnInit {
     this.utilsService.configureContextMenu();
   }
 
-  getCategories():void {
-    //get categories saved
-  }
-
-  setCategory(category: string):void {
-    document.getElementById("categoryDropdown").textContent = category;
-  }
-
-  setSaleMode(saleMode: string):void {
-    document.getElementById("saleModeDropdown").textContent = saleMode;
-  }
-
-  onProducerClick(event:any, product:any): boolean {
-    this.utilsService.showContextMenu(event);
-    this.actualProduct = product;
-    return false;
-  }
-
-  updateProduct() {
-    this.updating = true;
-    (document.getElementById("productName") as HTMLInputElement).value = this.actualProduct.name;
-    (document.getElementById("availability") as HTMLInputElement).value = this.actualProduct.availability;
-    (document.getElementById("price") as HTMLInputElement).value = this.actualProduct.price;
-    //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
-    document.getElementById("categoryDropdown").textContent = this.actualProduct.category;
-    document.getElementById("saleModeDropdown").textContent = this.actualProduct.saleMode;
-
-  }
-
-  // cleanFields() {
-  //   (document.getElementById("productName") as HTMLInputElement).value = "";
-  //   (document.getElementById("availability") as HTMLInputElement).value = "";
-  //   (document.getElementById("price") as HTMLInputElement).value = "";
-  //   //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
-  //   document.getElementById("categoryDropdown").textContent = "Categoria";
-  //   document.getElementById("saleModeDropdown").textContent = "Modo de venta";
-  // }
-
-  askUser() {
-    this.utilsService.configureDeleteModal("Esta seguro que desea eliminar el producto: " + this.actualProduct.name);
-  }
-
-  deleteProduct() {
-    document.getElementById('optionMsj').style.setProperty('display', 'none');
-    const index = this.products.indexOf(this.actualProduct, 0);
-    this.products.splice(index, 1);
-  }
-
+  /**
+   * Metodo para almacenar un nuevo producto
+   */
   saveProduct() {
     let name = (document.getElementById("productName") as HTMLInputElement);
     let availability = (document.getElementById("availability") as HTMLInputElement);
@@ -97,7 +52,6 @@ export class ProductComponent implements OnInit {
 
       if (this.updating) {
         this.utilsService.showInfoModal("Exito", "Producto actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
-
         let indexProduct = this.products.indexOf(this.actualProduct);
         this.products[indexProduct] = product;
         this.updating = false;
@@ -109,6 +63,74 @@ export class ProductComponent implements OnInit {
     }
   }
 
+  /**
+   * Metodo para actualizar un producto seleccionado
+   */
+  updateProduct() {
+    this.updating = true;
+    (document.getElementById("productName") as HTMLInputElement).value = this.actualProduct.name;
+    (document.getElementById("availability") as HTMLInputElement).value = this.actualProduct.availability;
+    (document.getElementById("price") as HTMLInputElement).value = this.actualProduct.price;
+    //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
+    document.getElementById("categoryDropdown").textContent = this.actualProduct.category;
+    document.getElementById("saleModeDropdown").textContent = this.actualProduct.saleMode;
+  }
+
+  /**
+   * Metodo para eliminar un producto
+   */
+  deleteProduct() {
+    document.getElementById('optionMsj').style.setProperty('display', 'none');
+    const index = this.products.indexOf(this.actualProduct, 0);
+    this.products.splice(index, 1);
+  }
+
+  /**
+   * Metodo para obtener las categorias almacenadas
+   */
+  getCategories():void {
+    //get categories saved
+  }
+
+  /**
+   * Metodo para colocar la categoria seleccionada
+   * @param category Categoria seleccionada
+   */
+  setCategory(category: string):void {
+    document.getElementById("categoryDropdown").textContent = category;
+  }
+
+  /**
+   * Metodo para colocar el modo de venta seleccionado
+   * @param saleMode Modo de venta seleccionado
+   */
+  setSaleMode(saleMode: string):void {
+    document.getElementById("saleModeDropdown").textContent = saleMode;
+  }
+
+  /**
+   *Metodo que se llama cuando se presiona click derecho en el item de la tabla
+   * @param event Evento de click derecho
+   * @param product Producto seleccionado
+   */
+  onProducerClick(event:any, product:any): boolean {
+    this.utilsService.showContextMenu(event);
+    this.actualProduct = product;
+    return false;
+  }
+
+  /**
+   * Metodo para mostrar al usuario un modal para tomar una decision de si o no
+   */
+  askUser() {
+    this.utilsService.showInfoModal("Eliminar", "Esta seguro que desea eliminar el producto: " + this.actualProduct.name,
+    "optionMsjLabel", "optionText", "optionMsj");
+  }
+
+   /**
+   * Metodo para cerrar un modal
+   * @param id Id del modal a cerrar
+   */
   closeModal(id: string): void {
     document.getElementById(id).style.setProperty('display', 'none');
   }

@@ -51,15 +51,107 @@ export class ProducerComponent implements OnInit {
     this.utilsService.configureContextMenu();
   }
 
+  /**
+   * Metodo para almacenar el nuevo productor
+   */
+  saveProducer(): void {
+    let id = (document.getElementById("id") as HTMLInputElement);
+    let name = (document.getElementById("name") as HTMLInputElement);
+    let lastName1 = (document.getElementById("last-name1") as HTMLInputElement);
+    let lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
+    let sinpe = (document.getElementById("sinpe") as HTMLInputElement);
+    let phone = (document.getElementById("phone") as HTMLInputElement);
+    let birth = (document.getElementById("birth") as HTMLInputElement);
+    let province = document.getElementById("provinceDDM");
+    let canton = document.getElementById("cantonDDM");
+    let district = document.getElementById("districtDDM");
+    let dir = (document.getElementById("dir") as HTMLInputElement);
+    let deliver = (document.getElementById("deliver") as HTMLInputElement);
+    
+    // TODO verificar que se haya ingresado alguna provincia, canton y distrito
+    if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
+      dir.value == '' || deliver.value == '') {
+        this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
+    } else {
+      // TODO guardar productor
+      let idN = Number(id.value);
+      let phoneN = Number(phone.value);
+      let sinpeN = Number(sinpe.value);
+      var producer = {
+        id: idN, name: name.value, lastName: lastName1.value, lastName2: lastName2.value,
+        sinpe: sinpeN, phone: phoneN, birth: birth.value, province: province.textContent,
+        canton: canton.textContent, district: district.textContent, dir: dir.value,
+        deliver: deliver.value};
+      
+
+      if (this.updating) {
+        this.utilsService.showInfoModal("Exito", "Productor actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+        let indexProducer = this.producers.indexOf(this.actualProducer);
+        this.producers[indexProducer] = producer;
+        this.updating = false;
+        document.getElementById("id").removeAttribute('disabled');
+
+      } else {
+        this.utilsService.showInfoModal("Exito", "Nueva productor guardado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.producers.push(producer);
+      }
+      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, deliver],
+        [province, canton, district], ["Provincia", "Canton", "Distrito"]);
+    }
+  }
+
+  /**
+   * Metodo para actualizar la informacion de un productor
+   */
+  updateProducer(): void {
+    console.log("Updating producer: " + this.actualProducer);
+    document.getElementById("id").setAttribute('disabled', 'true');
+    this.updating = true;
+    // Cargar los datos del productor en el formulario y deshabilitar el campo de id
+    (document.getElementById("id") as HTMLInputElement).value = this.actualProducer.id;
+    (document.getElementById("name") as HTMLInputElement).value = this.actualProducer.name;
+    (document.getElementById("last-name1") as HTMLInputElement).value = this.actualProducer.lastName;
+    (document.getElementById("last-name2") as HTMLInputElement).value = this.actualProducer.lastName2;
+    (document.getElementById("sinpe") as HTMLInputElement).value = this.actualProducer.sinpe;
+    (document.getElementById("phone") as HTMLInputElement).value = this.actualProducer.phone;
+    (document.getElementById("birth") as HTMLInputElement).value = this.actualProducer.birth;
+    document.getElementById("provinceDDM").textContent = this.actualProducer.province;
+    document.getElementById("cantonDDM").textContent = this.actualProducer.canton;
+    document.getElementById("districtDDM").textContent = this.actualProducer.district;
+    (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.dir;
+    (document.getElementById("deliver") as HTMLInputElement).value = this.actualProducer.deliver;
+  }
+
+  /**
+   * Metodo para eliminar un productor
+   */
+  deleteProducer(): void {
+    document.getElementById('optionMsj').style.setProperty('display', 'none');
+    const index = this.producers.indexOf(this.actualProducer, 0);
+    this.producers.splice(index, 1);
+  }
+
+  /**
+   * Metodo para obtener las provincias
+   */
   async getProvinces() {
     this.provinces = await this.utilsService.getProvinces();
     console.log(this.provinces);
   }
 
+  /**
+   * Metodo para obtener los cantones segun la provincia seleccionada
+   * @param provinceId Id de la provincia seleccionada
+   */
   async getCantons(provinceId: string) {
     this.cantons = await this.utilsService.getCantons(provinceId);
   }
 
+  /**
+   * Metodo para obtener los distritos segun el canton seleccionado
+   * @param idCanton Id del canton seleccionado
+   * @param idProvince Id de la provincia a la que pertenece el canton
+   */
   async getDistricts(idCanton: string, idProvince: string) {
     this.districts = await this.utilsService.getDistricts(idCanton, idProvince);
   }
@@ -106,104 +198,18 @@ export class ProducerComponent implements OnInit {
     return false;
   }
   
-
-  /**
-   * Metodo para almacenar el nuevo productor
-   */
-  saveProducer(): void {
-    let id = (document.getElementById("id") as HTMLInputElement);
-    let name = (document.getElementById("name") as HTMLInputElement);
-    let lastName1 = (document.getElementById("last-name1") as HTMLInputElement);
-    let lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
-    let sinpe = (document.getElementById("sinpe") as HTMLInputElement);
-    let phone = (document.getElementById("phone") as HTMLInputElement);
-    let birth = (document.getElementById("birth") as HTMLInputElement);
-    let province = document.getElementById("provinceDDM");
-    let canton = document.getElementById("cantonDDM");
-    let district = document.getElementById("districtDDM");
-    let dir = (document.getElementById("dir") as HTMLInputElement);
-    let deliver = (document.getElementById("deliver") as HTMLInputElement);
-    
-
-    
-
-    // TODO verificar que se haya ingresado alguna provincia, canton y distrito
-    if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
-      dir.value == '' || deliver.value == '') {
-        this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
-    } else {
-      // TODO guardar productor
-      let idN = Number(id.value);
-      let phoneN = Number(phone.value);
-      let sinpeN = Number(sinpe.value);
-
-      var producer = {
-        id: idN,
-        name: name.value,      
-        lastName: lastName1.value,
-        lastName2: lastName2.value,
-        sinpe: sinpeN,
-        phone: phoneN,
-        birth: birth.value,
-        province: province.textContent,
-        canton: canton.textContent,
-        district: district.textContent,
-        dir: dir.value,
-        deliver: deliver.value};
-      
-
-      if (this.updating) {
-        this.utilsService.showInfoModal("Exito", "Productor actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
-
-        let indexProducer = this.producers.indexOf(this.actualProducer);
-        this.producers[indexProducer] = producer;
-        this.updating = false;
-        document.getElementById("id").removeAttribute('disabled');
-
-      } else {
-        this.utilsService.showInfoModal("Exito", "Nueva productor guardado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
-        this.producers.push(producer);
-      }
-      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, deliver],
-        [province, canton, district], ["Provincia", "Canton", "Distrito"]);
-    }
-  }
-
-  /**
-   * Metodo para actualizar la informacion de un productor
-   */
-  updateProducer(): void {
-    console.log("Updating producer: " + this.actualProducer);
-    document.getElementById("id").setAttribute('disabled', 'true');
-    this.updating = true;
-    // Cargar los datos del productor en el formulario y deshabilitar el campo de id
-    (document.getElementById("id") as HTMLInputElement).value = this.actualProducer.id;
-    (document.getElementById("name") as HTMLInputElement).value = this.actualProducer.name;
-    (document.getElementById("last-name1") as HTMLInputElement).value = this.actualProducer.lastName;
-    (document.getElementById("last-name2") as HTMLInputElement).value = this.actualProducer.lastName2;
-    (document.getElementById("sinpe") as HTMLInputElement).value = this.actualProducer.sinpe;
-    (document.getElementById("phone") as HTMLInputElement).value = this.actualProducer.phone;
-    (document.getElementById("birth") as HTMLInputElement).value = this.actualProducer.birth;
-    document.getElementById("provinceDDM").textContent = this.actualProducer.province;
-    document.getElementById("cantonDDM").textContent = this.actualProducer.canton;
-    document.getElementById("districtDDM").textContent = this.actualProducer.district;
-    (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.dir;
-    (document.getElementById("deliver") as HTMLInputElement).value = this.actualProducer.deliver;
-  }
-
-  /**
-   * Metodo para eliminar a un productor
+   /**
+   * Metodo para mostrar al usuario un modal para tomar una decision de si o no
    */
   askUser(): void {
-    this.utilsService.configureDeleteModal("Esta seguro que desea eliminar al productor con la identificacion " + this.actualProducer.id);
+    this.utilsService.showInfoModal("Eliminar", "Esta seguro que desea eliminar al productor con la identificacion " + this.actualProducer.id,
+    "optionMsjLabel", "optionText", "optionMsj");
   }
 
-  deleteProducer(): void {
-    document.getElementById('optionMsj').style.setProperty('display', 'none');
-    const index = this.producers.indexOf(this.actualProducer, 0);
-    this.producers.splice(index, 1);
-  }
-
+  /**
+   * Metodo para cerrar un modal
+   * @param id Id del modal a cerrar
+   */
   closeModal(id: string): void {
     document.getElementById(id).style.setProperty('display', 'none');
   }

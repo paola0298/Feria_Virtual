@@ -10,6 +10,9 @@ export class UtilsService {
 
   constructor() { }
 
+  /**
+   * Metodo para obtener las provincias a partir de json
+   */
   async getProvinces(): Promise<string[]> {
     var url = 'https://ubicaciones.paginasweb.cr/provincias.json';
     let result = await this.makeRequest("GET", url);
@@ -17,19 +20,32 @@ export class UtilsService {
     return result;
   }
 
+  /**
+   * Metodo para obtener los cantones a partir de una provincia
+   * @param provinceId Id de la provicia de la cual se desea conocer los cantones
+   */
   async getCantons(provinceId: string): Promise<string[]> {
     var url = 'https://ubicaciones.paginasweb.cr/provincia/' + provinceId + '/cantones.json';
     let result = await this.makeRequest("GET", url);
     return result;
   }
 
+  /**
+   * Metodo para obtener los distritos a partir de una provincia y un canton
+   * @param idCanton Id del canton del cual se desea conocer los distritos
+   * @param idProvince Id de la provincia a la que pertenece el canton
+   */
   async getDistricts(idCanton: string, idProvince: string) {
     var url = 'https://ubicaciones.paginasweb.cr/provincia/' + idProvince + '/canton/' + idCanton + '/distritos.json';
     let result = await this.makeRequest("GET", url);
     return result;
   }
 
-
+  /**
+   * Metodo para hacer una peticion a un url
+   * @param method Metodo a utilizar
+   * @param url Url al cual hacer la peticion
+   */
   makeRequest(method, url): Promise<string[]> {
     var self = this;
     return new Promise(function (resolve, reject) {
@@ -68,6 +84,9 @@ export class UtilsService {
     return false;
   }
 
+  /**
+   * Metodo para configurar el menu contextual
+   */
   configureContextMenu() {
     document.getElementsByTagName('body')[0].addEventListener('click', (e: Event) => {
       var menu = document.getElementById('context-menu');
@@ -88,15 +107,12 @@ export class UtilsService {
     }
   }
 
-  configureDeleteModal(text: string) {
-    var modal = document.getElementById('optionMsj');
-    modal.style.setProperty('display', 'block');
-    modal.style.setProperty('opacity', '100');
-    
-    document.getElementById("optionMsjLabel").textContent = "Eliminar";
-    document.getElementById("optionText").textContent = text;
-  }
-
+  /**
+   * Metodo para limpiar los campos
+   * @param htmlElements Elementos HTML Input
+   * @param dropdownElements Elementos de dropdown
+   * @param dropdownNewTag Nuevas etiquetas de los dropdowns
+   */
   cleanField(htmlElements:HTMLInputElement[], dropdownElements:HTMLElement[], dropdownNewTag:string[]) {
     htmlElements.forEach(element => {
       element.value = ""
@@ -108,6 +124,14 @@ export class UtilsService {
 
   }
 
+  /**
+   * Metodo para mostrar un modal
+   * @param label Etiqueta del modal
+   * @param content Contenido del modal
+   * @param idLabel id de la etiqueta del modal
+   * @param idContent id del contenido del modal
+   * @param idElement id del modal
+   */
   showInfoModal(label:string, content:string, idLabel:string, idContent:string, idElement:string) {
     var modal = document.getElementById(idElement);
     modal.style.setProperty('display', 'block');
