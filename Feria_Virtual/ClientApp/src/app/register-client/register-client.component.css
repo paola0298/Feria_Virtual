@@ -1,0 +1,15 @@
+.margin-div {
+    margin-bottom: 50px;
+}
+
+.affiliation-header {
+    margin-bottom: 30px;
+}
+#menu {
+    display:none
+}
+
+.dropdown-menu {
+    max-height: 300px;
+    overflow: auto;
+}
