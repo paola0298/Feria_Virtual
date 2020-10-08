@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UtilsService } from 'src/app/shared/utils.service'
 
 @Component({
   selector: 'app-product',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductComponent implements OnInit {
 
+  private utilsService: UtilsService = new UtilsService();
   updating: boolean = false;
   categories = [];
   modesSale = ["Kilogramo", "Paquete", "Caja"];
@@ -23,23 +25,7 @@ export class ProductComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    document.getElementsByTagName('body')[0].addEventListener('click', (e: Event) => {
-      var menu = document.getElementById('context-menu');
-      if (menu.style.getPropertyValue('display') == 'block') {
-        menu.style.setProperty('display', 'none');
-      }
-      var tds = document.getElementsByTagName('td');
-      for (let i = 0; i < tds.length; i++) {
-        tds[i].style.setProperty('box-shadow', 'none');
-      }
-    });
-
-    var menuItems = document.getElementById('context-menu').getElementsByTagName('a');
-    for (let i = 0; i<menuItems.length; i++) {
-      menuItems[i].addEventListener('click', (e:Event) => {
-        menuItems[i].parentElement.style.setProperty('display', 'none');
-      })
-    }
+    this.utilsService.configureContextMenu();
   }
 
   getCategories():void {
@@ -55,28 +41,8 @@ export class ProductComponent implements OnInit {
   }
 
   onProducerClick(event:any, product:any): boolean {
-    this.showContextMenu(event);
+    this.utilsService.showContextMenu(event);
     this.actualProduct = product;
-    return false;
-  }
-
-  /**
-   * Metodo para mostrar el menu contextual al presionar click derecho
-   * @param event
-   */
-  showContextMenu(event: MouseEvent): boolean {
-    var tds = document.getElementsByTagName('td');
-    for (let i = 0; i < tds.length; i++) {
-      tds[i].style.setProperty('box-shadow', 'none');
-    }
-    
-    var top = event.pageY - 10;
-    var left = event.pageX - 120;
-
-    var menu = document.getElementById('context-menu');
-    menu.style.setProperty('display', 'block');
-    menu.style.setProperty('top', top.toString() + 'px')
-    menu.style.setProperty('left', left.toString() + 'px');
     return false;
   }
 
@@ -91,22 +57,17 @@ export class ProductComponent implements OnInit {
 
   }
 
-  cleanFields() {
-    (document.getElementById("productName") as HTMLInputElement).value = "";
-    (document.getElementById("availability") as HTMLInputElement).value = "";
-    (document.getElementById("price") as HTMLInputElement).value = "";
-    //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
-    document.getElementById("categoryDropdown").textContent = "Categoria";
-    document.getElementById("saleModeDropdown").textContent = "Modo de venta";
-  }
+  // cleanFields() {
+  //   (document.getElementById("productName") as HTMLInputElement).value = "";
+  //   (document.getElementById("availability") as HTMLInputElement).value = "";
+  //   (document.getElementById("price") as HTMLInputElement).value = "";
+  //   //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
+  //   document.getElementById("categoryDropdown").textContent = "Categoria";
+  //   document.getElementById("saleModeDropdown").textContent = "Modo de venta";
+  // }
 
   askUser() {
-    var modal = document.getElementById('optionMsj');
-    modal.style.setProperty('display', 'block');
-    modal.style.setProperty('opacity', '100');
-    
-    document.getElementById("optionMsjLabel").textContent = "Eliminar";
-    document.getElementById("optionText").textContent = "Esta seguro que desea eliminar el producto: " + this.actualProduct.name;
+    this.utilsService.configureDeleteModal("Esta seguro que desea eliminar el producto: " + this.actualProduct.name);
   }
 
   deleteProduct() {
@@ -116,38 +77,35 @@ export class ProductComponent implements OnInit {
   }
 
   saveProduct() {
-    let name = (document.getElementById("productName") as HTMLInputElement).value;
-    let availability = (document.getElementById("availability") as HTMLInputElement).value;
-    let price = (document.getElementById("price") as HTMLInputElement).value;
+    let name = (document.getElementById("productName") as HTMLInputElement);
+    let availability = (document.getElementById("availability") as HTMLInputElement);
+    let price = (document.getElementById("price") as HTMLInputElement);
     //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
-    let category = document.getElementById("categoryDropdown").textContent;
-    let saleMode = document.getElementById("saleModeDropdown").textContent;
+    let category = document.getElementById("categoryDropdown");
+    let saleMode = document.getElementById("saleModeDropdown");
 
-    if (name == '' || availability == '' || price == '') {
-      document.getElementById('saveMsj').style.setProperty('display', 'block');
-      document.getElementById("saveMsjLabel").textContent = "Error";
-      document.getElementById("msjText").textContent = "Por favor complete todos los campos.";
+    if (name.value == '' || availability.value == '' || price.value == '') {
+      this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
     } else {
-      let availabilityN = Number(availability);
-      let priceN = Number(price);
-      document.getElementById('saveMsj').style.setProperty('display', 'block');
-      document.getElementById("saveMsjLabel").textContent = "Exito";
+      let availabilityN = Number(availability.value);
+      let priceN = Number(price.value);
 
       var product = {
-        name:name, availability:availabilityN, 
-        price:priceN, image:'image', category:category, 
-        saleMode:saleMode}
+        name:name.value, availability:availabilityN, 
+        price:priceN, image:'image', category:category.textContent, 
+        saleMode:saleMode.textContent}
 
       if (this.updating) {
-        document.getElementById("msjText").textContent = "Producto actualizado correctamente.";
+        this.utilsService.showInfoModal("Exito", "Producto actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+
         let indexProduct = this.products.indexOf(this.actualProduct);
         this.products[indexProduct] = product;
         this.updating = false;
       } else {
-        document.getElementById("msjText").textContent = "Nuevo producto guardado correctamente.";
+        this.utilsService.showInfoModal("Exito", "Nuevo producto guardado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
         this.products.push(product);
       }
-      this.cleanFields();
+      this.utilsService.cleanField([name, availability, price], [category, saleMode], ["Categoria", "Modo de venta"]);
     }
   }
 

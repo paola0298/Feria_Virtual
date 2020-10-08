@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UtilsService } from 'src/app/shared/utils.service'
 
 @Component({
   selector: 'app-producer',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProducerComponent implements OnInit {
 
+  private utilsService: UtilsService = new UtilsService();
   updating: boolean = false;
   provinces = [];
   cantons = [];
@@ -46,66 +48,20 @@ export class ProducerComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    
-    document.getElementsByTagName('body')[0].addEventListener('click', (e: Event) => {
-      var menu = document.getElementById('context-menu');
-      if (menu.style.getPropertyValue('display') == 'block') {
-        menu.style.setProperty('display', 'none');
-      }
-      var tds = document.getElementsByTagName('td');
-      for (let i = 0; i < tds.length; i++) {
-        tds[i].style.setProperty('box-shadow', 'none');
-      }
-    });
-
-    var menuItems = document.getElementById('context-menu').getElementsByTagName('a');
-    for (let i = 0; i<menuItems.length; i++) {
-      menuItems[i].addEventListener('click', (e:Event) => {
-        menuItems[i].parentElement.style.setProperty('display', 'none');
-      })
-    }
+    this.utilsService.configureContextMenu();
   }
 
-  getProvinces() {
-    const Http = new XMLHttpRequest();
-    const url = 'https://ubicaciones.paginasweb.cr/provincias.json';
-    Http.open('GET', url);
-    Http.send();
-    var self = this;
-    Http.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var json = JSON.parse(Http.responseText);
-        self.provinces = Object.values(json);
-      }
-    }
+  async getProvinces() {
+    this.provinces = await this.utilsService.getProvinces();
+    console.log(this.provinces);
   }
 
-  getCantons(provinceId: string ): void {
-    const Http = new XMLHttpRequest();
-    const url = 'https://ubicaciones.paginasweb.cr/provincia/' + provinceId + '/cantones.json';
-    Http.open('GET', url);
-    Http.send();
-    var self = this;
-    Http.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var json = JSON.parse(Http.responseText);
-        self.cantons = Object.values(json);
-      }
-    }
+  async getCantons(provinceId: string) {
+    this.cantons = await this.utilsService.getCantons(provinceId);
   }
 
-  getDistricts(idCanton: string, idProvince: string): void {
-    const Http = new XMLHttpRequest();
-    const url = 'https://ubicaciones.paginasweb.cr/provincia/' + idProvince + '/canton/' + idCanton + '/distritos.json';
-    Http.open('GET', url);
-    Http.send();
-    var self = this;
-    Http.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var json = JSON.parse(Http.responseText);
-        self.districts = Object.values(json);
-      }
-    }
+  async getDistricts(idCanton: string, idProvince: string) {
+    this.districts = await this.utilsService.getDistricts(idCanton, idProvince);
   }
 
   /**
@@ -145,97 +101,71 @@ export class ProducerComponent implements OnInit {
    * @param producer Productor seleccionado
    */
   onProducerClick(event: any, producer: any): boolean {
-    this.showContextMenu(event);
-    // console.log(producer);
+    this.utilsService.showContextMenu(event);
     this.actualProducer = producer;
     return false;
   }
-
-  /**
-   * Metodo para mostrar el menu contextual al presionar click derecho
-   * @param event
-   */
-  showContextMenu(event: MouseEvent): boolean {
-    var tds = document.getElementsByTagName('td');
-    for (let i = 0; i < tds.length; i++) {
-      tds[i].style.setProperty('box-shadow', 'none');
-    }
-    
-    var top = event.pageY - 10;
-    var left = event.pageX - 120;
-
-    var menu = document.getElementById('context-menu');
-    menu.style.setProperty('display', 'block');
-    menu.style.setProperty('top', top.toString() + 'px')
-    menu.style.setProperty('left', left.toString() + 'px');
-    return false;
-  }
-
   
 
   /**
    * Metodo para almacenar el nuevo productor
    */
   saveProducer(): void {
-    let id = (document.getElementById("id") as HTMLInputElement).value;
-    let name = (document.getElementById("name") as HTMLInputElement).value;
-    let lastName1 = (document.getElementById("last-name1") as HTMLInputElement).value;
-    let lastName2 = (document.getElementById("last-name2") as HTMLInputElement).value;
-    let sinpe = (document.getElementById("sinpe") as HTMLInputElement).value;
-    let phone = (document.getElementById("phone") as HTMLInputElement).value;
-    let birth = (document.getElementById("birth") as HTMLInputElement).value;
-    let province = document.getElementById("provinceDDM").textContent;
-    let canton = document.getElementById("cantonDDM").textContent;
-    let district = document.getElementById("districtDDM").textContent;
-    let dir = (document.getElementById("dir") as HTMLInputElement).value;
-    let deliver = (document.getElementById("deliver") as HTMLInputElement).value;
-    console.log('id:' + id + '\n' + 'name:' + name + '\n' + 'lastName1:' + lastName1 + '\n' +
-      'lastName2:' + lastName2 + '\n' + 'sinpe:' + sinpe + '\n' + 'phone:' + phone + '\n' +
-      'birth:' + birth + '\n' + 'province:' + province + '\n' + 'canton:' + canton + '\n' +
-      'district:' + district + '\n' + 'dir:' + dir + '\n' + 'deliver:' + deliver);
+    let id = (document.getElementById("id") as HTMLInputElement);
+    let name = (document.getElementById("name") as HTMLInputElement);
+    let lastName1 = (document.getElementById("last-name1") as HTMLInputElement);
+    let lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
+    let sinpe = (document.getElementById("sinpe") as HTMLInputElement);
+    let phone = (document.getElementById("phone") as HTMLInputElement);
+    let birth = (document.getElementById("birth") as HTMLInputElement);
+    let province = document.getElementById("provinceDDM");
+    let canton = document.getElementById("cantonDDM");
+    let district = document.getElementById("districtDDM");
+    let dir = (document.getElementById("dir") as HTMLInputElement);
+    let deliver = (document.getElementById("deliver") as HTMLInputElement);
+    
 
     
 
     // TODO verificar que se haya ingresado alguna provincia, canton y distrito
-    if (id == '' || name == '' || lastName1 == '' || lastName2 == '' || sinpe == '' || phone == '' || birth == '' ||
-      dir == '' || deliver == '') {
-      document.getElementById('saveMsj').style.setProperty('display', 'block');
-      document.getElementById("saveMsjLabel").textContent = "Error";
-      document.getElementById("msjText").textContent = "Por favor complete todos los campos.";
+    if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
+      dir.value == '' || deliver.value == '') {
+        this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
     } else {
       // TODO guardar productor
-      let idN = Number(id);
-      let phoneN = Number(phone);
-      let sinpeN = Number(sinpe);
+      let idN = Number(id.value);
+      let phoneN = Number(phone.value);
+      let sinpeN = Number(sinpe.value);
 
-      document.getElementById('saveMsj').style.setProperty('display', 'block');
-      document.getElementById("saveMsjLabel").textContent = "Exito";
       var producer = {
         id: idN,
-        name: name,      
-        lastName: lastName1,
-        lastName2: lastName2,
+        name: name.value,      
+        lastName: lastName1.value,
+        lastName2: lastName2.value,
         sinpe: sinpeN,
         phone: phoneN,
-        birth: birth,
-        province: province,
-        canton: canton,
-        district: district,
-        dir: dir,
-        deliver: deliver};
+        birth: birth.value,
+        province: province.textContent,
+        canton: canton.textContent,
+        district: district.textContent,
+        dir: dir.value,
+        deliver: deliver.value};
       
 
       if (this.updating) {
-        document.getElementById("msjText").textContent = "Productor actualizado correctamente.";
+        this.utilsService.showInfoModal("Exito", "Productor actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+
         let indexProducer = this.producers.indexOf(this.actualProducer);
         this.producers[indexProducer] = producer;
         this.updating = false;
-        document.getElementById("id").setAttribute('disabled', 'false');
+        document.getElementById("id").removeAttribute('disabled');
+
       } else {
-        document.getElementById("msjText").textContent = "Nuevo productor guardado correctamente.";
+        this.utilsService.showInfoModal("Exito", "Nueva productor guardado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
         this.producers.push(producer);
       }
-      this.cleanFields();
+      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, deliver],
+        [province, canton, district], ["Provincia", "Canton", "Distrito"]);
     }
   }
 
@@ -261,38 +191,15 @@ export class ProducerComponent implements OnInit {
     (document.getElementById("deliver") as HTMLInputElement).value = this.actualProducer.deliver;
   }
 
-  cleanFields() {
-    (document.getElementById("id") as HTMLInputElement).value = "";
-    (document.getElementById("name") as HTMLInputElement).value = "";
-    (document.getElementById("last-name1") as HTMLInputElement).value = "";
-    (document.getElementById("last-name2") as HTMLInputElement).value = "";
-    (document.getElementById("sinpe") as HTMLInputElement).value = "";
-    (document.getElementById("phone") as HTMLInputElement).value = "";
-    (document.getElementById("birth") as HTMLInputElement).value = "";
-    document.getElementById("provinceDDM").textContent = "Provincia";
-    document.getElementById("cantonDDM").textContent = "Canton";
-    document.getElementById("districtDDM").textContent = "Distrito";
-    (document.getElementById("dir") as HTMLInputElement).value = "";
-    (document.getElementById("deliver") as HTMLInputElement).value = "";
-  }
-
   /**
    * Metodo para eliminar a un productor
    */
   askUser(): void {
-    console.log("Deleting producer: " + this.actualProducer.name);
-
-    var modal = document.getElementById('optionMsj');
-    modal.style.setProperty('display', 'block');
-    modal.style.setProperty('opacity', '100');
-    
-    document.getElementById("optionMsjLabel").textContent = "Eliminar";
-    document.getElementById("optionText").textContent = "Esta seguro que desea eliminar al productor con la identificacion " + this.actualProducer.id;
+    this.utilsService.configureDeleteModal("Esta seguro que desea eliminar al productor con la identificacion " + this.actualProducer.id);
   }
 
   deleteProducer(): void {
     document.getElementById('optionMsj').style.setProperty('display', 'none');
-    console.log("Deleting producer: " + this.actualProducer.name);
     const index = this.producers.indexOf(this.actualProducer, 0);
     this.producers.splice(index, 1);
   }

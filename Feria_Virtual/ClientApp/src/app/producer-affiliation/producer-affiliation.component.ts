@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UtilsService } from 'src/app/shared/utils.service'
 
 @Component({
   selector: 'app-producer-affiliation',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProducerAffiliationComponent implements OnInit {
 
+  private utilsService: UtilsService = new UtilsService();
   provinces = [];
   cantons = [];
   districts = [];
@@ -16,46 +18,17 @@ export class ProducerAffiliationComponent implements OnInit {
   ngOnInit() {
   }
 
-  getProvinces() {
-    const Http = new XMLHttpRequest();
-    const url = 'https://ubicaciones.paginasweb.cr/provincias.json';
-    Http.open('GET', url);
-    Http.send();
-    var self = this;
-    Http.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var json = JSON.parse(Http.responseText);
-        self.provinces = Object.values(json);
-      }
-    }
+  async getProvinces() {
+    this.provinces = await this.utilsService.getProvinces();
+    console.log(this.provinces);
   }
 
-  getCantons(provinceId: string ): void {
-    const Http = new XMLHttpRequest();
-    const url = 'https://ubicaciones.paginasweb.cr/provincia/' + provinceId + '/cantones.json';
-    Http.open('GET', url);
-    Http.send();
-    var self = this;
-    Http.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var json = JSON.parse(Http.responseText);
-        self.cantons = Object.values(json);
-      }
-    }
+  async getCantons(provinceId: string) {
+    this.cantons = await this.utilsService.getCantons(provinceId);
   }
 
-  getDistricts(idCanton: string, idProvince: string): void {
-    const Http = new XMLHttpRequest();
-    const url = 'https://ubicaciones.paginasweb.cr/provincia/' + idProvince + '/canton/' + idCanton + '/distritos.json';
-    Http.open('GET', url);
-    Http.send();
-    var self = this;
-    Http.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var json = JSON.parse(Http.responseText);
-        self.districts = Object.values(json);
-      }
-    }
+  async getDistricts(idCanton: string, idProvince: string) {
+    this.districts = await this.utilsService.getDistricts(idCanton, idProvince);
   }
 
   /**
@@ -90,35 +63,36 @@ export class ProducerAffiliationComponent implements OnInit {
   }
 
   saveProducer(): void {
-    let id = (document.getElementById("id") as HTMLInputElement).value;
-    let name = (document.getElementById("name") as HTMLInputElement).value;
-    let lastName1 = (document.getElementById("last-name1") as HTMLInputElement).value;
-    let lastName2 = (document.getElementById("last-name2") as HTMLInputElement).value;
-    let sinpe = (document.getElementById("sinpe") as HTMLInputElement).value;
-    let phone = (document.getElementById("phone") as HTMLInputElement).value;
-    let birth = (document.getElementById("birth") as HTMLInputElement).value;
-    let province = document.getElementById("provinceDDM").textContent;
-    let canton = document.getElementById("cantonDDM").textContent;
-    let district = document.getElementById("districtDDM").textContent;
-    let dir = (document.getElementById("dir") as HTMLInputElement).value;
-    let deliver = (document.getElementById("deliver") as HTMLInputElement).value;
+    let id = (document.getElementById("id") as HTMLInputElement);
+    let name = (document.getElementById("name") as HTMLInputElement);
+    let lastName1 = (document.getElementById("last-name1") as HTMLInputElement);
+    let lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
+    let sinpe = (document.getElementById("sinpe") as HTMLInputElement);
+    let phone = (document.getElementById("phone") as HTMLInputElement);
+    let birth = (document.getElementById("birth") as HTMLInputElement);
+    let province = document.getElementById("provinceDDM");
+    let canton = document.getElementById("cantonDDM");
+    let district = document.getElementById("districtDDM");
+    let dir = (document.getElementById("dir") as HTMLInputElement);
+    let deliver = (document.getElementById("deliver") as HTMLInputElement);
 
-    if (id == '' || name == '' || lastName1 == '' || lastName2 == '' || sinpe == '' || phone == '' || birth == '' ||
-      dir == '' || deliver == '') {
-      document.getElementById('saveMsj').style.setProperty('display', 'block');
-      document.getElementById("saveMsjLabel").textContent = "Error";
-      document.getElementById("msjText").textContent = "Por favor complete todos los campos.";
+    if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
+      dir.value == '' || deliver.value == '') {
+        this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
+
     } else {
-      let idN = Number(id);
-      let phoneN = Number(phone);
-      let sinpeN = Number(sinpe);
+      let idN = Number(id.value);
+      let phoneN = Number(phone.value);
+      let sinpeN = Number(sinpe.value);
 
-      document.getElementById('saveMsj').style.setProperty('display', 'block');
-      document.getElementById("saveMsjLabel").textContent = "Exito";
-      document.getElementById("msjText").textContent = "Su solicitud esta siendo vertificada."; 
+      this.utilsService.showInfoModal("Exito", "Su solicitud esta siendo vertificada.", "saveMsjLabel", "msjText", 'saveMsj');
 
       //TODO enviar solicitud de afiliacion
+      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, deliver],
+        [province, canton, district], ["Provincia", "Canton", "Distrito"]);
     }
+
+    
 
   }
 
