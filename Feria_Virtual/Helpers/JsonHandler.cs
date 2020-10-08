@@ -96,7 +96,7 @@ namespace Feria_Virtual.Helpers
             catch (IOException ex)
             {
                 var log = GetDirectory() + LogFile;
-                await File.AppendAllTextAsync(log, $"[Warning] {ex.StackTrace}\n").ConfigureAwait(false);
+                await File.AppendAllTextAsync(log, $"[Warning] {ex.Message} - {ex.StackTrace}\n").ConfigureAwait(false);
             }
 
             return fileData ?? null;
@@ -117,6 +117,11 @@ namespace Feria_Virtual.Helpers
                 case FilePath.Productos:
                     fullPath += "/productos.json";
                     break;
+                case FilePath.Afiliaciones:
+                    fullPath += "/afiliaciones.json";
+                    break;
+                default:
+                    return null;
             }
             return fullPath;
         }
