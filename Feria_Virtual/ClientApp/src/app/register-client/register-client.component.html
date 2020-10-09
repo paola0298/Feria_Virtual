@@ -1,134 +1,148 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
 
-<head>
-    <title>Registro</title>
-    <meta charset="utf-8">
-</head>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
 
-<body>
-    <div>
-        <h2>Registro</h2>
-        <h5 class="affiliation-header">Complete el siguiente formulario para poder comprar en la Feria Virtual</h5>
-        <form>
-            <div class="row">
-                <div class="form-group col">
-                    <label for="idClient">Identificacion:</label>
-                    <input type="text" class="form-control" id="idClient" name="idClient">
-                  </div>
-                  <div class="form-group col">
-                    <label for="name">Nombre:</label>
-                    <input mdbinput type="text" class="form-control" id="name" name="name">
-                  </div>
-                  <div class="form-group col">
-                    <label for="last-name1">Primer Apellido:</label>
-                    <input type="text" class="form-control" id="last-name1" name="last-name1">
-                  </div>
-                  <div class="form-group col">
-                    <label for="last-name2">Segundo Apellido:</label>
-                    <input type="text" class="form-control" id="last-name2" name="last-name2">
-                  </div>
+<div class="container">
+  <hr>
+  <div class="card bg-light">
+   <article class="card-body mx-auto"> 
+      <h4 class="card-title mt-3 text-center">Crear una cuenta</h4>
+      <form>
+
+        <div class="row">
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="far fa-address-card"></i> </span>
             </div>
-
-            <div class="row md-form">
-                <div class="form-group col">
-                  <label for="username">Nombre de usuario:</label>
-                  <input type="text" class="form-control" id="username" name="username">
-                </div>
-                <div class="form-group col">
-                  <label for="pass">Contraseña:</label>
-                  <input type="password" class="form-control" id="pass" name="pass">
-                </div>
-                <div class="form-group col">
-                  <label for="birth">Fecha de nacimiento:</label>
-                  <input type="date" class="form-control" id="birth" name="birth">
-                </div>
-            </div>
-
-            <div class="row md-form">
-                <div class="col md-form">
-                  <label>Direccion</label>
-                  <div class="row md-form">
-                    <div class="form-group col">
-                      <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle"
-                                type="button" id="provinceDDM"
-                                data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false" (click)="getProvinces()">
-                          Provincia
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="provinceDDM">
-                          <a *ngFor="let prov of provinces" class="dropdown-item" (click)="loadCanton(prov)">{{ prov }}</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col">
-                      <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle"
-                                type="button" id="cantonDDM"
-                                data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                          Canton
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="cantonDDM">
-                          <a *ngFor="let canton of cantons" class="dropdown-item" (click)="loadDistrict(canton)">{{ canton }}</a>
-                          <!--Colocar cantones de provincia seleccionada-->
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col">
-                      <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle"
-                                type="button" id="districtDDM"
-                                data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                          Distrito
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="districtDDM">
-                          <a *ngFor="let district of districts" class="dropdown-item" (click)="setActualDistrict(district)">{{ district }}</a>
-                          <!--Colocar distritos de canton seleccionado-->
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row md-form">
-                    <div class="form-group col">
-                      <label for="dir">Otras señas:</label>
-                      <input type="tel" class="form-control" id="dir" name="dir">
-                    </div>
-                  </div>
-                </div>
+            <input name="" class="form-control" placeholder="Número de cédula" type="text">
+          </div> <!-- form-group// -->
         
-                <div class="col md-form">
-                  <div class="row md-form margin-div">
-                    <label for="phone">Teléfono:</label>
-                    <input type="text" class="form-control" id="phone" name="phone">
-                  </div>
-                  <div class="row md-form">
-                    <button type="submit" class="btn btn-outline-success" data-toggle="modal"
-                            data-target="#saveMsj" (click)="saveClient()">
-                      Guardar
-                    </button>
-                    
-                  </div>
-                </div>
-              </div>
-        </form>
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input name="" class="form-control" placeholder="Nombre" type="text">
+          </div> <!-- form-group// -->
 
-        <!--Modal to open when error-->
-        <div class="modal fade" id="saveMsj" tabindex="-1" role="dialog" aria-labelledby="saveMsjLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-                        <h4 class="modal-title" id="saveMsjLabel"></h4> <!--El texto se coloca en script-->
-                      </div>
-                      <div class="modal-body">
-                          <a class="custom-close" id="msjText"></a>  <!--El texto se coloca en script-->
-                      </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-info" data-dismiss="modal">Cerrar</button>
-                      </div>
-                  </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-          </div><!-- /.modal -->
-    </div>
-</body>
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input name="" class="form-control" placeholder="Primer Apellido" type="text">
+          </div> <!-- form-group// -->
+  
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input name="" class="form-control" placeholder="Segundo Apellido" type="text">
+          </div> <!-- form-group// -->
+        </div>
+
+        <div class="row">
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+            </div>
+            <input name="" class="form-control" placeholder="Correo Electronico" type="email">
+          </div> <!-- form-group// -->
+          
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+            </div>
+            <input name="" class="form-control" placeholder="Numero de Telefono" type="text">
+          </div> <!-- form-group// -->
+  
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-birthday-cake"></i> </span>
+            </div>
+            <input name="" class="form-control" placeholder="Fecha de nacimiento" type="date">
+          </div> <!-- form-group// -->
+
+        </div>
+
+        <div class="row">
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+            <select class="form-control">
+              <option selected=""> Seleccione una provincia</option>
+              <option>Designer</option>
+              <option>Manager</option>
+              <option>Accaunting</option>
+            </select>
+          </div> <!-- form-group end.// -->
+  
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+            <select class="form-control">
+              <option selected=""> Seleccione un cantón</option>
+              <option>Designer</option>
+              <option>Manager</option>
+              <option>Accaunting</option>
+            </select>
+          </div> <!-- form-group end.// -->
+  
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+            <select class="form-control">
+              <option selected=""> Seleccione un distrito</option>
+              <option>Designer</option>
+              <option>Manager</option>
+              <option>Accaunting</option>
+            </select>
+          </div> <!-- form-group end.// -->
+
+        </div>
+
+        
+        <div class="row">
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user-circle"></i> </span>
+            </div>
+            <input name="" class="form-control" placeholder="Nombre de usuario" type="text">
+          </div> <!-- form-group// -->
+  
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+            </div>
+            <input class="form-control" placeholder="Crear contraseña" type="password">
+          </div> <!-- form-group// -->
+          
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+            </div>
+            <input class="form-control" placeholder="Repetir contraseña" type="password">
+          </div> <!-- form-group// -->  
+
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block">Crear cuenta</button>
+        </div> <!-- form-group// -->
+
+        <p class="text-center">¿Tienes una cuenta? <a href="">Inicia sesión</a> </p>
+
+                                            
+      </form>
+   </article>
+  </div> <!-- card.// -->
+</div> 
+<!--container end.//-->
+
