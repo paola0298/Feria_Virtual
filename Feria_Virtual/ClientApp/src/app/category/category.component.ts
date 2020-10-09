@@ -42,7 +42,7 @@ export class CategoryComponent implements OnInit {
         let indexCategory = this.categories.indexOf(this.actualCategory);
         this.categories[indexCategory] = category;
         this.updating = false;
-        document.getElementById("id").removeAttribute('disabled');
+        document.getElementById("idCategory").removeAttribute('disabled');
       } else {
         this.utilsService.showInfoModal("Exito", "Nueva categoria guardada correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
         this.categories.push(category);

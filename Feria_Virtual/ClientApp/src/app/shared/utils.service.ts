@@ -75,7 +75,7 @@ export class UtilsService {
     for (let i = 0; i < tds.length; i++) {
       tds[i].style.setProperty('box-shadow', 'none');
     }
-    var top = event.pageY - 10;
+    var top = event.pageY - 250;
     var left = event.pageX - 120;
     var menu = document.getElementById('context-menu');
     menu.style.setProperty('display', 'block');
