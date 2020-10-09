@@ -12,6 +12,7 @@ export class ProducerAffiliationComponent implements OnInit {
   provinces = [];
   cantons = [];
   districts = [];
+  deliveryZones = [];
 
   constructor() { }
 
@@ -28,14 +29,14 @@ export class ProducerAffiliationComponent implements OnInit {
     let sinpe = (document.getElementById("sinpe") as HTMLInputElement);
     let phone = (document.getElementById("phone") as HTMLInputElement);
     let birth = (document.getElementById("birth") as HTMLInputElement);
-    let province = document.getElementById("provinceDDM");
-    let canton = document.getElementById("cantonDDM");
-    let district = document.getElementById("districtDDM");
+    let province = document.getElementById("province");
+    let canton = document.getElementById("canton");
+    let district = document.getElementById("district");
     let dir = (document.getElementById("dir") as HTMLInputElement);
     let deliver = (document.getElementById("deliver") as HTMLInputElement);
 
     if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
-      dir.value == '' || deliver.value == '') {
+      dir.value == '' || this.deliveryZones.length == 0) {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
 
     } else {
@@ -45,8 +46,9 @@ export class ProducerAffiliationComponent implements OnInit {
       let sinpeN = Number(sinpe.value);
 
       //TODO enviar solicitud de afiliacion
-      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, deliver],
+      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir],
         [province, canton, district], ["Provincia", "Canton", "Distrito"]);
+      this.deliveryZones = [];
     }
   }
 
@@ -63,7 +65,9 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param provinceId Id de la provincia seleccionada
    */
   async getCantons(provinceId: string) {
+    console.log("loading canton")
     this.cantons = await this.utilsService.getCantons(provinceId);
+    console.log(this.cantons);
   }
 
   /**
@@ -73,6 +77,7 @@ export class ProducerAffiliationComponent implements OnInit {
    */
   async getDistricts(idCanton: string, idProvince: string) {
     this.districts = await this.utilsService.getDistricts(idCanton, idProvince);
+    console.log(this.districts)
   }
 
   /**
@@ -80,7 +85,7 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param province Provincia seleccionada
    */
   loadCanton(province: string): void {
-    document.getElementById("provinceDDM").textContent = province;
+    document.getElementById("province").setAttribute("selected", province);
     var index = this.provinces.indexOf(province) + 1;
     this.getCantons(index.toString());
   }
@@ -90,9 +95,9 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param canton Canton seleccionado
    */
   loadDistrict(canton: string): void {
-    document.getElementById("cantonDDM").textContent = canton;
+    document.getElementById("canton").setAttribute("selected", canton)
     var idCanton = this.cantons.indexOf(canton) + 1;
-    var idProvince = this.provinces.indexOf(document.getElementById("provinceDDM").textContent) + 1;
+    var idProvince = this.provinces.indexOf(document.getElementById("province").getAttribute("selected")) + 1;
     console.log(idCanton + '\n' + idProvince);
     this.getDistricts(idCanton.toString(), idProvince.toString());
   }
@@ -102,10 +107,29 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param district
    */
   setActualDistrict(district: string): void {
-    document.getElementById("districtDDM").textContent = district;
+    document.getElementById("district").setAttribute("selected", district);
   }
 
-  
+  addDeliveryZone() {
+    console.log("Adding delivery zone");
+    let newZone = (document.getElementById("delivery") as HTMLInputElement).value;
+    if (newZone != '') {
+      this.deliveryZones.push(newZone);
+      (document.getElementById("delivery") as HTMLInputElement).value = "";
+    } else {
+      this.utilsService.showInfoModal("Error", "Por favor ingrese un lugar de entrega", "saveMsjLabel", "msjText", 'saveMsj');
+    }
+    
+  }
 
+  deleteDeliveryZone(zone: string) {
+    console.log("removing " + zone);
+    let index = this.deliveryZones.indexOf(zone);
+    this.deliveryZones.splice(index, 1);
+  }
+
+  closeModal(modal:string) {
+    document.getElementById(modal).style.setProperty('display', 'none');
+  }
   
 }

@@ -29,7 +29,6 @@ export class LoginClientComponent implements OnInit {
 
   closeModal(modal:string) {
     document.getElementById(modal).style.setProperty('display', 'none');
-
   }
 
 }

@@ -1,4 +1,176 @@
-<head>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+
+<div class="primary-container">
+  <hr>
+  <div class="card bg-light article-custom">
+    <article class="card-body mx-auto">
+      <h4 class="card-title mt-3 text-center custom-margin">Crear una cuenta como productor</h4>
+      <form>
+        <div class="row">
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="far fa-address-card"></i> </span>
+            </div>
+            <input id="id" name="id" class="form-control" placeholder="Número de cédula" type="text">
+          </div> <!-- form-group// -->
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input id="name" name="name" class="form-control" placeholder="Nombre" type="text">
+          </div> <!-- form-group// -->
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input id="last-name1" name="last-name1" class="form-control" placeholder="Primer Apellido" type="text">
+          </div> <!-- form-group// -->
+  
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input id="last-name2" name="last-name2" class="form-control" placeholder="Segundo Apellido" type="text">
+          </div> <!-- form-group// -->
+        </div>
+
+        <div class="row">
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-money-check"></i> </span>
+            </div>
+            <input id="sinpe" name="sinpe" class="form-control" placeholder="Sinpe Movil" type="text">
+          </div> <!-- form-group// -->
+          
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+            </div>
+            <input id="phone" name="phone" class="form-control" placeholder="Numero de Telefono" type="text">
+          </div> <!-- form-group// -->
+  
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-birthday-cake"></i> </span>
+            </div>
+            <input id="birth" name="birth" class="form-control" placeholder="Fecha de nacimiento" type="date">
+          </div> <!-- form-group// -->
+        
+        </div>
+
+        <div class="row">
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+            <select class="form-control" id="province" (click)="getProvinces()">
+              <option selected=""> Seleccione una provincia</option>
+              <option *ngFor="let prov of provinces" (click)="loadCanton(prov)">{{ prov }}</option>
+            </select>
+          </div> <!-- form-group end.// -->
+        
+        
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+            <select class="form-control" id="canton">
+              <option selected=""> Seleccione un cantón</option>
+              <option *ngFor="let canton of cantons" (click)="loadDistrict(canton)">{{ canton }}</option>
+            </select>
+          </div> <!-- form-group end.// -->
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+            <select class="form-control" id="district">
+              <option selected=""> Seleccione un distrito</option>
+              <option *ngFor="let district of districts" (click)="setActualDistrict(district)">{{ district }}</option>
+            </select>
+          </div> <!-- form-group end.// -->
+        </div>
+
+        <div class="row">
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-home"></i> </span>
+            </div>
+            <input id="dir" name="dir" class="form-control" placeholder="Otras señas" type="text">
+          </div> <!-- form-group// -->
+        </div>
+
+        <div class="custom-row">
+          <div class="col">
+            <div class="form-group input-group col">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-truck"></i>
+                </span>
+              </div>
+              <input type="text" name="delivery" placeholder="Lugar de entrega" class="form-control" id="delivery">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" (click)="addDeliveryZone()">
+                  Agregar lugar de entrega
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="table-container">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center align-middle" scope="col">Lugar de entrega</th>
+                    <th></th>
+                  </tr>
+                </thead>
+  
+                <tbody *ngFor="let deliveryZone of deliveryZones">
+                  <tr>
+                    <td class="text-center align-middle">{{ deliveryZone }}</td>
+                    <button type="button" class="btn btn-teal btn-rounded btn-sm m-0" (click)="deleteDeliveryZone(deliveryZone)" ><i class="far fa-trash-alt"></i></button>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn-save btn btn-primary btn-block" (click)="saveProducer()">Crear cuenta</button>
+        </div> <!-- form-group// -->
+
+      </form>
+    </article>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="saveMsj">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="saveMsjLabel"></h4>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <a id="msjText"></a>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" (click)="closeModal('saveMsj')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <head>
     <title>Afiliacion de Productores</title>
     <meta charset="utf-8">
 </head>
@@ -71,7 +243,7 @@
                       </button>
                       <div class="dropdown-menu" aria-labelledby="cantonDDM">
                         <a *ngFor="let canton of cantons" class="dropdown-item" (click)="loadDistrict(canton)">{{ canton }}</a>
-                        <!--Colocar cantones de provincia seleccionada-->
+                   
                       </div>
                     </div>
                   </div>
@@ -85,7 +257,7 @@
                       </button>
                       <div class="dropdown-menu" aria-labelledby="districtDDM">
                         <a *ngFor="let district of districts" class="dropdown-item" (click)="setActualDistrict(district)">{{ district }}</a>
-                        <!--Colocar distritos de canton seleccionado-->
+                     
                       </div>
                     </div>
                   </div>
@@ -114,22 +286,20 @@
             </div>
           </form>
 
-          <!--Modal to open when error-->
+
             <div class="modal fade" id="saveMsj" tabindex="-1" role="dialog" aria-labelledby="saveMsjLabel" aria-hidden="true">
               <div class="modal-dialog">
                   <div class="modal-content">
                       <div class="modal-header">
-                          <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-                          <h4 class="modal-title" id="saveMsjLabel"></h4> <!--El texto se coloca en script-->
+                          <h4 class="modal-title" id="saveMsjLabel"></h4> 
                         </div>
                         <div class="modal-body">
-                            <a class="custom-close" id="msjText"></a>  <!--El texto se coloca en script-->
+                            <a class="custom-close" id="msjText"></a>  
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-info" data-dismiss="modal">Cerrar</button>
                         </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-    </div>
-</body>
+                    </div>
+                </div>
+            </div>
+</body> -->

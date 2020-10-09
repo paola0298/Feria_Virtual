@@ -119,7 +119,7 @@ export class UtilsService {
     });
 
     for (let index = 0; index < dropdownElements.length; index++) {
-      dropdownElements[index].textContent = dropdownNewTag[index];
+      dropdownElements[index].setAttribute("selected", dropdownNewTag[index]); 
     }
 
   }
