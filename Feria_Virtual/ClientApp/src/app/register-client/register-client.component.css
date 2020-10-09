@@ -29,3 +29,35 @@
 .modal {
     margin-top: 50px;
 }
+
+.primary-container {
+    /* display: flex !important;
+    flex: row wrap;
+    justify-content: center; */
+
+    width: 100vw;
+    height: 92vh;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -15px;
+
+    background-image: url('https://cdn.pixabay.com/photo/2016/09/23/15/03/vegetables-1689887_1280.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.article-custom {
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    align-self: center;
+    margin: auto;
+    margin-top: 10%;
+}
+
+.custom-margin {
+    margin-bottom: 30px !important;
+}
