@@ -25,15 +25,16 @@ export class RegisterClientComponent implements OnInit {
     let lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
     let username = (document.getElementById("username") as HTMLInputElement);
     let pass = (document.getElementById("pass") as HTMLInputElement);
+    let passConfirm = (document.getElementById("passConfirm") as HTMLInputElement);
     let birth = (document.getElementById("birth") as HTMLInputElement);
-    let province = document.getElementById("provinceDDM");
-    let canton = document.getElementById("cantonDDM");
-    let district = document.getElementById("districtDDM");
+    let province = document.getElementById("province");
+    let canton = document.getElementById("canton");
+    let district = document.getElementById("district");
     let dir = (document.getElementById("dir") as HTMLInputElement);
     let phone = (document.getElementById("phone") as HTMLInputElement);
 
     if (idClient.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || username.value == '' || phone.value == '' || birth.value == '' ||
-      dir.value == '' || pass.value == '') {
+      dir.value == '' || pass.value == '' || passConfirm.value == '') {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
 
     } else {
@@ -42,7 +43,7 @@ export class RegisterClientComponent implements OnInit {
       let phoneN = Number(phone.value);
 
       //TODO enviar solicitud de afiliacion
-      this.utilsService.cleanField([idClient, name, lastName1, lastName2, username, pass, phone, dir],
+      this.utilsService.cleanField([idClient, name, lastName1, lastName2, username, pass, phone, dir, passConfirm],
         [province, canton, district], ["Provincia", "Canton", "Distrito"]);
     }
   }
@@ -77,7 +78,7 @@ export class RegisterClientComponent implements OnInit {
    * @param province Provincia seleccionada
    */
   loadCanton(province: string): void {
-    document.getElementById("provinceDDM").textContent = province;
+    document.getElementById("province").setAttribute("selected", province);
     var index = this.provinces.indexOf(province) + 1;
     this.getCantons(index.toString());
   }
@@ -87,9 +88,9 @@ export class RegisterClientComponent implements OnInit {
    * @param canton Canton seleccionado
    */
   loadDistrict(canton: string): void {
-    document.getElementById("cantonDDM").textContent = canton;
+    document.getElementById("canton").setAttribute("selected", canton);
     var idCanton = this.cantons.indexOf(canton) + 1;
-    var idProvince = this.provinces.indexOf(document.getElementById("provinceDDM").textContent) + 1;
+    var idProvince = this.provinces.indexOf(document.getElementById("province").getAttribute("selected")) + 1;
     console.log(idCanton + '\n' + idProvince);
     this.getDistricts(idCanton.toString(), idProvince.toString());
   }
@@ -99,6 +100,14 @@ export class RegisterClientComponent implements OnInit {
    * @param district
    */
   setActualDistrict(district: string): void {
-    document.getElementById("districtDDM").textContent = district;
+    document.getElementById("district").setAttribute("selected", district);
+  }
+
+  /**
+   * Metodo para cerrar un modal
+   * @param id Id del modal a cerrar
+   */
+  closeModal(id: string): void {
+    document.getElementById(id).style.setProperty('display', 'none');
   }
 }
