@@ -16,7 +16,9 @@ export class ProducerAffiliationComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.getProvinces();
+  }
 
   /**
    * Metodo para guardar la solicitud de afiliacion de un productor
@@ -29,9 +31,9 @@ export class ProducerAffiliationComponent implements OnInit {
     let sinpe = (document.getElementById("sinpe") as HTMLInputElement);
     let phone = (document.getElementById("phone") as HTMLInputElement);
     let birth = (document.getElementById("birth") as HTMLInputElement);
-    let province = document.getElementById("province");
-    let canton = document.getElementById("canton");
-    let district = document.getElementById("district");
+    let province = (document.getElementById("province") as HTMLSelectElement);
+    let canton = (document.getElementById("canton") as HTMLSelectElement);
+    let district = (document.getElementById("district") as HTMLSelectElement);
     let dir = (document.getElementById("dir") as HTMLInputElement);
     let deliver = (document.getElementById("deliver") as HTMLInputElement);
 
@@ -46,8 +48,8 @@ export class ProducerAffiliationComponent implements OnInit {
       let sinpeN = Number(sinpe.value);
 
       //TODO enviar solicitud de afiliacion
-      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir],
-        [province, canton, district], ["Provincia", "Canton", "Distrito"]);
+      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, birth],
+        [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
       this.deliveryZones = [];
     }
   }
