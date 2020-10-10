@@ -1,14 +1,43 @@
-.dropdown-margin {
+.primary-container {
+    /* display: flex !important;
+    flex: row wrap;
+    justify-content: center; */
+
+    width: 100vw;
+    height: 60vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -15px;
+
+    background-image: url('https://www.abc.net.au/cm/rimage/11439468-16x9-xlarge.jpg?v=7');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+}
+
+.article-custom {
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    align-self: center;
+    margin: auto;
+    margin-top: 5%;
+}
+
+.btn-save {
+    border-radius: 8px;
+    width: 50%; 
+    margin: auto;
+}
+
+.product-table {
+    max-height: 300px !important;
+    overflow: auto;
+}
+
+.margin-div {
     margin-top: 30px;
-    text-align: center;
-
-}
-
-.dropdown-margin button {
-    width: 60%;
-}
-
-.margin-up-down {
-    margin-bottom: 25px;
-    margin-top: 25px;
 }

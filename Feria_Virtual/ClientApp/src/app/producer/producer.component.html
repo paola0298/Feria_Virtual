@@ -66,7 +66,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
             </div>
-            <select class="form-control" id="province" (click)="getProvinces()">
+            <select class="form-control" id="province">
               <option selected="" value="Seleccione una provincia"> Seleccione una provincia</option>
               <option *ngFor="let prov of provinces" (click)="loadCanton(prov)" value="{{prov}}">{{ prov }}</option>
             </select>

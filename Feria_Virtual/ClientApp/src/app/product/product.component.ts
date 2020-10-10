@@ -26,6 +26,7 @@ export class ProductComponent implements OnInit {
 
   ngOnInit() {
     this.utilsService.configureContextMenu();
+    this.getCategories();
   }
 
   /**
@@ -35,9 +36,9 @@ export class ProductComponent implements OnInit {
     let name = (document.getElementById("productName") as HTMLInputElement);
     let availability = (document.getElementById("availability") as HTMLInputElement);
     let price = (document.getElementById("price") as HTMLInputElement);
-    //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
-    let category = document.getElementById("categoryDropdown");
-    let saleMode = document.getElementById("saleModeDropdown");
+    //(document.getElementById("image") as HTMLInputElement).value = this.actualProduct.image;
+    let category = (document.getElementById("category") as HTMLSelectElement);
+    let saleMode = (document.getElementById("saleMode") as HTMLSelectElement);
 
     if (name.value == '' || availability.value == '' || price.value == '') {
       this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
@@ -47,8 +48,8 @@ export class ProductComponent implements OnInit {
 
       var product = {
         name:name.value, availability:availabilityN, 
-        price:priceN, image:'image', category:category.textContent, 
-        saleMode:saleMode.textContent}
+        price:priceN, image:'image', category:category.value, 
+        saleMode:saleMode.value}
 
       if (this.updating) {
         this.utilsService.showInfoModal("Exito", "Producto actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
@@ -59,7 +60,7 @@ export class ProductComponent implements OnInit {
         this.utilsService.showInfoModal("Exito", "Nuevo producto guardado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
         this.products.push(product);
       }
-      this.utilsService.cleanField([name, availability, price], [category, saleMode], ["Categoria", "Modo de venta"]);
+      this.utilsService.cleanField([name, availability, price], [category, saleMode], ["Seleccione una categoria", "Seleccione un modo de venta"]);
     }
   }
 
@@ -67,13 +68,14 @@ export class ProductComponent implements OnInit {
    * Metodo para actualizar un producto seleccionado
    */
   updateProduct() {
+    console.log(this.actualProduct.category);
     this.updating = true;
     (document.getElementById("productName") as HTMLInputElement).value = this.actualProduct.name;
     (document.getElementById("availability") as HTMLInputElement).value = this.actualProduct.availability;
     (document.getElementById("price") as HTMLInputElement).value = this.actualProduct.price;
     //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
-    document.getElementById("categoryDropdown").textContent = this.actualProduct.category;
-    document.getElementById("saleModeDropdown").textContent = this.actualProduct.saleMode;
+    (document.getElementById("category") as HTMLSelectElement).value = this.actualProduct.category;
+    (document.getElementById("saleMode") as HTMLSelectElement).value = this.actualProduct.saleMode;
   }
 
   /**
@@ -90,22 +92,7 @@ export class ProductComponent implements OnInit {
    */
   getCategories():void {
     //get categories saved
-  }
-
-  /**
-   * Metodo para colocar la categoria seleccionada
-   * @param category Categoria seleccionada
-   */
-  setCategory(category: string):void {
-    document.getElementById("categoryDropdown").textContent = category;
-  }
-
-  /**
-   * Metodo para colocar el modo de venta seleccionado
-   * @param saleMode Modo de venta seleccionado
-   */
-  setSaleMode(saleMode: string):void {
-    document.getElementById("saleModeDropdown").textContent = saleMode;
+    this.categories = ["Carne", "Verdura"];
   }
 
   /**
