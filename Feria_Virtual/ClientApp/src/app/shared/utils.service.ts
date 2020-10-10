@@ -113,13 +113,13 @@ export class UtilsService {
    * @param dropdownElements Elementos de dropdown
    * @param dropdownNewTag Nuevas etiquetas de los dropdowns
    */
-  cleanField(htmlElements:HTMLInputElement[], dropdownElements:HTMLElement[], dropdownNewTag:string[]) {
+  cleanField(htmlElements:HTMLInputElement[], dropdownElements:HTMLSelectElement[], dropdownNewTag:string[]) {
     htmlElements.forEach(element => {
       element.value = ""
     });
 
     for (let index = 0; index < dropdownElements.length; index++) {
-      dropdownElements[index].setAttribute("selected", dropdownNewTag[index]); 
+      dropdownElements[index].value = dropdownNewTag[index]; 
     }
 
   }
