@@ -16,7 +16,9 @@ export class RegisterClientComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.getProvinces();
+   }
 
   saveClient() {
     let idClient = (document.getElementById("idClient") as HTMLInputElement);
@@ -27,12 +29,13 @@ export class RegisterClientComponent implements OnInit {
     let pass = (document.getElementById("pass") as HTMLInputElement);
     let passConfirm = (document.getElementById("passConfirm") as HTMLInputElement);
     let birth = (document.getElementById("birth") as HTMLInputElement);
-    let province = document.getElementById("province");
-    let canton = document.getElementById("canton");
-    let district = document.getElementById("district");
+    let province = document.getElementById("province") as HTMLSelectElement;
+    let canton = document.getElementById("canton") as HTMLSelectElement;
+    let district = document.getElementById("district") as HTMLSelectElement;
     let dir = (document.getElementById("dir") as HTMLInputElement);
     let phone = (document.getElementById("phone") as HTMLInputElement);
 
+    //TODO verificacion de contraseña sean igual
     if (idClient.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || username.value == '' || phone.value == '' || birth.value == '' ||
       dir.value == '' || pass.value == '' || passConfirm.value == '') {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
@@ -43,8 +46,9 @@ export class RegisterClientComponent implements OnInit {
       let phoneN = Number(phone.value);
 
       //TODO enviar solicitud de afiliacion
-      this.utilsService.cleanField([idClient, name, lastName1, lastName2, username, pass, phone, dir, passConfirm],
-        [province, canton, district], ["Provincia", "Canton", "Distrito"]);
+      
+      this.utilsService.cleanField([idClient, name, lastName1, lastName2, username, pass, phone, dir, passConfirm, birth],
+        [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
     }
   }
 
@@ -78,7 +82,6 @@ export class RegisterClientComponent implements OnInit {
    * @param province Provincia seleccionada
    */
   loadCanton(province: string): void {
-    document.getElementById("province").setAttribute("selected", province);
     var index = this.provinces.indexOf(province) + 1;
     this.getCantons(index.toString());
   }
@@ -88,19 +91,10 @@ export class RegisterClientComponent implements OnInit {
    * @param canton Canton seleccionado
    */
   loadDistrict(canton: string): void {
-    document.getElementById("canton").setAttribute("selected", canton);
     var idCanton = this.cantons.indexOf(canton) + 1;
-    var idProvince = this.provinces.indexOf(document.getElementById("province").getAttribute("selected")) + 1;
+    var idProvince = this.provinces.indexOf((document.getElementById("province") as HTMLSelectElement).value) + 1;
     console.log(idCanton + '\n' + idProvince);
     this.getDistricts(idCanton.toString(), idProvince.toString());
-  }
-
-  /**
-   * Metodo para colocar el distrito seleccionado en el nombre del dropdown 
-   * @param district
-   */
-  setActualDistrict(district: string): void {
-    document.getElementById("district").setAttribute("selected", district);
   }
 
   /**

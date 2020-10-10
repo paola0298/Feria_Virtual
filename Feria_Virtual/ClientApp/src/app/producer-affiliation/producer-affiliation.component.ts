@@ -87,7 +87,6 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param province Provincia seleccionada
    */
   loadCanton(province: string): void {
-    document.getElementById("province").setAttribute("selected", province);
     var index = this.provinces.indexOf(province) + 1;
     this.getCantons(index.toString());
   }
@@ -97,20 +96,12 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param canton Canton seleccionado
    */
   loadDistrict(canton: string): void {
-    document.getElementById("canton").setAttribute("selected", canton)
     var idCanton = this.cantons.indexOf(canton) + 1;
     var idProvince = this.provinces.indexOf(document.getElementById("province").getAttribute("selected")) + 1;
     console.log(idCanton + '\n' + idProvince);
     this.getDistricts(idCanton.toString(), idProvince.toString());
   }
 
-  /**
-   * Metodo para colocar el distrito seleccionado en el nombre del dropdown 
-   * @param district
-   */
-  setActualDistrict(district: string): void {
-    document.getElementById("district").setAttribute("selected", district);
-  }
 
   addDeliveryZone() {
     console.log("Adding delivery zone");
