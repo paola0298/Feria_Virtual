@@ -21,12 +21,12 @@ export class ProducerComponent implements OnInit {
     lastName2: 'Chacon',
     sinpe: 123456789,
     phone: 83216963,
-    birth: '02-06-1998',
+    birth: '1998-06-02',
     province: 'Heredia',
-    canton: 'Heredia',
-    district: 'Vara Blanca',
-    dir: 'Minisuper Vara Blanca',
-    deliver: 'Heredia'
+    canton: 'Central',
+    district: 'Varablanca',
+    dir: 'Minisuper Varablanca',
+    deliver: ['Heredia']
     },
     {
       id: 122200589521,
@@ -35,42 +35,46 @@ export class ProducerComponent implements OnInit {
       lastName2: 'Chinchilla',
       sinpe: 123456789,
       phone: 70143773,
-      birth: '11-01-1999',
-      province: 'San Jose',
-      canton: 'Escazu',
+      birth: '1999-01-11',
+      province: 'San José',
+      canton: 'Escazú',
       district: 'San Antonio',
       dir: 'Residencial Vista de Oro',
-      deliver: 'San Jose'
+      deliver: ['San Jose']
     }
   ];
   actualProducer;
+  deliveryZones:string[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
     this.utilsService.configureContextMenu();
+
+    //Cargar las provincias al iniciar el componente
+    this.getProvinces();
   }
 
   /**
    * Metodo para almacenar el nuevo productor
    */
   saveProducer(): void {
-    let id = (document.getElementById("id") as HTMLInputElement);
+    let id = (document.getElementById("idProducer") as HTMLInputElement);
     let name = (document.getElementById("name") as HTMLInputElement);
     let lastName1 = (document.getElementById("last-name1") as HTMLInputElement);
     let lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
     let sinpe = (document.getElementById("sinpe") as HTMLInputElement);
     let phone = (document.getElementById("phone") as HTMLInputElement);
     let birth = (document.getElementById("birth") as HTMLInputElement);
-    let province = document.getElementById("provinceDDM");
-    let canton = document.getElementById("cantonDDM");
-    let district = document.getElementById("districtDDM");
+    let province = (document.getElementById("province") as HTMLSelectElement);
+    let canton = (document.getElementById("canton") as HTMLSelectElement);
+    let district = (document.getElementById("district") as HTMLSelectElement);
     let dir = (document.getElementById("dir") as HTMLInputElement);
     let deliver = (document.getElementById("deliver") as HTMLInputElement);
     
     // TODO verificar que se haya ingresado alguna provincia, canton y distrito
     if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
-      dir.value == '' || deliver.value == '') {
+      dir.value == '' || this.deliveryZones.length == 0) {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
     } else {
       // TODO guardar productor
@@ -79,9 +83,9 @@ export class ProducerComponent implements OnInit {
       let sinpeN = Number(sinpe.value);
       var producer = {
         id: idN, name: name.value, lastName: lastName1.value, lastName2: lastName2.value,
-        sinpe: sinpeN, phone: phoneN, birth: birth.value, province: province.textContent,
-        canton: canton.textContent, district: district.textContent, dir: dir.value,
-        deliver: deliver.value};
+        sinpe: sinpeN, phone: phoneN, birth: birth.value, province: province.value,
+        canton: canton.value, district: district.value, dir: dir.value,
+        deliver: this.deliveryZones};
       
 
       if (this.updating) {
@@ -89,14 +93,15 @@ export class ProducerComponent implements OnInit {
         let indexProducer = this.producers.indexOf(this.actualProducer);
         this.producers[indexProducer] = producer;
         this.updating = false;
-        document.getElementById("id").removeAttribute('disabled');
+        document.getElementById("idProducer").removeAttribute('disabled');
 
       } else {
         this.utilsService.showInfoModal("Exito", "Nueva productor guardado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
         this.producers.push(producer);
       }
-      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, deliver],
-        [province, canton, district], ["Provincia", "Canton", "Distrito"]);
+      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, birth],
+        [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
+      this.deliveryZones = [];
     }
   }
 
@@ -104,22 +109,38 @@ export class ProducerComponent implements OnInit {
    * Metodo para actualizar la informacion de un productor
    */
   updateProducer(): void {
-    console.log("Updating producer: " + this.actualProducer);
-    document.getElementById("id").setAttribute('disabled', 'true');
+
+    console.log("Updating producer: " + this.actualProducer.province);
+    console.log("Updating producer: " + this.actualProducer.canton);
+
+    this.loadCanton(this.actualProducer.province);
+    this.loadDistrict(this.actualProducer.canton);
+
+    // console.log("Updating producer: " + this.actualProducer.province);
+    // console.log("Updating producer: " + this.actualProducer.canton);
+    // console.log("Updating producer: " + this.actualProducer.district);
+    console.log(document.getElementById("province").getAttribute("selected"));
+    document.getElementById("idProducer").setAttribute('disabled', 'true');
     this.updating = true;
     // Cargar los datos del productor en el formulario y deshabilitar el campo de id
-    (document.getElementById("id") as HTMLInputElement).value = this.actualProducer.id;
+    (document.getElementById("idProducer") as HTMLInputElement).value = this.actualProducer.id;
     (document.getElementById("name") as HTMLInputElement).value = this.actualProducer.name;
     (document.getElementById("last-name1") as HTMLInputElement).value = this.actualProducer.lastName;
     (document.getElementById("last-name2") as HTMLInputElement).value = this.actualProducer.lastName2;
     (document.getElementById("sinpe") as HTMLInputElement).value = this.actualProducer.sinpe;
     (document.getElementById("phone") as HTMLInputElement).value = this.actualProducer.phone;
     (document.getElementById("birth") as HTMLInputElement).value = this.actualProducer.birth;
-    document.getElementById("provinceDDM").textContent = this.actualProducer.province;
-    document.getElementById("cantonDDM").textContent = this.actualProducer.canton;
-    document.getElementById("districtDDM").textContent = this.actualProducer.district;
     (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.dir;
-    (document.getElementById("deliver") as HTMLInputElement).value = this.actualProducer.deliver;
+
+    // document.getElementById("province").setAttribute("selected", this.actualProducer.province);
+    // document.getElementById("canton").setAttribute("selected", this.actualProducer.canton);
+    // document.getElementById("district").setAttribute("selected", this.actualProducer.district);
+    (document.getElementById("province") as HTMLSelectElement).value = this.actualProducer.province;
+    (document.getElementById("canton") as HTMLSelectElement).value = this.actualProducer.canton;
+    (document.getElementById("district") as HTMLSelectElement).value = this.actualProducer.district;  
+
+    this.deliveryZones = this.actualProducer.deliver;
+    // console.log(document.getElementById("province").getAttribute("selected"));
   }
 
   /**
@@ -162,8 +183,9 @@ export class ProducerComponent implements OnInit {
    */
   loadCanton(province: string): void {
 
-    document.getElementById("provinceDDM").textContent = province;
+    //document.getElementById("province").setAttribute("selected", province);
     var index = this.provinces.indexOf(province) + 1;
+    console.log(index + ": index of province");
     this.getCantons(index.toString());
   }
 
@@ -172,10 +194,10 @@ export class ProducerComponent implements OnInit {
    * @param canton Canton seleccionado
    */
   loadDistrict(canton: string): void {
-    document.getElementById("cantonDDM").textContent = canton;
+    //document.getElementById("canton").setAttribute("selected", canton);
     var idCanton = this.cantons.indexOf(canton) + 1;
-    var idProvince = this.provinces.indexOf(document.getElementById("provinceDDM").textContent) + 1;
-    console.log(idCanton + '\n' + idProvince);
+    var idProvince = this.provinces.indexOf((document.getElementById("province") as HTMLSelectElement).value) + 1;
+    console.log("indice canton " + idCanton + '\n' + "indice provincia " +  idProvince);
     this.getDistricts(idCanton.toString(), idProvince.toString());
   }
 
@@ -184,7 +206,7 @@ export class ProducerComponent implements OnInit {
    * @param district
    */
   setActualDistrict(district: string): void {
-    document.getElementById("districtDDM").textContent = district;
+    document.getElementById("district").setAttribute("selected", district);
   }
 
   /**
@@ -213,4 +235,23 @@ export class ProducerComponent implements OnInit {
   closeModal(id: string): void {
     document.getElementById(id).style.setProperty('display', 'none');
   }
+
+  addDeliveryZone() {
+    console.log("Adding delivery zone");
+    let newZone = (document.getElementById("delivery") as HTMLInputElement).value;
+    if (newZone != '') {
+      this.deliveryZones.push(newZone);
+      (document.getElementById("delivery") as HTMLInputElement).value = "";
+    } else {
+      this.utilsService.showInfoModal("Error", "Por favor ingrese un lugar de entrega", "saveMsjLabel", "msjText", 'saveMsj');
+    }
+    
+  }
+
+  deleteDeliveryZone(zone: string) {
+    console.log("removing " + zone);
+    let index = this.deliveryZones.indexOf(zone);
+    this.deliveryZones.splice(index, 1);
+  }
+
 }

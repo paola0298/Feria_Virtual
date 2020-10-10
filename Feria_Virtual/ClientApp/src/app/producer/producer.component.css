@@ -10,3 +10,65 @@
     overflow: auto;
 }
 
+.primary-container {
+    /* display: flex !important;
+    flex: row wrap;
+    justify-content: center; */
+
+    width: 100vw;
+    height: 65vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -15px;
+
+    background-image: url('https://www.revistaelabasto.com.ar/wp-content/uploads/2020/01/fruitveg.jpeg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+}
+
+.article-custom {
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    align-self: center;
+    margin: auto;
+    margin-top: 5%;
+}
+
+.custom-margin {
+    margin-bottom: 30px !important;
+}
+
+.input-group {
+    width: 500px !important;
+}
+
+.margin-div {
+    margin-top: 30px;
+}
+
+.producer-table {
+    max-height: 300px !important;
+    overflow: auto;
+}
+
+.table-container {
+    max-height: 160px;
+    overflow: auto;
+}
+
+.btn-save {
+    border-radius: 8px;
+    width: 50%; 
+    margin: auto;
+}
+
+.custom-row {
+    display: flex;
+    flex: row wrap;
+    justify-content: flex-start;
+}
