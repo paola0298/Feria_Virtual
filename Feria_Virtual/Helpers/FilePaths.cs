@@ -9,6 +9,7 @@ namespace Feria_Virtual.Helpers
     {
         Productores,
         Productos,
-        Afiliaciones
+        Afiliaciones,
+        Categorias
     }
 }

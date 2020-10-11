@@ -14,6 +14,6 @@ namespace Feria_Virtual.Models {
         [Key]
         public int Id { get; set; }
         public AfiliacionStatus Estado { get; set; }
-        public Productor Productor { get; set; }
+        public string IdProductor { get; set; }
     }
 }

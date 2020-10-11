@@ -53,12 +53,19 @@ namespace Feria_Virtual.Controllers
             var afiliacion = new Afiliacion() {
                 Id = afiliaciones.Count,
                 Estado = AfiliacionStatus.Pendiente,
-                Productor = productor
+                IdProductor = productor.Identificacion
             };
 
+            /**
+            Al crear una solicitud de afiliación, el productor no va a estar afiliado
+            hasta que la solicitud sea aceptada o denegada manualmente
+            */
+            productor.Afiliado = false;
+            
             afiliaciones.Add(afiliacion);
             
-            await JsonHandler.OvewriteFileAsync<Afiliacion>(FilePath.Afiliaciones, afiliaciones);
+            await JsonHandler.OvewriteFileAsync(FilePath.Afiliaciones, afiliaciones);
+            await JsonHandler.AddToFileAsync(FilePath.Productores, productor);
 
             return CreatedAtRoute("default", new { id = afiliacion.Id }, afiliacion);
         }
@@ -79,11 +86,20 @@ namespace Feria_Virtual.Controllers
             afiliaciones.Remove(old);
 
             if (afiliacion.Estado == AfiliacionStatus.Aceptada) {
-                await JsonHandler.AddToFileAsync<Productor>(FilePath.Productores, afiliacion.Productor)
-                    .ConfigureAwait(false);
+                var productores = await JsonHandler.LoadFileAsync<Productor>(FilePath.Productores);
+                var productor = productores.FirstOrDefault(p => p.Identificacion == afiliacion.IdProductor);
+                
+                if (productor == null)
+                    return StatusCode(500);
+
+                productor.Afiliado = true;
+
+                await JsonHandler.OvewriteFileAsync<Productor>(FilePath.Productores, productores);
             }
 
             afiliaciones.Add(afiliacion);
+
+            await JsonHandler.OvewriteFileAsync<Afiliacion>(FilePath.Afiliaciones, afiliaciones);
 
             return NoContent();
         }
@@ -102,6 +118,8 @@ namespace Feria_Virtual.Controllers
                 return NotFound();
 
             afiliaciones.Remove(afiliacion);
+
+            await JsonHandler.OvewriteFileAsync(FilePath.Afiliaciones, afiliaciones);
 
             return Ok();
         }

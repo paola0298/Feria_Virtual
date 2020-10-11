@@ -14,6 +14,7 @@ namespace Feria_Virtual.Models
         public string Sinpe { get; set; }
         public string Telefono { get; set; }
         public DateTimeOffset FechaNacimiento { get; set; }
+        public bool Afiliado { get; set; }
 
         #region Apellido
         public string Apellido1 { get; set; }

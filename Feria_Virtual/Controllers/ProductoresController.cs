@@ -18,7 +18,10 @@ namespace Feria_Virtual.Controllers
         {
             var productores = await JsonHandler.LoadFileAsync<Productor>(FilePath.Productores)
                 .ConfigureAwait(false);
-            return Ok(productores);
+
+            var productoresAfiliados = productores.FindAll(p => p.Afiliado == true);
+
+            return Ok(productoresAfiliados);
         }
 
         [HttpGet("{id}")]
@@ -48,6 +51,9 @@ namespace Feria_Virtual.Controllers
 
             if (exists)
                 return Conflict();
+
+            //Los productores agregados desde la vista de administración están afiliados por defecto
+            productor.Afiliado = true;
 
             await JsonHandler.AddToFileAsync(FilePath.Productores, productor)
                 .ConfigureAwait(false);
