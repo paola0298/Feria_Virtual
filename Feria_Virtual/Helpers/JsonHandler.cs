@@ -70,7 +70,7 @@ namespace Feria_Virtual.Helpers
 
             var listData = JsonConvert.DeserializeObject<List<T>>(fileData);
 
-            return listData.FirstOrDefault(x => comparator.Invoke(x, toAdd) == true) != null;
+            return listData.Any(x => comparator.Invoke(x, toAdd) == true);
         }
 
         private static async Task WriteFileData(string filePath, string contents)
