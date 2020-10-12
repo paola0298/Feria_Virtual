@@ -1,0 +1,88 @@
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 10%;
+    margin-bottom: 75px;
+}
+
+/* input {
+  padding:10px 10px 10px 5px;
+  display:block;
+  width:250px;
+  border:none;
+  border-bottom:1px solid #757575;
+  background-color: transparent;
+  
+} */
+
+/* select {
+    padding:1px 10px 10px 5px;
+    display:block;
+    width:250px;
+    border:none;
+    border-bottom:1px solid #757575;
+    background-color: transparent !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    color: black !important;
+} */
+
+input:disabled {
+    background-color: transparent;
+    padding:10px 10px 10px 5px;
+    display:block;
+    width:250px;
+    border:none;
+    border-bottom:1px solid #757575;
+}
+
+select:disabled {
+    padding:1px 10px 10px 5px;
+    display:block;
+    width:250px;
+    border:none;
+    border-bottom:1px solid #757575;
+    background-color: transparent !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    color: black !important;
+}
+
+::placeholder {
+    color: black;
+    opacity: 1;
+}
+
+.primary-container {
+    width: 100vw;
+    height: 92vh;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -15px;
+
+    background-image: url("../../assets/gradient.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+}
+
+.article-custom {
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    align-self: center;
+    margin: auto;
+    margin-top: 3.5%;
+}
+
+.margin-div {
+    margin-top: 50px;
+}

@@ -15,6 +15,7 @@ import { ProducerAffiliationComponent } from './producer-affiliation/producer-af
 import { ProductComponent } from './product/product.component';
 import { RegisterClientComponent } from './register-client/register-client.component';
 import { LoginClientComponent } from './login-client/login-client.component';
+import { ProfileClientComponent } from './profile-client/profile-client.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { LoginClientComponent } from './login-client/login-client.component';
     ProducerAffiliationComponent,
     ProductComponent,
     RegisterClientComponent,
-    LoginClientComponent
+    LoginClientComponent,
+    ProfileClientComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,6 +46,7 @@ import { LoginClientComponent } from './login-client/login-client.component';
       { path: 'product', component: ProductComponent},
       { path: 'register-client', component: RegisterClientComponent},
       { path: 'login-client', component: LoginClientComponent},
+      { path: 'profile-client', component: ProfileClientComponent},
     ])
   ],
   providers: [],
