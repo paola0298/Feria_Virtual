@@ -15,9 +15,10 @@ export class UtilsService {
    */
   async getProvinces(): Promise<string[]> {
     var url = 'https://ubicaciones.paginasweb.cr/provincias.json';
-    let result = await this.makeRequest("GET", url);
-    console.log(result);
-    return result;
+    // let result = await this.makeRequest("GET", url);
+    // //console.log(result);
+    // return result;
+    return this.makeRequest("GET", url);
   }
 
   /**
@@ -26,8 +27,9 @@ export class UtilsService {
    */
   async getCantons(provinceId: string): Promise<string[]> {
     var url = 'https://ubicaciones.paginasweb.cr/provincia/' + provinceId + '/cantones.json';
-    let result = await this.makeRequest("GET", url);
-    return result;
+    // let result = await this.makeRequest("GET", url);
+    // return result;
+    return this.makeRequest("GET", url);
   }
 
   /**
@@ -35,10 +37,11 @@ export class UtilsService {
    * @param idCanton Id del canton del cual se desea conocer los distritos
    * @param idProvince Id de la provincia a la que pertenece el canton
    */
-  async getDistricts(idCanton: string, idProvince: string) {
+  async getDistricts(idCanton: string, idProvince: string): Promise<string[]> {
     var url = 'https://ubicaciones.paginasweb.cr/provincia/' + idProvince + '/canton/' + idCanton + '/distritos.json';
-    let result = await this.makeRequest("GET", url);
-    return result;
+    // let result = await this.makeRequest("GET", url);
+    // return result;
+    return this.makeRequest("GET", url);
   }
 
   /**
@@ -46,24 +49,28 @@ export class UtilsService {
    * @param method Metodo a utilizar
    * @param url Url al cual hacer la peticion
    */
-  makeRequest(method, url): Promise<string[]> {
-    var self = this;
-    return new Promise(function (resolve, reject) {
+  makeRequest(method: string, url: string): Promise<string[]> {
+    var promise = new Promise<string[]>(function(resolve, reject) {
       let xhr = new XMLHttpRequest();
       xhr.open(method, url);
+      
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
-          var json = JSON.parse(xhr.responseText);
+          var json = JSON.parse(this.responseText);
           resolve(Object.values(json));
         } else {
-          reject({
+          var reason = {
             status: this.status,
-            statusText: xhr.statusText
-          });
+            statusText: this.statusText
+          };
+          reject(reason);
         }
       };
+      
       xhr.send();
     });
+
+    return promise;
   }
 
   /**
