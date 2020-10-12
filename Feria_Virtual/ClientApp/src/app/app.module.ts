@@ -16,6 +16,7 @@ import { ProductComponent } from './product/product.component';
 import { RegisterClientComponent } from './register-client/register-client.component';
 import { LoginClientComponent } from './login-client/login-client.component';
 import { ProfileClientComponent } from './profile-client/profile-client.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ProfileClientComponent } from './profile-client/profile-client.componen
     ProductComponent,
     RegisterClientComponent,
     LoginClientComponent,
-    ProfileClientComponent
+    ProfileClientComponent,
+    ShoppingCartComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -47,6 +49,7 @@ import { ProfileClientComponent } from './profile-client/profile-client.componen
       { path: 'register-client', component: RegisterClientComponent},
       { path: 'login-client', component: LoginClientComponent},
       { path: 'profile-client', component: ProfileClientComponent},
+      { path: 'shopping-cart', component: ShoppingCartComponent},
     ])
   ],
   providers: [],
