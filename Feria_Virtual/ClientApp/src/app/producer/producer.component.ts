@@ -110,16 +110,10 @@ export class ProducerComponent implements OnInit {
    */
   updateProducer(): void {
 
-    console.log("Updating producer: " + this.actualProducer.province);
-    console.log("Updating producer: " + this.actualProducer.canton);
 
     this.loadCanton(this.actualProducer.province);
     this.loadDistrict(this.actualProducer.canton);
 
-    // console.log("Updating producer: " + this.actualProducer.province);
-    // console.log("Updating producer: " + this.actualProducer.canton);
-    // console.log("Updating producer: " + this.actualProducer.district);
-    console.log(document.getElementById("province").getAttribute("selected"));
     document.getElementById("idProducer").setAttribute('disabled', 'true');
     this.updating = true;
     // Cargar los datos del productor en el formulario y deshabilitar el campo de id
@@ -132,12 +126,9 @@ export class ProducerComponent implements OnInit {
     (document.getElementById("birth") as HTMLInputElement).value = this.actualProducer.birth;
     (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.dir;
 
-    // document.getElementById("province").setAttribute("selected", this.actualProducer.province);
-    // document.getElementById("canton").setAttribute("selected", this.actualProducer.canton);
-    // document.getElementById("district").setAttribute("selected", this.actualProducer.district);
     (document.getElementById("province") as HTMLSelectElement).value = this.actualProducer.province;
     (document.getElementById("canton") as HTMLSelectElement).value = this.actualProducer.canton;
-    (document.getElementById("district") as HTMLSelectElement).value = this.actualProducer.district;  
+    (document.getElementById('district') as HTMLSelectElement).value = this.actualProducer.district;  
 
     this.deliveryZones = this.actualProducer.deliver;
     // console.log(document.getElementById("province").getAttribute("selected"));
