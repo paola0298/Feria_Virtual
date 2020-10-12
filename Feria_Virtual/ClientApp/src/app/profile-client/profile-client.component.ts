@@ -13,10 +13,7 @@ export class ProfileClientComponent implements OnInit {
   provinces: string[] = [];
   cantons: string[] = [];
   districts: string[] = [];
-
   actionFlag: boolean = false;
-
-  
   actualProducer: Producer;
 
   constructor(private changeDetection: ChangeDetectorRef) {
@@ -39,7 +36,6 @@ export class ProfileClientComponent implements OnInit {
     (document.getElementById("province") as HTMLSelectElement).disabled=true;
     (document.getElementById("canton") as HTMLSelectElement).disabled=true;
     (document.getElementById("district") as HTMLSelectElement).disabled=true; 
-    
     this.setData();
   }
 
@@ -68,40 +64,54 @@ export class ProfileClientComponent implements OnInit {
   updateData() {
 
     this.actionFlag = !this.actionFlag;
+    var id = (document.getElementById("idClient") as HTMLInputElement);
+    var name = (document.getElementById("name") as HTMLInputElement);
+    var lastName1 = (document.getElementById("last-name1") as HTMLInputElement);
+    var lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
+    var birth = (document.getElementById("birth") as HTMLInputElement);
+    var dir = (document.getElementById("dir") as HTMLInputElement);
+    var phone = (document.getElementById("phone") as HTMLInputElement);
+    var province = (document.getElementById("province") as HTMLSelectElement);
+    var canton = (document.getElementById("canton") as HTMLSelectElement);
+    var district = (document.getElementById("district") as HTMLSelectElement); 
+
     if (this.actionFlag) {
-      (document.getElementById("idClient") as HTMLInputElement).removeAttribute("disabled");
-      (document.getElementById("name") as HTMLInputElement).removeAttribute("disabled");
-      (document.getElementById("last-name1") as HTMLInputElement).removeAttribute("disabled");
-      (document.getElementById("last-name2") as HTMLInputElement).removeAttribute("disabled");
-      (document.getElementById("birth") as HTMLInputElement).removeAttribute("disabled");
-      (document.getElementById("dir") as HTMLInputElement).removeAttribute("disabled");
-      (document.getElementById("phone") as HTMLInputElement).removeAttribute("disabled");
-      (document.getElementById("province") as HTMLSelectElement).disabled=false;
-      (document.getElementById("canton") as HTMLSelectElement).disabled=false;
-      (document.getElementById("district") as HTMLSelectElement).disabled=false; 
+      this.setProfileEditable(id, name, lastName1, lastName2, birth, dir, phone, province, canton, district);
 
-    } else {
-      console.log("Saving...");
-      
-      (document.getElementById("idClient") as HTMLInputElement).setAttribute("disabled", "true");
-      (document.getElementById("name") as HTMLInputElement).setAttribute("disabled", "true");
-      (document.getElementById("last-name1") as HTMLInputElement).setAttribute("disabled", "true");
-      (document.getElementById("last-name2") as HTMLInputElement).setAttribute("disabled", "true");
-      (document.getElementById("birth") as HTMLInputElement).setAttribute("disabled", "true");
-      (document.getElementById("dir") as HTMLInputElement).setAttribute("disabled", "true");
-      (document.getElementById("phone") as HTMLInputElement).setAttribute("disabled", "true");
-      (document.getElementById("province") as HTMLSelectElement).disabled=true;
-      (document.getElementById("canton") as HTMLSelectElement).disabled=true;
-      (document.getElementById("district") as HTMLSelectElement).disabled=true; 
+    } else { 
+      this.saveProfileData(id, name, lastName1, lastName2, birth, dir, phone, province, canton, district);
     }
+  }
 
-    
-
+  setProfileEditable(id : HTMLInputElement, name : HTMLInputElement, lastName1 : HTMLInputElement, lastName2 : HTMLInputElement, 
+    birth : HTMLInputElement, dir : HTMLInputElement, phone : HTMLInputElement, province : HTMLSelectElement, 
+    canton : HTMLSelectElement, district : HTMLSelectElement) {
+      id.removeAttribute("disabled");
+      name.removeAttribute("disabled");
+      lastName1.removeAttribute("disabled");
+      lastName2.removeAttribute("disabled");
+      birth.removeAttribute("disabled");
+      dir.removeAttribute("disabled");
+      phone.removeAttribute("disabled");
+      province.disabled=false;
+      canton.disabled=false;
+      district.disabled=false; 
 
   }
 
-  saveData() {
-    console.log("saving data");
+  saveProfileData(id : HTMLInputElement, name : HTMLInputElement, lastName1 : HTMLInputElement, lastName2 : HTMLInputElement, 
+    birth : HTMLInputElement, dir : HTMLInputElement, phone : HTMLInputElement, province : HTMLSelectElement, 
+    canton : HTMLSelectElement, district : HTMLSelectElement) {
+      id.setAttribute("disabled", "true");
+      name.setAttribute("disabled", "true");
+      lastName1.setAttribute("disabled", "true");
+      lastName2.setAttribute("disabled", "true");
+      birth.setAttribute("disabled", "true");
+      dir.setAttribute("disabled", "true");
+      phone.setAttribute("disabled", "true");
+      province.disabled=true;
+      canton.disabled=true;
+      district.disabled=true;
   }
 
   deleteAccount() {
