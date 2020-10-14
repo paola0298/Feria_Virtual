@@ -123,6 +123,9 @@ namespace Feria_Virtual.Helpers
                 case FilePath.Categorias:
                     fullPath += "/categorias.json";
                     break;
+                case FilePath.ProductosCarrito:
+                    fullPath += "/productosCarrito.json";
+                    break;
                 default:
                     return null;
             }
