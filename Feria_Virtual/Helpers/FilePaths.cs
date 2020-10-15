@@ -11,6 +11,9 @@ namespace Feria_Virtual.Helpers
         Productos,
         Afiliaciones,
         Categorias,
-        ProductosCarrito
+        ProductosCarrito,
+        Clientes,
+        ClienteLog
+
     }
 }
