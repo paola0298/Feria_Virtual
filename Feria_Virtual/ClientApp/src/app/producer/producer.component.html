@@ -93,16 +93,7 @@
             </select>
           </div> <!-- form-group end.// -->
         </div>
-
-        <div class="row">
-          <div class="form-group input-group col">
-            <div class="input-group-prepend">
-              <span class="input-group-text"> <i class="fas fa-home"></i> </span>
-            </div>
-            <input id="dir" name="dir" class="form-control" placeholder="Otras señas" type="text">
-          </div> <!-- form-group// -->
-        </div>
-
+        
         <div class="custom-row">
           <div class="col">
             <div class="form-group input-group col">
@@ -165,24 +156,22 @@
                   <th class="text-center align-middle" scope="col">Provincia</th>
                   <th class="text-center align-middle" scope="col">Canton</th>
                   <th class="text-center align-middle" scope="col">Distrito</th>
-                  <th class="text-center align-middle" scope="col">Direccion exacta</th>
                   <th class="text-center align-middle" scope="col">Lugares de entrega</th>
                 </tr>
               </thead>
               <tbody *ngFor="let producer of producers; let i = index;">
                 <tr>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.id }}</td>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.name }}</td>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.lastName }}</td>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.lastName2 }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.identificacion }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.nombre }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.apellido1 }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.apellido2 }}</td>
                   <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.sinpe }}</td>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.phone }}</td>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.birth }}</td>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.province }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.telefono }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.fechaNacimiento }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.provincia }}</td>
                   <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.canton }}</td>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.district }}</td>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.dir }}</td>
-                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.deliver }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.distrito }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.lugaresEntrega }}</td>
                 </tr>
       
               </tbody>
