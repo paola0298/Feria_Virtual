@@ -9,6 +9,14 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { ProducerComponent } from './producer/producer.component';
+import { CategoryComponent } from './category/category.component';
+import { ProducerAffiliationComponent } from './producer-affiliation/producer-affiliation.component';
+import { ProductComponent } from './product/product.component';
+import { RegisterClientComponent } from './register-client/register-client.component';
+import { LoginClientComponent } from './login-client/login-client.component';
+import { ProfileClientComponent } from './profile-client/profile-client.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +24,15 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    ProducerComponent,
+    CategoryComponent,
+    ProducerAffiliationComponent,
+    ProductComponent,
+    RegisterClientComponent,
+    LoginClientComponent,
+    ProfileClientComponent,
+    ShoppingCartComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -26,6 +42,14 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'producer', component: ProducerComponent },
+      { path: 'category', component: CategoryComponent},
+      { path: 'producer-affiliation', component: ProducerAffiliationComponent},
+      { path: 'product', component: ProductComponent},
+      { path: 'register-client', component: RegisterClientComponent},
+      { path: 'login-client', component: LoginClientComponent},
+      { path: 'profile-client', component: ProfileClientComponent},
+      { path: 'shopping-cart', component: ShoppingCartComponent},
     ])
   ],
   providers: [],

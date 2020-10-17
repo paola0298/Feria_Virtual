@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+<div class="primary-container">
+
+    <div class="login-overlay">
+        <h3 class="login-title">
+            Inicio de sesión
+        </h3>
+        <div class="overlay-separator"></div>
+
+        <div class="overlay-body">
+
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                </div>
+                <input id="username" type="text" class="form-control" placeholder="Nombre de usuario">
+            </div>
+            
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                </div>
+                <input id = "password" type="password" class="form-control" placeholder="Contraseña">
+            </div>
+
+            <div class="control-container form-group">
+                <button class="btn float-right login-btn" (click)="login()">Iniciar</button>
+            </div>
+
+        </div>
+
+        <div class="overlay-footer">
+
+            <div class="footer-container">
+                <span>
+                    ¿No tienes cuenta?
+                </span>
+                <a href="/register-client">Registrate</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Modal to open when error-->
+<div class="modal fade" id="saveMsj" tabindex="-1" role="dialog" aria-labelledby="saveMsjLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+          <h4 class="modal-title" id="saveMsjLabel"></h4> <!--El texto se coloca en script-->
+        </div>
+        <div class="modal-body">
+          <a class="custom-close" id="msjText"></a>  <!--El texto se coloca en script-->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal" (click)="closeModal('saveMsj')">Cerrar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->

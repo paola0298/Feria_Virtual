@@ -1,0 +1,144 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+
+<div class="primary-container">
+    <hr>
+    <div class="card bg-light article-custom">
+        <article class="card-body mx-auto">
+            <h4 class="card-title mt-3 text-center custom-margin">Gestión de Productos</h4>
+            <form>
+                <div class="row">
+                    <div class="form-group input-group col">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"> <i class="fas fa-seedling"></i> </span>
+                        </div>
+                        <input id="productName" name="productName" class="form-control" placeholder="Nombre" type="text">
+                      </div> <!-- form-group// -->
+
+                      <div class="form-group input-group col">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"> <i class="fas fa-box-open"></i> </span>
+                        </div>
+                        <input id="availability" name="availability" class="form-control" placeholder="Disponibilidad" type="number">
+                      </div> <!-- form-group// -->
+
+                      <div class="form-group input-group col">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"> <i class="fas fa-dollar-sign"></i> </span>
+                        </div>
+                        <input id="price" name="price" class="form-control" placeholder="Precio" type="text">
+                      </div> <!-- form-group// -->
+                </div>
+
+                <div class="row">
+                    <div class="form-group input-group col">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"> <i class="far fa-image"></i> </span>
+                        </div>
+                        <input id="image" name="image" class="form-control" placeholder="Imagen del producto" type="file" accept=".png, .jpg, .jpeg">
+                      </div> <!-- form-group// -->
+
+                      <div class="form-group input-group col">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+                        </div>
+                        <select class="form-control" id="category">
+                          <option selected="" value="Seleccione una categoria"> Seleccione una categoria</option>
+                          <option *ngFor="let category of categories" value="{{category}}">{{ category }}</option>
+                        </select>
+                      </div> <!-- form-group end.// -->
+    
+                      <div class="form-group input-group col">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+                        </div>
+                        <select class="form-control" id="saleMode">
+                          <option selected="" value="Seleccione un modo de venta"> Seleccione un modo de venta</option>
+                          <option *ngFor="let saleMode of modesSale" value="{{saleMode}}">{{ saleMode }}</option>
+                        </select>
+                      </div> <!-- form-group end.// -->
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn-save btn btn-primary btn-block" (click)="saveProduct()">Guardar nuevo producto</button>
+                  </div> <!-- form-group// -->
+            </form>
+
+            <hr class="style18">
+
+            <div class="margin-div">
+                <h2>Productos registrados</h2>
+                <div class="product-table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center align-middle" scope="col">Nombre</th>
+                                <th class="text-center align-middle" scope="col">Disponibilidad</th>
+                                <th class="text-center align-middle" scope="col">Precio</th>
+                                <th class="text-center align-middle" scope="col">Imagen</th>
+                                <th class="text-center align-middle" scope="col">Categoria</th>
+                                <th class="text-center align-middle" scope="col">Modo de venta</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let product of products; let i = index">
+                            <tr>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.name }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.availability }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.price }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.image }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.category }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.saleMode }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dropdown-menu" aria-labelledby="tableMenu" id="context-menu">
+                    <a class="dropdown-item btn btn-default" (click)="updateProduct()">Actualizar</a>  
+                    <a class="dropdown-item btn" (click)="askUser()">Eliminar</a> 
+                </div>
+            </div>
+
+        </article>
+    </div>
+</div>
+
+
+<!-- The Modal -->
+<div class="modal" id="saveMsj">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="saveMsjLabel"></h4>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <a id="msjText"></a>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" (click)="closeModal('saveMsj')">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- The Option Modal -->
+  <div class="modal" id="optionMsj">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="optionMsjLabel"></h4>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <a id="optionText"></a>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal" (click)="deleteProducer()">Si</button>
+          <button type="button" class="btn btn-info" data-dismiss="modal" (click)="closeModal('optionMsj')">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
