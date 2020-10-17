@@ -17,6 +17,7 @@ import { RegisterClientComponent } from './register-client/register-client.compo
 import { LoginClientComponent } from './login-client/login-client.component';
 import { ProfileClientComponent } from './profile-client/profile-client.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { RestclientService } from './services/restclient.service';
 
 @NgModule({
   declarations: [
@@ -50,9 +51,10 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
       { path: 'login-client', component: LoginClientComponent},
       { path: 'profile-client', component: ProfileClientComponent},
       { path: 'shopping-cart', component: ShoppingCartComponent},
+      { path: 'counter', component: CounterComponent }
     ])
   ],
-  providers: [],
+  providers: [RestclientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
