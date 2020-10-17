@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ProducerComponent } from './producer/producer.component';
 import { CategoryComponent } from './category/category.component';
 import { ProducerAffiliationComponent } from './producer-affiliation/producer-affiliation.component';
@@ -25,7 +24,6 @@ import { RestclientService } from './services/restclient.service';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent,
     ProducerComponent,
     CategoryComponent,
     ProducerAffiliationComponent,
@@ -42,7 +40,6 @@ import { RestclientService } from './services/restclient.service';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
       { path: 'producer', component: ProducerComponent },
       { path: 'category', component: CategoryComponent},
       { path: 'producer-affiliation', component: ProducerAffiliationComponent},
@@ -51,7 +48,6 @@ import { RestclientService } from './services/restclient.service';
       { path: 'login-client', component: LoginClientComponent},
       { path: 'profile-client', component: ProfileClientComponent},
       { path: 'shopping-cart', component: ShoppingCartComponent},
-      { path: 'counter', component: CounterComponent }
     ])
   ],
   providers: [RestclientService],
