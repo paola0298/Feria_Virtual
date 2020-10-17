@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../shared/models/product';
+import { Product } from '../models/product';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -17,24 +17,24 @@ export class ShoppingCartComponent implements OnInit {
 
 
   constructor() {
-    var p1: Product = new Product();
-    var p2: Product = new Product();
+    // var p1: Product = new Product();
+    // var p2: Product = new Product();
 
-    p1.name = "Papa";
-    p1.price = 1000;
-    p1.availability = 10;
-    p1.category = "Verdura";
-    p1.saleMode = "Kilogramo";
-    p1.image = "https://encolombia.com/wp-content/uploads/2013/01/Papa.jpg";
+    // p1.name = "Papa";
+    // p1.price = 1000;
+    // p1.availability = 10;
+    // p1.category = "Verdura";
+    // p1.saleMode = "Kilogramo";
+    // p1.image = "https://encolombia.com/wp-content/uploads/2013/01/Papa.jpg";
 
-    p2.name = "Aguacate";
-    p2.price = 1000;
-    p2.availability = 10;
-    p2.category = "Fruta";
-    p2.saleMode = "Unidad";
-    p2.image = "https://as01.epimg.net/deporteyvida/imagenes/2017/07/23/portada/1500819395_065005_1500819504_noticia_normal.jpg";
+    // p2.name = "Aguacate";
+    // p2.price = 1000;
+    // p2.availability = 10;
+    // p2.category = "Fruta";
+    // p2.saleMode = "Unidad";
+    // p2.image = "https://as01.epimg.net/deporteyvida/imagenes/2017/07/23/portada/1500819395_065005_1500819504_noticia_normal.jpg";
 
-    this.products.push(p1, p2);
+    // this.products.push(p1, p2);
    }
 
   ngOnInit() {
