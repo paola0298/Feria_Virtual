@@ -26,5 +26,8 @@ namespace Feria_Virtual.Models
         public string Canton { get; set; }
         public string Distrito { get; set; }
         #endregion
+
+        //TODO: Crear nueva entidad para almacenar los lugares de entrega
+        public List<string> LugaresEntrega { get; set; }
     }
 }
