@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { UtilsService } from 'src/app/shared/utils.service'
-import { Producer } from '../shared/models/producer';
+import { UtilsService } from 'src/app/services/utils.service'
+import { Producer } from '../models/producer';
 
 @Component({
   selector: 'app-profile-client',
@@ -17,19 +17,19 @@ export class ProfileClientComponent implements OnInit {
   actualProducer: Producer;
 
   constructor(private changeDetection: ChangeDetectorRef) {
-    this.actualProducer = new Producer();
-    this.actualProducer.id = 402390083;
-    this.actualProducer.name = 'Paola';
-    this.actualProducer.lastName = 'Villegas';
-    this.actualProducer.lastName2 = 'Chacón';
-    this.actualProducer.sinpe = 123456789;
-    this.actualProducer.phone = 83216963;
-    this.actualProducer.birth = '1998-06-02';
-    this.actualProducer.province = 'Heredia';
-    this.actualProducer.canton = 'Central';
-    this.actualProducer.district = 'Varablanca';
-    this.actualProducer.dir = 'Minisuper Varablanca';
-    this.actualProducer.deliver = ['Heredia'];
+    // this.actualProducer = new Producer();
+    // this.actualProducer.id = 402390083;
+    // this.actualProducer.name = 'Paola';
+    // this.actualProducer.lastName = 'Villegas';
+    // this.actualProducer.lastName2 = 'Chacón';
+    // this.actualProducer.sinpe = 123456789;
+    // this.actualProducer.phone = 83216963;
+    // this.actualProducer.birth = '1998-06-02';
+    // this.actualProducer.province = 'Heredia';
+    // this.actualProducer.canton = 'Central';
+    // this.actualProducer.district = 'Varablanca';
+    // this.actualProducer.dir = 'Minisuper Varablanca';
+    // this.actualProducer.deliver = ['Heredia'];
   }
 
   ngOnInit() {
@@ -41,23 +41,23 @@ export class ProfileClientComponent implements OnInit {
 
   async setData() {
     await this.loadProvinces();
-    await this.loadCanton(this.actualProducer.province);
+    await this.loadCanton(this.actualProducer.provincia);
     await this.loadDistrict(this.actualProducer.canton);
     this.changeDetection.detectChanges();
-    (document.getElementById("idClient") as HTMLInputElement).value = this.actualProducer.id.toString();
-    (document.getElementById("name") as HTMLInputElement).value = this.actualProducer.name;
-    (document.getElementById("last-name1") as HTMLInputElement).value = this.actualProducer.lastName;
-    (document.getElementById("last-name2") as HTMLInputElement).value = this.actualProducer.lastName2;
-    (document.getElementById("birth") as HTMLInputElement).value = this.actualProducer.birth;
-    (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.dir;
-    (document.getElementById("phone") as HTMLInputElement).value = this.actualProducer.phone.toString();
+    (document.getElementById("idClient") as HTMLInputElement).value = this.actualProducer.identificacion;
+    (document.getElementById("name") as HTMLInputElement).value = this.actualProducer.nombre;
+    (document.getElementById("last-name1") as HTMLInputElement).value = this.actualProducer.apellido2;
+    (document.getElementById("last-name2") as HTMLInputElement).value = this.actualProducer.apellido2;
+    (document.getElementById("birth") as HTMLInputElement).value = this.actualProducer.fechaNacimiento;
+    // (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.direccionExacta;
+    (document.getElementById("phone") as HTMLInputElement).value = this.actualProducer.telefono;
 
     var provinceSelect = (document.getElementById("province") as HTMLSelectElement); 
-    provinceSelect.value = this.actualProducer.province;
+    provinceSelect.value = this.actualProducer.provincia;
     var cantonSelect = (document.getElementById("canton") as HTMLSelectElement);
     cantonSelect.value = this.actualProducer.canton;
     var districtSelect = (document.getElementById("district") as HTMLSelectElement);
-    districtSelect.value = this.actualProducer.district;
+    districtSelect.value = this.actualProducer.distrito;
 
   }
 
@@ -134,7 +134,7 @@ export class ProfileClientComponent implements OnInit {
   }
 
   async loadDistrict(canton: string) {
-    var provinceId = this.provinces.indexOf(this.actualProducer.province) + 1;
+    var provinceId = this.provinces.indexOf(this.actualProducer.provincia) + 1;
     var cantonId = this.cantons.indexOf(canton) + 1;
 
     if (cantonId == 0) {
