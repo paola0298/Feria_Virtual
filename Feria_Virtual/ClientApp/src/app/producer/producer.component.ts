@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UtilsService } from 'src/app/shared/utils.service'
+import { UtilsService } from 'src/app/services/utils.service';
+import { Producer } from 'src/app/models/producer';
+import { RestclientService } from 'src/app/services/restclient.service';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-producer',
@@ -7,52 +11,39 @@ import { UtilsService } from 'src/app/shared/utils.service'
   styleUrls: ['./producer.component.css']
 })
 export class ProducerComponent implements OnInit {
-
-  private utilsService: UtilsService = new UtilsService();
   updating: boolean = false;
-  provinces = [];
-  cantons = [];
-  districts = [];
-  producers = [
-    {
-    id: 402390083,
-    name: 'Paola',
-    lastName: 'Villegas',
-    lastName2: 'Chacon',
-    sinpe: 123456789,
-    phone: 83216963,
-    birth: '1998-06-02',
-    province: 'Heredia',
-    canton: 'Central',
-    district: 'Varablanca',
-    dir: 'Minisuper Varablanca',
-    deliver: ['Heredia']
-    },
-    {
-      id: 122200589521,
-      name: 'Marlon',
-      lastName: 'Vega',
-      lastName2: 'Chinchilla',
-      sinpe: 123456789,
-      phone: 70143773,
-      birth: '1999-01-11',
-      province: 'San José',
-      canton: 'Escazú',
-      district: 'San Antonio',
-      dir: 'Residencial Vista de Oro',
-      deliver: ['San Jose']
-    }
-  ];
-  actualProducer;
+  provinces: string[] = [];
+  cantons: string[] = [];
+  districts: string[] = [];
+  producers = [];
+  actualProducer: Producer;
   deliveryZones:string[] = [];
 
-  constructor() { }
+
+  constructor(private restClientService: RestclientService, private utilsService: UtilsService) { }
 
   ngOnInit(): void {
     this.utilsService.configureContextMenu();
 
     //Cargar las provincias al iniciar el componente
     this.getProvinces();
+    
+    // this.restClientService.createProducer(new Producer(
+    //   "Marlon", "122200589521", "Vega", "Chinchilla", "123456789", "70143773", "1999-01-11", "San José", 
+    //   "Escazú", "San Antonio", "casa", ["san jose"]
+    // ))
+    // console.log(this.utilsService.getProducers());
+    console.log(this.restClientService.getProducers());
+    this.loadProducers();
+    
+    
+  }
+
+  async loadProducers() {
+    this.producers = await this.utilsService.getProducers();
+    // this.producers = this.restClientService.getProducers();
+
+
   }
 
   /**
@@ -69,23 +60,16 @@ export class ProducerComponent implements OnInit {
     let province = (document.getElementById("province") as HTMLSelectElement);
     let canton = (document.getElementById("canton") as HTMLSelectElement);
     let district = (document.getElementById("district") as HTMLSelectElement);
-    let dir = (document.getElementById("dir") as HTMLInputElement);
     let deliver = (document.getElementById("deliver") as HTMLInputElement);
     
     // TODO verificar que se haya ingresado alguna provincia, canton y distrito
-    if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
-      dir.value == '' || this.deliveryZones.length == 0) {
+    if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' || 
+    this.deliveryZones.length == 0) {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
     } else {
-      // TODO guardar productor
-      let idN = Number(id.value);
-      let phoneN = Number(phone.value);
-      let sinpeN = Number(sinpe.value);
-      var producer = {
-        id: idN, name: name.value, lastName: lastName1.value, lastName2: lastName2.value,
-        sinpe: sinpeN, phone: phoneN, birth: birth.value, province: province.value,
-        canton: canton.value, district: district.value, dir: dir.value,
-        deliver: this.deliveryZones};
+      var producer:Producer = new Producer(name.value, id.value, lastName1.value, lastName2.value, 
+        sinpe.value, phone.value, birth.value, province.value, canton.value, district.value,
+        this.deliveryZones);
       
 
       if (this.updating) {
@@ -99,7 +83,7 @@ export class ProducerComponent implements OnInit {
         this.utilsService.showInfoModal("Exito", "Nueva productor guardado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
         this.producers.push(producer);
       }
-      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, birth],
+      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, birth],
         [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
       this.deliveryZones = [];
     }
@@ -111,26 +95,30 @@ export class ProducerComponent implements OnInit {
   updateProducer(): void {
 
 
-    this.loadCanton(this.actualProducer.province);
+    this.loadCanton(this.actualProducer.provincia);
     this.loadDistrict(this.actualProducer.canton);
 
     document.getElementById("idProducer").setAttribute('disabled', 'true');
     this.updating = true;
     // Cargar los datos del productor en el formulario y deshabilitar el campo de id
-    (document.getElementById("idProducer") as HTMLInputElement).value = this.actualProducer.id;
-    (document.getElementById("name") as HTMLInputElement).value = this.actualProducer.name;
-    (document.getElementById("last-name1") as HTMLInputElement).value = this.actualProducer.lastName;
-    (document.getElementById("last-name2") as HTMLInputElement).value = this.actualProducer.lastName2;
+
+    var birthDateTime = this.actualProducer.fechaNacimiento;
+    var index = birthDateTime.indexOf("T");
+    var birth = this.actualProducer.fechaNacimiento.substring(0, index);
+
+    (document.getElementById("idProducer") as HTMLInputElement).value = this.actualProducer.identificacion;
+    (document.getElementById("name") as HTMLInputElement).value = this.actualProducer.nombre;
+    (document.getElementById("last-name1") as HTMLInputElement).value = this.actualProducer.apellido1;
+    (document.getElementById("last-name2") as HTMLInputElement).value = this.actualProducer.apellido2;
     (document.getElementById("sinpe") as HTMLInputElement).value = this.actualProducer.sinpe;
-    (document.getElementById("phone") as HTMLInputElement).value = this.actualProducer.phone;
-    (document.getElementById("birth") as HTMLInputElement).value = this.actualProducer.birth;
-    (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.dir;
+    (document.getElementById("phone") as HTMLInputElement).value = this.actualProducer.telefono;
+    (document.getElementById("birth") as HTMLInputElement).value = birth;
 
-    (document.getElementById("province") as HTMLSelectElement).value = this.actualProducer.province;
+    (document.getElementById("province") as HTMLSelectElement).value = this.actualProducer.provincia;
     (document.getElementById("canton") as HTMLSelectElement).value = this.actualProducer.canton;
-    (document.getElementById('district') as HTMLSelectElement).value = this.actualProducer.district;  
+    (document.getElementById('district') as HTMLSelectElement).value = this.actualProducer.distrito;  
 
-    this.deliveryZones = this.actualProducer.deliver;
+    this.deliveryZones = this.actualProducer.lugaresEntrega;
     // console.log(document.getElementById("province").getAttribute("selected"));
   }
 
@@ -215,7 +203,7 @@ export class ProducerComponent implements OnInit {
    * Metodo para mostrar al usuario un modal para tomar una decision de si o no
    */
   askUser(): void {
-    this.utilsService.showInfoModal("Eliminar", "Esta seguro que desea eliminar al productor con la identificacion " + this.actualProducer.id,
+    this.utilsService.showInfoModal("Eliminar", "Esta seguro que desea eliminar al productor con la identificacion " + this.actualProducer.identificacion,
     "optionMsjLabel", "optionText", "optionMsj");
   }
 
