@@ -12,7 +12,7 @@ mediante solicitudes HTTP como GET, POST, PUT y DELETE */
   providedIn: 'root',
 })
 export class RestclientService {
-  private PORT = 5050;
+  private PORT = 5001;
 
   constructor(protected http: HttpClient) {}
 
@@ -33,9 +33,9 @@ export class RestclientService {
    */
   createProducer(producer: Producer) {
     console.log('Creando productor: ');
-    console.log('\n');
-    console.log(producer);
-    console.log('\n');
+    // console.log('\n');
+    // console.log(producer);
+    // console.log('\n');
     return this.http.post(
       `https://localhost:${this.PORT}/api/Productores`,
       JSON.stringify(producer)
