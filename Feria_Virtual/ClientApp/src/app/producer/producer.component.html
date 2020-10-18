@@ -1,0 +1,229 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+
+<div class="primary-container">
+  <hr>
+  <div class="card bg-light article-custom">
+    <article class="card-body mx-auto">
+      <h4 class="card-title mt-3 text-center custom-margin">Gestión de Productores</h4>
+      <form>
+        <div class="row">
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="far fa-address-card"></i> </span>
+            </div>
+            <input id="idProducer" name="idProducer" class="form-control" placeholder="Número de cédula" type="text">
+          </div> <!-- form-group// -->
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input id="name" name="name" class="form-control" placeholder="Nombre" type="text">
+          </div> <!-- form-group// -->
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input id="last-name1" name="last-name1" class="form-control" placeholder="Primer Apellido" type="text">
+          </div> <!-- form-group// -->
+  
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+            </div>
+            <input id="last-name2" name="last-name2" class="form-control" placeholder="Segundo Apellido" type="text">
+          </div> <!-- form-group// -->
+        </div>
+
+        <div class="row">
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-money-check"></i> </span>
+            </div>
+            <input id="sinpe" name="sinpe" class="form-control" placeholder="Sinpe Movil" type="text">
+          </div> <!-- form-group// -->
+          
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+            </div>
+            <input id="phone" name="phone" class="form-control" placeholder="Numero de Telefono" type="text">
+          </div> <!-- form-group// -->
+  
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-birthday-cake"></i> </span>
+            </div>
+            <input id="birth" name="birth" class="form-control" placeholder="Fecha de nacimiento" type="date">
+          </div> <!-- form-group// -->
+        
+        </div>
+
+        <div class="row">
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+            <select class="form-control" id="province">
+              <option selected="" value="Seleccione una provincia"> Seleccione una provincia</option>
+              <option *ngFor="let prov of provinces" (click)="loadCanton(prov)" value="{{prov}}">{{ prov }}</option>
+            </select>
+          </div> <!-- form-group end.// -->
+        
+        
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+            <select class="form-control" id="canton">
+              <option selected="" value="Seleccione un cantón"> Seleccione un cantón</option>
+              <option *ngFor="let canton of cantons" (click)="loadDistrict(canton)" value="{{canton}}">{{ canton }}</option>
+            </select>
+          </div> <!-- form-group end.// -->
+
+          <div class="form-group input-group col">
+            <div class="input-group-prepend">
+              <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+            <select class="form-control" id="district">
+              <option selected="" value="Seleccione un distrito"> Seleccione un distrito</option>
+              <option *ngFor="let district of districts" (click)="setActualDistrict(district)" value="{{district}}">{{ district }}</option>
+            </select>
+          </div> <!-- form-group end.// -->
+        </div>
+        
+        <div class="custom-row">
+          <div class="col">
+            <div class="form-group input-group col">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-truck"></i>
+                </span>
+              </div>
+              <input type="text" name="delivery" placeholder="Lugar de entrega" class="form-control" id="delivery">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" (click)="addDeliveryZone()">
+                  Agregar lugar de entrega
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="table-container">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center align-middle" scope="col">Lugar de entrega</th>
+                    <th></th>
+                  </tr>
+                </thead>
+  
+                <tbody *ngFor="let deliveryZone of deliveryZones">
+                  <tr>
+                    <td class="text-center align-middle">{{ deliveryZone }}</td>
+                    <button type="button" class="btn btn-teal btn-rounded btn-sm m-0" (click)="deleteDeliveryZone(deliveryZone)" ><i class="far fa-trash-alt"></i></button>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <button id="saveButton" value="Guardar nuevo productor" type="submit" class="btn-save btn btn-primary btn-block" (click)="saveProducer()">Guardar nuevo productor</button>
+        </div> <!-- form-group// -->
+      </form>
+
+      <hr class="style18">
+
+      <div class="margin-div">
+        <h2>Productores registrados</h2>
+        <div class="producer-table">
+          <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th class="text-center align-middle" scope="col">Identificacion</th>
+                  <th class="text-center align-middle" scope="col">Nombre</th>
+                  <th class="text-center align-middle" scope="col">Primer Apellido</th>
+                  <th class="text-center align-middle" scope="col">Segundo Apellido</th>
+                  <th class="text-center align-middle" scope="col">Sinpe Movil</th>
+                  <th class="text-center align-middle" scope="col">Telefono</th>
+                  <th class="text-center align-middle" scope="col">Fecha de nacimiento</th>
+                  <th class="text-center align-middle" scope="col">Provincia</th>
+                  <th class="text-center align-middle" scope="col">Canton</th>
+                  <th class="text-center align-middle" scope="col">Distrito</th>
+                  <th class="text-center align-middle" scope="col">Lugares de entrega</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let producer of producers; let i = index;">
+                <tr>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.identificacion }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.nombre }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.apellido1 }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.apellido2 }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.sinpe }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.telefono }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.fechaNacimiento }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.provincia }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.canton }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.distrito }}</td>
+                  <td (contextmenu)="onProducerClick($event, producer)" class="text-center align-middle">{{ producer.lugaresEntrega }}</td>
+                </tr>
+      
+              </tbody>
+        </table>
+        </div>
+        
+        <div class="dropdown-menu" aria-labelledby="tableMenu" id="context-menu">
+            <a class="dropdown-item btn btn-default" (click)="updateProducer()">Actualizar</a>  
+            <a class="dropdown-item btn" (click)="askUser()">Eliminar</a> 
+        </div>
+    </div>
+    </article>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="saveMsj">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="saveMsjLabel"></h4>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <a id="msjText"></a>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" (click)="closeModal('saveMsj')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Option Modal -->
+<div class="modal" id="optionMsj">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="optionMsjLabel"></h4>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <a id="optionText"></a>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal" (click)="deleteProducer()">Si</button>
+        <button type="button" class="btn btn-info" data-dismiss="modal" (click)="closeModal('optionMsj')">No</button>
+      </div>
+    </div>
+  </div>
+</div>

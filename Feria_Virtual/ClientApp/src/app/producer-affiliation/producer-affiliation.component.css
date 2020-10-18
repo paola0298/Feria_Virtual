@@ -1,0 +1,68 @@
+.margin-div {
+    margin-bottom: 50px;
+}
+
+.affiliation-header {
+    margin-bottom: 30px;
+}
+#menu {
+    display:none
+}
+
+.dropdown-menu {
+    max-height: 300px;
+    overflow: auto;
+}
+
+.custom-row {
+    display: flex;
+    flex: row wrap;
+    justify-content: flex-start;
+}
+
+.custom-row>div:first-child {
+    padding-left: 0;
+    flex-grow: 2;
+}
+.custom-row>div:first-child>div {
+    padding-left: 0;
+}
+
+.table-container {
+    max-height: 160px;
+    overflow: auto;
+}
+
+.btn-save {
+    border-radius: 8px;
+    width: 50%; 
+    margin: auto;
+}
+
+.primary-container {
+    /* display: flex !important;
+    flex: row wrap;
+    justify-content: center; */
+
+    width: 100vw;
+    height: 92vh;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -15px;
+
+    background-image: url('https://www.apa.org/images/farmers-stress-title_tcm7-262116.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.article-custom {
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    align-self: center;
+    margin: auto;
+    margin-top: 5%;
+}

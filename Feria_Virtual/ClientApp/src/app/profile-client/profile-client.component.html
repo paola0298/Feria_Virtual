@@ -1,0 +1,89 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+
+<div class="primary-container">
+    <hr>
+    <div class="card bg-light article-custom">
+        <article class="card-body mx-auto">
+            <h4 class="card-title mt-3 text-center custom-margin">Mi Perfil</h4>
+            <img src="../assets/user.png" alt="" class="center">
+            <form>
+                <div class="row">
+                    <div class="form-group input-group col">
+                        <input id="idClient" name="idClient" class="form-control" placeholder="Identificacion" type="text" disabled>
+                    </div> <!-- form-group// -->
+
+                    <div class="form-group input-group col">
+                        <input id="name" name="name" class="form-control" placeholder="Nombre" type="text" disabled>
+                    </div> <!-- form-group// -->
+
+                    <div class="form-group input-group col">
+                        <input id="last-name1" name="last-name1" class="form-control" placeholder="Primer Apellido" type="text" disabled>
+                    </div> <!-- form-group// -->
+
+                    <div class="form-group input-group col">
+                        <input id="last-name2" name="last-name2" class="form-control" placeholder="Segundo Apellido" type="text" disabled>
+                    </div> <!-- form-group// -->
+                </div> <!-- row// -->
+
+                <div class="row">
+                    <div class="form-group input-group col">
+                        <select class="form-control" id="province">
+                          <option selected="" value="Seleccione una provincia"> Seleccione una provincia</option>
+                          <option *ngFor="let prov of provinces" (click)="loadCanton(prov)" value="{{prov}}">{{ prov }}</option>
+                        </select>
+                      </div> <!-- form-group end.// -->
+
+                      <div class="form-group input-group col">
+                        <select class="form-control" id="canton">
+                          <option selected="" value="Seleccione un cantón"> Seleccione un cantón</option>
+                          <option *ngFor="let canton of cantons" (click)="loadDistrict(canton)" value="{{canton}}">{{ canton }}</option>
+                        </select>
+                      </div> <!-- form-group end.// -->
+              
+                      <div class="form-group input-group col">
+                        <select class="form-control" id="district">
+                          <option selected="" value="Seleccione un distrito"> Seleccione un distrito</option>
+                          <option *ngFor="let district of districts" value="{{district}}">{{ district }}</option>
+                        </select>
+                      </div> <!-- form-group end.// -->
+                </div>
+
+                <div class="row">
+                    <div class="form-group input-group col">
+                        <input id="dir" name="dir" class="form-control" placeholder="Otras señas" type="text" disabled>
+                      </div> <!-- form-group// -->
+
+                    <div class="form-group input-group col">
+                        <input id="phone" name="phone" class="form-control" placeholder="Telefono" type="text" disabled>
+                    </div> <!-- form-group// -->
+
+                    <div class="form-group input-group col">
+                        <input id="birth" name="birth" class="form-control" placeholder="Fecha de nacimiento" type="date" disabled>
+                      </div> <!-- form-group// -->
+                </div> <!-- row// -->
+
+                <div class="row margin-div">
+                    <div class="form-group col">
+                        <button type="submit" class="btn btn-primary btn-block" (click)="updateData()"  >{{ actionFlag? 'Guardar' : 'Modificar mis datos'}}</button>
+                    </div> <!-- form-group// -->
+
+                    <div class="form-group col">
+                        <button type="submit" class="btn btn-danger btn-block" (click)="deleteAccount()">Eliminar mi cuenta</button>
+                    </div> <!-- form-group// -->
+                </div> <!-- row -->
+            </form>
+        </article>
+    </div>
+</div>
+
+
+
+<!-- <div class="container">
+    <form>
+        <div class="input-group">
+            <input type="text" name="" id="" required placeholder="Nombre">
+            <span class="bar"></span>
+            
+        </div>
+    </form>
+</div> -->

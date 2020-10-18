@@ -1,0 +1,44 @@
+.primary-container {
+    /* display: flex !important;
+    flex: row wrap;
+    justify-content: center; */
+
+    width: 100vw;
+    height: 92vh;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -15px;
+
+    background-image: url('https://www.croptracker.com/images/blog/FruitvsVeg.webp');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.article-custom {
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    align-self: center;
+    margin: auto;
+    margin-top: 5%;
+}
+
+.custom-margin {
+    margin-bottom: 30px !important;
+}
+
+.input-group {
+    width: 500px !important;
+}
+
+.margin-div {
+    margin-top: 30px;
+}
+
+.category-table {
+    max-height: 250px !important;
+    overflow: auto;
+}
