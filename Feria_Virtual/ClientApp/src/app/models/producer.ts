@@ -12,6 +12,7 @@ export class Producer {
   canton: string;
   distrito: string;
   lugaresEntrega: string[];
+  afiliado: boolean;
 
   constructor(
     nombre: string,
