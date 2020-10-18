@@ -7,12 +7,6 @@
       <h4 class="card-title mt-3 text-center custom-margin">Gestión de Categorías</h4>
       <form>
         <div class="row custom-row">
-          <div class="form-group input-group col">
-            <div class="input-group-prepend">
-              <span class="input-group-text"> <i class="far fa-address-card"></i> </span>
-            </div>
-            <input id="idCategory" name="idCategory" class="form-control" placeholder="Identificador" type="text">
-          </div> <!-- form-group// -->
 
           <div class="form-group input-group col">
             <div class="input-group-prepend">
@@ -22,7 +16,7 @@
           </div> <!-- form-group// -->
 
           <div class="form-group col">
-            <button type="submit" class="btn btn-primary btn-block" (click)="saveCategory()">Guardar</button>
+            <button type="submit" id="saveButton" class="btn btn-primary btn-block" (click)="saveCategory()">Guardar</button>
           </div> <!-- form-group// -->
 
         </div>
@@ -43,7 +37,7 @@
             <tbody *ngFor="let category of categories; let i = index;">
                 <tr>
                     <td (contextmenu)="onCategoryClick($event, category)" class="text-center align-middle">{{ category.id }}</td>
-                    <td (contextmenu)="onCategoryClick($event, category)" class="text-center align-middle">{{ category.name }}</td>
+                    <td (contextmenu)="onCategoryClick($event, category)" class="text-center align-middle">{{ category.nombre }}</td>
                 </tr>
             </tbody>
         </table>
