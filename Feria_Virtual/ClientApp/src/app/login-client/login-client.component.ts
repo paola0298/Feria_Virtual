@@ -8,8 +8,8 @@ import { UtilsService } from 'src/app/services/utils.service'
 })
 export class LoginClientComponent implements OnInit {
 
-  utilsService:UtilsService = new UtilsService();
-  constructor() { }
+  
+  constructor(private utilsService:UtilsService) { }
 
   ngOnInit() { }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UtilsService } from 'src/app/services/utils.service' 
 
 @Component({
   selector: 'app-login-admin',
@@ -7,9 +8,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginAdminComponent implements OnInit {
 
-  constructor() { }
+  constructor(private utilsService:UtilsService) { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  login() {
+    let adminCode = (document.getElementById("adminCode") as HTMLInputElement);
+
+    if (adminCode.value == "") {
+      this.utilsService.showInfoModal("Error", "Por favor ingrese el código de administrador", "saveMsjLabel", "msjText", "saveMsj");
+      return;
+    } 
+
+    if (Number(adminCode.value) == 12345) {
+      //cargar pagina
+      (document.getElementById("adminCode") as HTMLInputElement).value = "";
+    }
+  }
+
+  closeModal(modal:string) {
+    document.getElementById(modal).style.setProperty('display', 'none');
   }
 
 }
