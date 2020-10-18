@@ -24,6 +24,18 @@ namespace Feria_Virtual.Controllers
             return Ok(productoresAfiliados);
         }
 
+        [HttpGet("{prov}/{can}/{dis}")]
+        public async Task<IActionResult> GetProductoresInRegionAsync(string prov, string can, string dis) {
+            var productores = await JsonHandler.LoadFileAsync<Productor>(FilePath.Productores);
+
+            var inRegion = productores.FindAll(
+                p => p.Provincia == prov && 
+                p.Canton == can && 
+                p.Distrito == dis);
+
+            return Ok(inRegion);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductorAsync(string id)
         {

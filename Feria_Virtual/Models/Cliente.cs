@@ -1,20 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+
 
 namespace Feria_Virtual.Models
 {
-    public class Productor
+    public class Cliente
     {
         [Key]
         public string Identificacion { get; set; }
-        public string Nombre { get; set; }
-        public string Sinpe { get; set; }
         public string Telefono { get; set; }
         public DateTimeOffset FechaNacimiento { get; set; }
-        public bool Afiliado { get; set; }
 
         #region Apellido
         public string Apellido1 { get; set; }
@@ -27,7 +26,11 @@ namespace Feria_Virtual.Models
         public string Distrito { get; set; }
         #endregion
 
-        //TODO: Crear nueva entidad para almacenar los lugares de entrega
-        public List<string> LugaresEntrega { get; set; }
+        #region LogIn
+        public string Usuario {get; set; }
+        public string Password{get; set;}
+        #endregion
+
+
     }
 }
