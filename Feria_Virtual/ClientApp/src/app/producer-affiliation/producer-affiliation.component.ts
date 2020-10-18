@@ -34,11 +34,10 @@ export class ProducerAffiliationComponent implements OnInit {
     let province = (document.getElementById("province") as HTMLSelectElement);
     let canton = (document.getElementById("canton") as HTMLSelectElement);
     let district = (document.getElementById("district") as HTMLSelectElement);
-    let dir = (document.getElementById("dir") as HTMLInputElement);
     let deliver = (document.getElementById("deliver") as HTMLInputElement);
 
     if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
-      dir.value == '' || this.deliveryZones.length == 0) {
+        this.deliveryZones.length == 0) {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
 
     } else {
@@ -48,7 +47,7 @@ export class ProducerAffiliationComponent implements OnInit {
       let sinpeN = Number(sinpe.value);
 
       //TODO enviar solicitud de afiliacion
-      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, dir, birth],
+      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, birth],
         [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
       this.deliveryZones = [];
     }
