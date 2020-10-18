@@ -72,3 +72,12 @@
     background-color: white;
 }
 
+.hr-custom {
+    margin-top: 1px !important;
+    margin-bottom: 1px !important;
+}
+
+.a-custom {
+    color: dodgerblue !important;
+}
+
