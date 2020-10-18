@@ -1,5 +1,5 @@
 import { Injectable, Provider } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Producer } from '../models/producer';
 import { AfilliationRequest } from '../models/affiliationRequest';
 import { Category } from '../models/category';
@@ -13,6 +13,11 @@ mediante solicitudes HTTP como GET, POST, PUT y DELETE */
 })
 export class RestclientService {
   private PORT = 5001;
+  private options = {
+    headers : {
+      'Content-Type': 'application/json'
+    }
+  }
 
   constructor(protected http: HttpClient) {}
 
@@ -24,7 +29,7 @@ export class RestclientService {
   getProducers() {
     console.log('Obteniendo todos los productores');
     console.log('\n');
-    return this.http.get(`https://localhost:${this.PORT}/api/Productores`);
+    return this.http.get(`https://localhost:${this.PORT}/api/Productores`, this.options);
   }
 
   /**
@@ -33,13 +38,11 @@ export class RestclientService {
    */
   createProducer(producer: Producer) {
     console.log('Creando productor: ');
-    // console.log('\n');
-    // console.log(producer);
-    // console.log('\n');
-    return this.http.post(
-      `https://localhost:${this.PORT}/api/Productores`,
-      JSON.stringify(producer)
-    );
+    console.log('\n');
+    console.log(producer);
+    console.log('\n');
+    return this.http.post(`https://localhost:${this.PORT}/api/Productores`, JSON.stringify(producer), this.options);
+    
   }
 
   /**
@@ -53,8 +56,7 @@ export class RestclientService {
     console.log('\n');
     return this.http.put(
       `https://localhost:${this.PORT}/api/Productores/${producer.identificacion}`,
-      JSON.stringify(producer)
-    );
+      JSON.stringify(producer), this.options);
   }
 
   /**
@@ -66,19 +68,19 @@ export class RestclientService {
     console.log('\n');
     console.log(id);
     console.log('\n');
-    return this.http.get(`https://localhost:${this.PORT}/api/Productores/${id}`);
+    return this.http.get(`https://localhost:${this.PORT}/api/Productores/${id}`, this.options);
   }
 
   /**
    * Solicitud HTTP DELETE para eliminar un productor
    * @param id id del productor específico que se desea eliminar
    */
-  deleteProducer(id: string) {
+  deleteProducer1(id: string) {
     console.log('Eliminando productor id: ');
     console.log('\n');
     console.log(id);
     console.log('\n');
-    return this.http.delete(`https://localhost:${this.PORT}/api/Productores/${id}`);
+    return this.http.delete(`https://localhost:${this.PORT}/api/Productores/${id}`, this.options);
   }
 
   /**
@@ -92,21 +94,14 @@ export class RestclientService {
     console.log('\n');
     return this.http.put(
       `https://localhost:${this.PORT}/api/Afiliaciones/${affiliationRequest.id}`,
-      JSON.stringify({
-        id: affiliationRequest.id,
-        estado: 1
-      })
-    );
+      JSON.stringify(affiliationRequest), this.options);
   }
 
   /**
    * Solicitud HTTP PUT para rechazar solicitud de afiliación
    * @param id Id de solicitud de afiliacion que se quiere rechazar
    */
-  rejectAffiliationRequest(
-    affiliationRequest: AfilliationRequest,
-    comment?: string
-  ) {
+  rejectAffiliationRequest(affiliationRequest: AfilliationRequest, comment?: string) {
     console.log('Rechazando solicitud: ');
     console.log('\n');
     console.log(affiliationRequest);
@@ -118,14 +113,14 @@ export class RestclientService {
             id: affiliationRequest.id,
             estado: 2,
             comment: comment,
-          })
+          }), this.options
         )
       : this.http.put(
           `https://localhost:${this.PORT}/api/Afiliaciones/${affiliationRequest.id}`,
           JSON.stringify({
             id: affiliationRequest.id,
             estado: 2,
-          })
+          }), this.options
         );
   }
 
@@ -135,7 +130,7 @@ export class RestclientService {
   getCategories() {
     console.log('Obteniendo todas las categorías');
     console.log('\n');
-    return this.http.get(`https://localhost:${this.PORT}/api/Categorias`);
+    return this.http.get(`https://localhost:${this.PORT}/api/Categorias`, this.options);
   }
 
   /**
@@ -147,7 +142,7 @@ export class RestclientService {
     console.log('\n');
     console.log(id);
     console.log('\n');
-    return this.http.get(`https://localhost:${this.PORT}/api/Categorias/${id}`);
+    return this.http.get(`https://localhost:${this.PORT}/api/Categorias/${id}`, this.options);
   }
 
   /**
@@ -159,7 +154,7 @@ export class RestclientService {
     console.log('\n');
     console.log(category);
     console.log('\n');
-    return this.http.post(`https://localhost:${this.PORT}/api/Categorias`, JSON.stringify(category));
+    return this.http.post(`https://localhost:${this.PORT}/api/Categorias`, JSON.stringify(category), this.options);
   }
 
   /**
@@ -173,7 +168,8 @@ export class RestclientService {
     console.log('\n');
     return this.http.put(
       `https://localhost:${this.PORT}/api/Categorias/${category.id}`,
-      JSON.stringify(category)
+      JSON.stringify(category),
+      this.options
     );
   }
 
@@ -186,7 +182,7 @@ export class RestclientService {
     console.log('\n');
     console.log(id);
     console.log('\n');
-    return this.http.delete(`https://localhost:${this.PORT}/api/Categorias/${id}`);
+    return this.http.delete(`https://localhost:${this.PORT}/api/Categorias/${id}`, this.options);
   }
 
   /**
@@ -195,7 +191,7 @@ export class RestclientService {
   getProducts() {
     console.log('Obteniendo todos los productos');
     console.log('\n');
-    return this.http.get(`https://localhost:${this.PORT}/api/Productos`);
+    return this.http.get(`https://localhost:${this.PORT}/api/Productos`, this.options);
   }
 
   /**
@@ -207,7 +203,7 @@ export class RestclientService {
     console.log('\n');
     console.log(id);
     console.log('\n');
-    return this.http.get(`https://localhost:${this.PORT}/api/Productos/productor/${id}`);
+    return this.http.get(`https://localhost:${this.PORT}/api/Productos/productor/${id}`, this.options);
   }
 
   /**
@@ -219,7 +215,7 @@ export class RestclientService {
     console.log('\n');
     console.log(product);
     console.log('\n');
-    return this.http.post(`https://localhost:${this.PORT}/api/Productos`, JSON.stringify(product));
+    return this.http.post(`https://localhost:${this.PORT}/api/Productos`, JSON.stringify(product), this.options);
   }
 
   /**
@@ -231,10 +227,7 @@ export class RestclientService {
     console.log('\n');
     console.log(product);
     console.log('\n');
-    return this.http.put(
-      `https://localhost:${this.PORT}/api/Productos/${product.id}`,
-      JSON.stringify(product)
-    );
+    return this.http.put(`https://localhost:${this.PORT}/api/Productos/${product.id}`, JSON.stringify(product), this.options);
   }
 
   /**
@@ -246,7 +239,59 @@ export class RestclientService {
     console.log('\n');
     console.log(id);
     console.log('\n');
-    return this.http.delete(`https://localhost:${this.PORT}/api/Productos/${id}`);
+    return this.http.delete(`https://localhost:${this.PORT}/api/Productos/${id}`, this.options);
   }
+
+
+  // send<T>(method: string, url: string, body: string): Promise<ApiResponse<T>> {
+  //   var promise = new Promise<ApiResponse<T>>(function(resolve, reject) {
+  //     let xhr = new XMLHttpRequest();
+  //     xhr.open(method, url, true);
+  //     xhr.setRequestHeader('Content-Type', 'application/json');
+  //     xhr.onload = function() {
+  //       if (this.status >= 200 && this.status < 300) {
+  //         var value = null;
+  //         if (method != "PUT" && method != "DELETE") {
+  //           value = JSON.parse(this.responseText);
+  //         }
+  //         var response = new ApiResponse(value, this.status, this.statusText);
+  //         resolve(response);
+  //       } else {
+  //         resolve(new ApiResponse(null, this.status, this.statusText));
+  //         // reject(new ApiResponse(null, this.status, this.statusText));
+  //       }
+  //     };
+  //     xhr.send(body);
+  //   });
+  //   return promise;
+  // }
+
+  // /**
+  //  * Solicitud HTTP GET para obtener la lista de productores registrados
+  //  */
+  // async getProducers(): Promise<ApiResponse<Producer[]>> {
+  //   var url = `https://localhost:${this.PORT}/api/Productores`;
+  //   return this.send('GET', url, null);
+  // }
+
+
+  // /**
+  //  * Solicitud HTTP POST para crear un productor
+  //  * @param producer Objeto de tipo Producer
+  //  */
+  // async createProducer(producer:Producer): Promise<ApiResponse<Producer>> {
+  //   console.log(JSON.stringify(producer));
+  //   var url = `https://localhost:${this.PORT}/api/Productores`;
+  //   return this.send('POST', url, JSON.stringify(producer));
+  // }
+
+  // /**
+  //  * Solicitud HTTP DELETE para eliminar un productor
+  //  * @param id id del productor específico que se desea eliminar
+  //  */
+  // async deleteProducer(id: String): Promise<ApiResponse<null>> {
+  //   var url = `https://localhost:${this.PORT}/api/Productores/${id}`;
+  //   return this.send('DELETE', url, null);
+  // }
 
 }
