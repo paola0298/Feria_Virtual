@@ -93,7 +93,7 @@ export class ProducerComponent implements OnInit {
    * @param htmlElements Elementos html input para limpiar los campos
    * @param selectElements Elementos html select para limpiar los campos
    */
-  modifyProducer(producer, htmlElements:HTMLInputElement[], selectElements:HTMLSelectElement[]) {
+  modifyProducer(producer:Producer, htmlElements:HTMLInputElement[], selectElements:HTMLSelectElement[]) {
     var response = this.restClientService.updateProducer(producer);
     response.subscribe(
       (value:any) => {
@@ -185,9 +185,6 @@ export class ProducerComponent implements OnInit {
   deleteProducer(): void {
     this.removeProducer(this.actualProducer.identificacion);
     document.getElementById('optionMsj').style.setProperty('display', 'none');
-    // this.loadProducers();
-    // const index = this.producers.indexOf(this.actualProducer, 0);
-    // this.producers.splice(index, 1);
   }
 
   /**
