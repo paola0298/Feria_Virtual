@@ -17,6 +17,7 @@ import { LoginClientComponent } from './login-client/login-client.component';
 import { ProfileClientComponent } from './profile-client/profile-client.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { RestclientService } from './services/restclient.service';
+import { LoginAdminComponent } from './login-admin/login-admin.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { RestclientService } from './services/restclient.service';
     RegisterClientComponent,
     LoginClientComponent,
     ProfileClientComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
+    LoginAdminComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -48,6 +50,7 @@ import { RestclientService } from './services/restclient.service';
       { path: 'login-client', component: LoginClientComponent},
       { path: 'profile-client', component: ProfileClientComponent},
       { path: 'shopping-cart', component: ShoppingCartComponent},
+      { path: 'login-admin', component: LoginAdminComponent},
     ])
   ],
   providers: [RestclientService],
