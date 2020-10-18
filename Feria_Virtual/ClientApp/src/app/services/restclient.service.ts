@@ -37,10 +37,10 @@ export class RestclientService {
    * @param producer Objeto de tipo Producer
    */
   createProducer(producer: Producer) {
-    console.log('Creando productor: ');
-    console.log('\n');
-    console.log(producer);
-    console.log('\n');
+    console.log('Creando productor: ' + producer);
+    // console.log('\n');
+    // console.log(producer);
+    // console.log('\n');
     return this.http.post(`https://localhost:${this.PORT}/api/Productores`, JSON.stringify(producer), this.options);
     
   }
@@ -50,10 +50,10 @@ export class RestclientService {
    * @param producer Objeto de tipo Producer
    */
   updateProducer(producer: Producer) {
-    console.log('Actualizando productor: ');
-    console.log('\n');
-    console.log(producer);
-    console.log('\n');
+    console.log('Actualizando productor: ' + producer);
+    // console.log('\n');
+    // console.log(producer);
+    // console.log('\n');
     return this.http.put(
       `https://localhost:${this.PORT}/api/Productores/${producer.identificacion}`,
       JSON.stringify(producer), this.options);
@@ -64,10 +64,10 @@ export class RestclientService {
    * @param id id del productor específico que se desea obtener
    */
   getProducer(id: string) {
-    console.log('Obteniendo productor id: ');
-    console.log('\n');
-    console.log(id);
-    console.log('\n');
+    console.log('Obteniendo productor id: ' + id);
+    // console.log('\n');
+    // console.log(id);
+    // console.log('\n');
     return this.http.get(`https://localhost:${this.PORT}/api/Productores/${id}`, this.options);
   }
 
@@ -75,11 +75,11 @@ export class RestclientService {
    * Solicitud HTTP DELETE para eliminar un productor
    * @param id id del productor específico que se desea eliminar
    */
-  deleteProducer1(id: string) {
-    console.log('Eliminando productor id: ');
-    console.log('\n');
-    console.log(id);
-    console.log('\n');
+  deleteProducer(id: string) {
+    console.log('Eliminando productor id: ' + id);
+    // console.log('\n');
+    // console.log(id);
+    // console.log('\n');
     return this.http.delete(`https://localhost:${this.PORT}/api/Productores/${id}`, this.options);
   }
 
