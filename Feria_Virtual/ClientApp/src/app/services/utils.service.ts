@@ -73,34 +73,6 @@ export class UtilsService {
     return promise;
   }
 
-  makeRequestProducers(method: string, url: string): Promise<Producer[]> {
-    var promise = new Promise<Producer[]>(function(resolve, reject){
-      let xhr = new XMLHttpRequest();
-      xhr.open(method, url);
-      xhr.onload = function() {
-        if (this.status >= 200 && this.status < 300) {
-          var json = JSON.parse(this.responseText);
-          console.log(this.responseText);
-          resolve(json);
-        } else {
-          var reason = {
-            status: this.status,
-            statusText: this.statusText
-          };
-          reject(reason);
-        }
-      };
-      xhr.send();
-    });
-    return promise;
-  }
-
-  async getProducers(): Promise<Producer[]> {
-    var url = "https://localhost:5001/api/Productores";
-    return this.makeRequestProducers("GET", url);
-  }
-
- 
 
   /**
    * Metodo para mostrar el menu contextual al presionar click derecho
