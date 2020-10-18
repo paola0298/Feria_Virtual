@@ -129,7 +129,7 @@ export class RestclientService {
    */
   getCategories() {
     console.log('Obteniendo todas las categorías');
-    console.log('\n');
+    // console.log('\n');
     return this.http.get(`https://localhost:${this.PORT}/api/Categorias`, this.options);
   }
 
@@ -138,10 +138,10 @@ export class RestclientService {
    * @param id Id de la categoría que se desea obtener
    */
   getCategory(id: number) {
-    console.log('Obteniendo categoría id: ');
-    console.log('\n');
-    console.log(id);
-    console.log('\n');
+    console.log('Obteniendo categoría id: ' + id);
+    // console.log('\n');
+    // console.log(id);
+    // console.log('\n');
     return this.http.get(`https://localhost:${this.PORT}/api/Categorias/${id}`, this.options);
   }
 
@@ -150,10 +150,10 @@ export class RestclientService {
    * @param category Objeto de tipo Category
    */
   createCategory(category: Category) {
-    console.log('Creando productor: ');
-    console.log('\n');
-    console.log(category);
-    console.log('\n');
+    console.log('Creando categoria: ' + category);
+    // console.log('\n');
+    // console.log(category);
+    // console.log('\n');
     return this.http.post(`https://localhost:${this.PORT}/api/Categorias`, JSON.stringify(category), this.options);
   }
 
@@ -177,11 +177,11 @@ export class RestclientService {
    * Solicitud HTTP DELETE para eliminar una catergoría
    * @param id id de la categoría específica que se desea eliminar
    */
-  deleteCategory(id: string) {
-    console.log('Eliminando categoría id: ');
-    console.log('\n');
-    console.log(id);
-    console.log('\n');
+  deleteCategory(id: number) {
+    console.log('Eliminando categoría id: ' + id);
+    // console.log('\n');
+    // console.log(id);
+    // console.log('\n');
     return this.http.delete(`https://localhost:${this.PORT}/api/Categorias/${id}`, this.options);
   }
 
