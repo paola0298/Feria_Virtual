@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service'
+import { RestclientService } from 'src/app/services/restclient.service'
+import { Category } from 'src/app/models/category'
 
 @Component({
   selector: 'app-category',
@@ -8,57 +10,114 @@ import { UtilsService } from 'src/app/services/utils.service'
 })
 export class CategoryComponent implements OnInit {
 
-  private utilsService: UtilsService = new UtilsService();
   updating: boolean = false;
-  actualCategory;
-  categories = [{
-    id:1,
-    name:'verduras'
-  }]
-  isEnabled?: boolean = true;
+  actualCategory:Category;
+  categories = []
 
-  constructor() { }
+  constructor(private utilsService: UtilsService, private restClientService: RestclientService) { }
 
   ngOnInit() {
     this.utilsService.configureContextMenu();
+    this.loadCategories();
+  }
+
+  /**
+   * Metodo para conectarse al servicio para obtener todas las categorias registradas
+   */
+  loadCategories() {
+    var response = this.restClientService.getCategories();
+    response.subscribe(
+      (value:Category[]) => {
+        this.categories = value;
+
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+      });
+  }
+
+  /**
+   * Metodo que se conecta con el servicio para crear una nueva categoria
+   * @param category Nueva categoria a incluir
+   * @param inputElementName Elemnto html para limpiar los campos
+   */
+  createCategory(category:Category, inputElementName:HTMLInputElement) {
+    var response = this.restClientService.createCategory(category);
+    response.subscribe(
+      (value:Category) => {
+        this.loadCategories();
+        this.utilsService.showInfoModal("Exito", "Nueva categoria guardada correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.utilsService.cleanField([inputElementName], [], []);
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+        if (error.status == 409)
+          this.utilsService.showInfoModal("Error", "La categoria ya existe", "saveMsjLabel", "msjText", 'saveMsj');
+      });
+  }
+
+  /**
+   * Metodo para conectarse al servicio y eliminar una categoria 
+   * @param id Id de la categoria a eliminar 
+   */
+  removeCategory(id:number) {
+    var response = this.restClientService.deleteCategory(id);
+    response.subscribe(
+      (value:any) => {
+        this.utilsService.showInfoModal("Exito", "Categoria eliminada correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.loadCategories();
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+        this.utilsService.showInfoModal("Error", "Hubo un problema al eliminar la categoria.", "saveMsjLabel", "msjText", 'saveMsj');
+      });
+  }
+
+  /**
+   * Metodo que se conecta con el servicio para actualizar una categoria
+   * @param category Categoria a actualizar
+   * @param inputElementName Elemnto html para limpiar los campos
+   */
+  modifyCategory(category:Category, inputElementName:HTMLInputElement) {
+    var response = this.restClientService.updateCategory(category);
+    response.subscribe(
+      (value:any) => {
+        this.utilsService.showInfoModal("Exito", "Categoria actualizada correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.utilsService.cleanField([inputElementName], [], []);
+        this.loadCategories();
+        this.updating = false;
+        (document.getElementById("saveButton") as HTMLButtonElement).textContent = "Guardar";
+      });
   }
 
   /**
    * Metodo para obtener los datos ingresados por el usuario y almacenarlos
    */
   saveCategory(): void {
-    let id = (document.getElementById("idCategory") as HTMLInputElement);
     let name = (document.getElementById("nameCategory") as HTMLInputElement);
 
-    if (id.value == '' || name.value == '') {
+    if (name.value == '') {
       this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
+      return;
+    }
+    //TODO guardar categoria 
+    var category = new Category(name.value);
+    if (this.updating) {
+      category.id = this.actualCategory.id;
+      this.modifyCategory(category, name);
     } else {
-      //TODO guardar categoria 
-      let idN = Number(id.value);
-      var category = {id:idN, name:name.value};
-
-      if (this.updating) {
-        this.utilsService.showInfoModal("Exito", "Categoria actualizada correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
-        let indexCategory = this.categories.indexOf(this.actualCategory);
-        this.categories[indexCategory] = category;
-        this.updating = false;
-        document.getElementById("idCategory").removeAttribute('disabled');
-      } else {
-        this.utilsService.showInfoModal("Exito", "Nueva categoria guardada correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
-        this.categories.push(category);
-      }
-      this.utilsService.cleanField([id, name], [], []);
+      this.createCategory(category, name);
     }
   }
+
 
   /**
    * Metodo para actualizar una categoria
    */
   updateCategory(): void {
-    console.log("Updating category: " + this.actualCategory.id + " " + this.actualCategory.name);
-    (document.getElementById("idCategory") as HTMLInputElement).value = this.actualCategory.id;
-    (document.getElementById("nameCategory") as HTMLInputElement).value = this.actualCategory.name;
-    document.getElementById("idCategory").setAttribute('disabled', 'true');
+    console.log("Updating category: " + this.actualCategory.id + " " + this.actualCategory.nombre);
+    (document.getElementById("nameCategory") as HTMLInputElement).value = this.actualCategory.nombre;
+    (document.getElementById("saveButton") as HTMLButtonElement).textContent = "Actualizar";
     this.updating = true;
   }
 
@@ -67,8 +126,7 @@ export class CategoryComponent implements OnInit {
    */
   deleteCategory(): void {
     document.getElementById('optionMsj').style.setProperty('display', 'none');
-    const index = this.categories.indexOf(this.actualCategory, 0);
-    this.categories.splice(index, 1);
+    this.removeCategory(this.actualCategory.id);
   }
 
   /**
@@ -94,7 +152,7 @@ export class CategoryComponent implements OnInit {
    * Metodo para mostrar al usuario un modal para tomar una decision de si o no
    */
   askUser(): void {
-    this.utilsService.showInfoModal("Eliminar", "Esta seguro que desea eliminar la categoria: " + this.actualCategory.name,
+    this.utilsService.showInfoModal("Eliminar", "Esta seguro que desea eliminar la categoria: " + this.actualCategory.nombre,
     "optionMsjLabel", "optionText", "optionMsj");
   }
 }
