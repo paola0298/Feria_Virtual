@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+
+<div class="primary-container">
+  <hr>
+  <div class="card bg-light article-custom">
+    <article class="card-body-mx-auto">
+      <h1 class="card-title mt-3 text-center custom-margin">Bienvenidos a la Feria Virtual del Agricultor</h1>
+      <h3 class="card-title mt-3 text-center custom-margin">Por favor seleccione la acción que desea realizar:</h3>
+
+      <div class="row row-custom">
+
+        <div class="col col-custom">
+          <button class="btn" [routerLink]="['/producer']"><i class="fas fa-tractor"></i>Gestión de Productores</button>
+        </div>
+
+        <div class="col col-custom">
+          <button class="btn" [routerLink]="['/']"><i class="fas fa-user-cog"></i>Administración de afiliaciones</button>
+        </div>
+
+        <div class="col col-custom">
+          <button class="btn" [routerLink]="['/category']"><i class="fas fa-box-open"></i>Gestión de Categorías</button>
+        </div>
+
+        <div class="col col-custom">
+            <button class="btn" [routerLink]="['/']"><i class="far fa-newspaper"></i>Reportes</button>
+          </div>
+      </div>
+    </article>
+  </div>
+</div>

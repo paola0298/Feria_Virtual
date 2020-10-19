@@ -5,23 +5,23 @@
   <div class="card bg-light article-custom">
     <article class="card-body-mx-auto">
       <h1 class="card-title mt-3 text-center custom-margin">Bienvenidos a la Feria Virtual del Agricultor</h1>
-      <h3 class="card-title mt-3 text-center custom-margin">Por favor seleccione como desea ingresar:</h3>
+      <h3 class="card-title mt-3 text-center custom-margin">Por favor seleccione la acción que desea realizar:</h3>
 
       <div class="row row-custom">
 
         <div class="col col-custom">
-          <button class="btn" [routerLink]="['/login-client']"><i class="fas fa-tractor"></i>Productor</button>
+          <button class="btn" [routerLink]="['/profile-client']"><i class="fas fa-user"></i>Mi Perfil</button>
         </div>
 
         <div class="col col-custom">
-          <button class="btn" [routerLink]="['/login-admin']"><i class="fas fa-user-cog"></i>Administrador</button>
+          <button class="btn" [routerLink]="['/']"><i class="fas fa-user-cog"></i>Ver Productores</button>
         </div>
 
         <div class="col col-custom">
-          <button class="btn" [routerLink]="['/login-client']"><i class="fas fa-user"></i>Cliente</button>
+          <button class="btn" [routerLink]="['/shopping-cart']"><i class="fas fa-shopping-cart"></i>Carrito de compras</button>
         </div>
-
       </div>
+
     </article>
   </div>
 </div>
