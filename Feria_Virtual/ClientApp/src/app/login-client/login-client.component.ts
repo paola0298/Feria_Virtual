@@ -21,7 +21,6 @@ export class LoginClientComponent implements OnInit {
     var response = this.restClientService.loginClient(id, pass);
     response.subscribe(
       (value:any) => {
-        //cargar pagina
         var userId = value.id;
         var client:boolean = value.client;
 
@@ -31,12 +30,29 @@ export class LoginClientComponent implements OnInit {
           window.localStorage.setItem("userId", userId);
           this.router.navigate(['menu-client']);
         } else {
-          this.utilsService.showInfoModal("Error", "Error al iniciar sesion, el cliente no esta registrado", "saveMsjLabel", "msjText", 'saveMsj');
+          // es un productor
+          window.localStorage.setItem("producerId", userId);
+          this.router.navigate(['menu-producer']);
         }
       }, (error:any) => {
         console.log(error.statusText);
         console.log(error.status);
-        this.utilsService.showInfoModal("Error", "Error al iniciar sesion", "saveMsjLabel", "msjText", 'saveMsj');
+
+        let status = error.status;
+        if (status == 400) {
+          this.utilsService.showInfoModal("Error", "Usuario y/o Contraseña incorrectos", "saveMsjLabel", "msjText", 'saveMsj');
+          return;
+        }
+
+        if (status == 409) {
+          this.utilsService.showInfoModal("Error", "El usuario ya se encuentra registrado", "saveMsjLabel", "msjText", 'saveMsj');
+          return;
+        }
+
+        if (status == 500) {
+          this.utilsService.showInfoModal("Error", "Su solicitud de afiliación aún esta siendo verificada.", "saveMsjLabel", "msjText", 'saveMsj');
+          return;
+        }
       });
   }
 
