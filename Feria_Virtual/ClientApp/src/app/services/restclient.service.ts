@@ -304,4 +304,13 @@ export class RestclientService {
     return this.http.delete(url, this.options);
   }
 
+  /**
+   * Solicitud HTTP POST para enviar una solicitud de afiliación de un productor
+   * @param producer Objeto de tipo Producer
+   */
+  sendAffiliationRequest(producer:Producer) {
+    console.log('Enviando solicitud de afiliacion id: ' + producer.identificacion);
+    var url = `https://localhost:${this.PORT}/api/Afiliaciones`;
+    return this.http.post(url, JSON.stringify(producer), this.options);
+  }
 }
