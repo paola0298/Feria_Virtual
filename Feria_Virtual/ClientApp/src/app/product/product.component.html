@@ -43,7 +43,7 @@
                         </div>
                         <select class="form-control" id="category">
                           <option selected="" value="Seleccione una categoria"> Seleccione una categoria</option>
-                          <option *ngFor="let category of categories" value="{{category}}">{{ category }}</option>
+                          <option *ngFor="let category of categories" value="{{category.nombre}}">{{ category.nombre }}</option>
                         </select>
                       </div> <!-- form-group end.// -->
     
@@ -81,12 +81,12 @@
                         </thead>
                         <tbody *ngFor="let product of products; let i = index">
                             <tr>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.name }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.availability }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.price }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.image }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.category }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.saleMode }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.nombre }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.disponibilidad }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.precio }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.imagen }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.idCategoria }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.modoVenta }}</td>
                             </tr>
                         </tbody>
                     </table>
