@@ -51,8 +51,12 @@ namespace Feria_Virtual.Controllers
                 if (productor == null)
                     return BadRequest();
 
+                if (!productor.Afiliado)
+                    return Forbid();
+
                 //Usar productor;
-                if (!productor.Password.Equals(EncryptLogin(log.Password)))
+                //if (!productor.Password.Equals(EncryptLogin(log.Password)))
+                if (!productor.Password.Equals(log.Password))
                     return BadRequest();
 
                 //Mandar datos de productor.

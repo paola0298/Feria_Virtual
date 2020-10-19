@@ -32,11 +32,12 @@ namespace Feria_Virtual.Controllers
             return Ok(productosSel);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductoAsync(int id) {
+        [HttpGet("{nombreProducto}")]
+        public async Task<IActionResult> GetProductoAsync(string nombreProducto) {
             var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
 
-            var producto = productos.FirstOrDefault(p => p.Id == id);
+            // var producto = productos.FirstOrDefault(p => p.Id == id);
+            var producto = productos.FirstOrDefault(p => p.Nombre == nombreProducto);
 
             if (producto == null)
                 return NotFound();
@@ -55,22 +56,25 @@ namespace Feria_Virtual.Controllers
             
             var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
 
-            producto.Id = productos.Count;
+            if (productos.Any(p => p.Nombre == producto.Nombre))
+                return Conflict();
+
+            // producto.Id = productos.Count;
             productos.Add(producto);
 
             await JsonHandler.OvewriteFileAsync(FilePath.Productos, productos);
 
-            return CreatedAtRoute("default", new { id = producto.Id }, producto);
+            return CreatedAtRoute("default", new { nombreProducto = producto.Nombre }, producto);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProductoAsync(int id, Producto producto) {
-            if (producto == null || producto.Id != id)
+        [HttpPut("{nombreProducto}")]
+        public async Task<IActionResult> UpdateProductoAsync(string nombreProducto, Producto producto) {
+            if (producto == null || producto.Nombre != nombreProducto)
                 return BadRequest();
 
             var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
 
-            var old = productos.FirstOrDefault(p => p.Id == id);
+            var old = productos.FirstOrDefault(p => p.Nombre == nombreProducto);
 
             if (old == null)
                 return NotFound();
@@ -83,11 +87,12 @@ namespace Feria_Virtual.Controllers
             return NoContent();
         } 
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductoAsync(int id) {
+        [HttpDelete("{nombreProducto}")]
+        public async Task<IActionResult> DeleteProductoAsync(string nombreProducto) {
             var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
 
-            var producto = productos.FirstOrDefault(p => p.Id == id);
+            // var producto = productos.FirstOrDefault(p => p.Id == id);
+            var producto = productos.FirstOrDefault(p => p.Nombre == nombreProducto);
 
             if (producto == null)
                 return NotFound();
