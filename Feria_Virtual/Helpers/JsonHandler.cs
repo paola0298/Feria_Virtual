@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Feria_Virtual.Helpers
 {
@@ -25,7 +26,8 @@ namespace Feria_Virtual.Helpers
             if (string.IsNullOrWhiteSpace(fileData))
             {
                 listData = new List<T>();
-            } else
+            }
+            else
             {
                 listData = JsonConvert.DeserializeObject<List<T>>(fileData);
             }
@@ -104,35 +106,42 @@ namespace Feria_Virtual.Helpers
 
         private static string GetPathTo(FilePath path)
         {
-            string fullPath = GetDirectory();
-
-            if (string.IsNullOrWhiteSpace(fullPath))
+            string _fullPath = GetDirectory();
+            if (string.IsNullOrWhiteSpace(_fullPath))
                 return null;
-            
+
+            var fullPath = new StringBuilder(_fullPath);
+
             switch (path)
             {
                 case FilePath.Productores:
-                    fullPath += "/productores.json";
+                    fullPath.Append("/productores.json");
                     break;
                 case FilePath.Productos:
-                    fullPath += "/productos.json";
+                    fullPath.Append("/productos.json");
                     break;
                 case FilePath.Afiliaciones:
-                    fullPath += "/afiliaciones.json";
+                    fullPath.Append("/afiliaciones.json");
                     break;
                 case FilePath.Categorias:
-                    fullPath += "/categorias.json";
+                    fullPath.Append("/categorias.json");
                     break;
-                case FilePath.ProductosCarrito:
-                    fullPath += "/productosCarrito.json";
+                case FilePath.Carrito:
+                    fullPath.Append("/carritos.json");
+                    break;
+                case FilePath.Orden:
+                    fullPath.Append("/ordenes.json");
+                    break;
+                case FilePath.Detalle:
+                    fullPath.Append("/detalles.json");
                     break;
                 case FilePath.Clientes:
-                    fullPath += "/clientes.json";
+                    fullPath.Append("/clientes.json");
                     break;
                 default:
                     return null;
             }
-            return fullPath;
+            return fullPath.ToString();
         }
 
         private static string GetDirectory()

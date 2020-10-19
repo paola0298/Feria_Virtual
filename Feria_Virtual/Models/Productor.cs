@@ -10,6 +10,7 @@ namespace Feria_Virtual.Models
     {
         [Key]
         public string Identificacion { get; set; }
+        public string Password { get; set; }
         public string Nombre { get; set; }
         public string Sinpe { get; set; }
         public string Telefono { get; set; }
@@ -20,14 +21,12 @@ namespace Feria_Virtual.Models
         public string Apellido1 { get; set; }
         public string Apellido2 { get; set; }
         #endregion
-        
+
         #region Dirección
         public string Provincia { get; set; }
         public string Canton { get; set; }
         public string Distrito { get; set; }
         #endregion
-
-        //TODO: Crear nueva entidad para almacenar los lugares de entrega
         public List<string> LugaresEntrega { get; set; }
     }
 }

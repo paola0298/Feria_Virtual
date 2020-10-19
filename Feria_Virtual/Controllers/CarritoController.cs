@@ -9,82 +9,80 @@ namespace Feria_Virtual.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarritoController: ControllerBase
+    public class CarritoController : ControllerBase
     {
         [HttpGet("{idCliente}")]
-        public async Task<IActionResult> GetCarritoAsync(string idCliente) {
+        public async Task<IActionResult> GetCarritoAsync(string idCliente)
+        {
             //TODO: verificar que el cliente exista
-
-            var productos = await JsonHandler.LoadFileAsync<ProductoCarrito>(FilePath.ProductosCarrito)
+            var carrito = await JsonHandler.LoadFileAsync<Carrito>(FilePath.Carrito)
                 .ConfigureAwait(false);
 
-            return Ok(productos.FindAll(p => p.IdCliente == idCliente));
+            return Ok(carrito.FindAll(p => p.IdCliente == idCliente));
         }
 
         [HttpPost("{idCliente}")]
-        public async Task<IActionResult> AddACarritoAsync(string idCliente, ProductoCarrito producto) {
+        public async Task<IActionResult> AddCarritoAsync(string idCliente, Carrito carrito)
+        {
             //TODO: verificar que el cliente exista
             if (string.IsNullOrWhiteSpace(idCliente))
                 return BadRequest();
 
-            var productoExists = await JsonHandler.CheckIfExists(FilePath.ProductosCarrito, producto, (p1, p2) => 
+            var exists = await JsonHandler.CheckIfExists(FilePath.Carrito, carrito, (c1, c2) =>
             {
-                return p1.IdCliente == p2.IdCliente && p1.IdProducto == p2.IdProducto;
+                return c1.IdCliente == c2.IdCliente && c1.IdProducto == c2.IdProducto;
             });
 
-            if (productoExists)
+            if (exists)
                 return Conflict();
 
-            producto.IdCliente = idCliente;
+            carrito.IdCliente = idCliente;
 
-            await JsonHandler.AddToFileAsync(FilePath.ProductosCarrito, producto);
+            await JsonHandler.AddToFileAsync(FilePath.Carrito, carrito);
 
-            return CreatedAtRoute("default", new { id = producto.IdProducto }, producto);
+            return CreatedAtRoute("default", new { id = carrito.IdProducto }, carrito);
         }
 
         [HttpPut("{idCliente}/{idProducto}")]
-        public async Task<IActionResult> UpdateCarritoAsync(string idCliente, int idProducto, ProductoCarrito producto) {
+        public async Task<IActionResult> UpdateCarritoAsync(string idCliente, int idProducto, Carrito carrito)
+        {
             //TODO: verificar que el cliente exista
-            
             if (string.IsNullOrWhiteSpace(idCliente))
                 return BadRequest();
 
-            var allProductos = await JsonHandler.LoadFileAsync<ProductoCarrito>(FilePath.ProductosCarrito)
+            var allCarritos = await JsonHandler.LoadFileAsync<Carrito>(FilePath.Carrito)
                 .ConfigureAwait(false);
 
-            var oldProducto = allProductos.FirstOrDefault(p => p.IdCliente == idCliente && p.IdProducto == idProducto);
-            if (oldProducto == null)
+            var oldCarrito = allCarritos.FirstOrDefault(c => c.IdCliente == idCliente && c.IdProducto == idProducto);
+
+            if (oldCarrito == null)
                 return NotFound();
 
-            allProductos.Remove(oldProducto);
-            allProductos.Add(producto);
+            allCarritos.Remove(oldCarrito);
+            allCarritos.Add(carrito);
 
-            await JsonHandler.OvewriteFileAsync(FilePath.ProductosCarrito, allProductos)    
+            await JsonHandler.OvewriteFileAsync(FilePath.Carrito, allCarritos)
                 .ConfigureAwait(false);
 
             return NoContent();
         }
 
         [HttpDelete("{idCliente}/{idProducto}")]
-        public async Task<IActionResult> DeleteDeCarritoAsync(string idCliente, int idProducto) {
+        public async Task<IActionResult> DeleteCarritoAsync(string idCliente, int idProducto)
+        {
             //TODO: verificar que el cliente exista
-
-            var allProductos = await JsonHandler.LoadFileAsync<ProductoCarrito>(FilePath.ProductosCarrito)
+            var allCarritos = await JsonHandler.LoadFileAsync<Carrito>(FilePath.Carrito)
                 .ConfigureAwait(false);
 
-            var producto = allProductos.FirstOrDefault(p => p.IdCliente == idCliente && p.IdProducto == idProducto);
+            var carrito = allCarritos.FirstOrDefault(c => c.IdCliente == idCliente && c.IdProducto == idProducto);
 
-            // var carrito = allProductos.FindAll(p => p.IdCliente == idCliente);
-
-            // var producto = carrito.FirstOrDefault(p => p.IdProducto == idProducto);
-
-            if (producto == null)
+            if (carrito == null)
                 return NotFound();
 
-            allProductos.Remove(producto);
-            // carrito.Remove(producto);
+            allCarritos.Remove(carrito);
 
-            await JsonHandler.OvewriteFileAsync(FilePath.ProductosCarrito, allProductos);
+            await JsonHandler.OvewriteFileAsync(FilePath.Carrito, allCarritos)
+                .ConfigureAwait(false);
 
             return Ok();
         }

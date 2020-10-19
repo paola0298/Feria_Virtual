@@ -11,7 +11,7 @@ namespace Feria_Virtual.Models
     public class ClienteLog
     {
         [Key]
-        public string id { get; set; }
-        public string password { get; set; }
+        public string Id { get; set; }
+        public string Password { get; set; }
     }
 }
