@@ -47,6 +47,7 @@ namespace Feria_Virtual.Controllers
 
         [HttpPost]
         public async Task<IActionResult> AddProductoAsync(Producto producto) {
+            // TODO VERIFICAR SI EL PRODUCTO YA ESTA EN LOS PRODUCTOS DEL PRODUCTOR ACTUAL
             if (producto == null || string.IsNullOrWhiteSpace(producto.IdProductor))
                 return BadRequest();
 
