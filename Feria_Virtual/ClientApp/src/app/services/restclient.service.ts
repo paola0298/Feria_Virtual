@@ -4,6 +4,7 @@ import { Producer } from '../models/producer';
 import { AfilliationRequest } from '../models/affiliationRequest';
 import { Category } from '../models/category';
 import { Product } from '../models/product';
+import { Client } from '../models/client'
 
 /* Este servicio se utiliza para solicitar, enviar y recibir datos del servidor
 mediante solicitudes HTTP como GET, POST, PUT y DELETE */
@@ -242,56 +243,65 @@ export class RestclientService {
     return this.http.delete(`https://localhost:${this.PORT}/api/Productos/${id}`, this.options);
   }
 
+  /**
+   * Solicitud HTTP POST para iniciar sesion
+   * @param id Nombre de usuario
+   * @param pass Contraseña
+   */
+  loginClient(id:string, pass:string) {
+    var url = `https://localhost:${this.PORT}/api/ClienteLog`;
+    var auth = {
+      id: id,
+      password: pass
+    }
+    return this.http.post(url, JSON.stringify(auth), this.options);
+  }
 
-  // send<T>(method: string, url: string, body: string): Promise<ApiResponse<T>> {
-  //   var promise = new Promise<ApiResponse<T>>(function(resolve, reject) {
-  //     let xhr = new XMLHttpRequest();
-  //     xhr.open(method, url, true);
-  //     xhr.setRequestHeader('Content-Type', 'application/json');
-  //     xhr.onload = function() {
-  //       if (this.status >= 200 && this.status < 300) {
-  //         var value = null;
-  //         if (method != "PUT" && method != "DELETE") {
-  //           value = JSON.parse(this.responseText);
-  //         }
-  //         var response = new ApiResponse(value, this.status, this.statusText);
-  //         resolve(response);
-  //       } else {
-  //         resolve(new ApiResponse(null, this.status, this.statusText));
-  //         // reject(new ApiResponse(null, this.status, this.statusText));
-  //       }
-  //     };
-  //     xhr.send(body);
-  //   });
-  //   return promise;
-  // }
+  /**
+   * Solicitud HTTP GET para obtener un cliente específico
+   * @param id Id del cliente que se desea obtener
+   */
+  getClient(id:string) {
+    var url = `https://localhost:${this.PORT}/api/Clientes/${id}`;
+    return this.http.get(url, this.options);
+  }
 
-  // /**
-  //  * Solicitud HTTP GET para obtener la lista de productores registrados
-  //  */
-  // async getProducers(): Promise<ApiResponse<Producer[]>> {
-  //   var url = `https://localhost:${this.PORT}/api/Productores`;
-  //   return this.send('GET', url, null);
-  // }
+  /**
+   * Solicitud HTTP GET para obtener todos los clientes guardados
+   */
+  getClients() {
+    var url = `https://localhost:${this.PORT}/api/Clientes`;
+    return this.http.get(url, this.options);
+  }
 
+  /**
+   * Solicitud HTTP POST para crear un cliente
+   * @param client Objeto de tipo Client
+   */
+  createClient(client:Client) {
+    console.log('Creando cliente ' + client.nombre);
+    var url = `https://localhost:${this.PORT}/api/Clientes`;
+    return this.http.post(url, JSON.stringify(client), this.options);
+  }
 
-  // /**
-  //  * Solicitud HTTP POST para crear un productor
-  //  * @param producer Objeto de tipo Producer
-  //  */
-  // async createProducer(producer:Producer): Promise<ApiResponse<Producer>> {
-  //   console.log(JSON.stringify(producer));
-  //   var url = `https://localhost:${this.PORT}/api/Productores`;
-  //   return this.send('POST', url, JSON.stringify(producer));
-  // }
+  /**
+   * Solicitud HTTP PUT para modificar un cliente
+   * @param client Objeto de tipo Client
+   */
+  updateClient(client:Client) {
+    console.log('Actualizando cliente ' + client.nombre);
+    var url = `https://localhost:${this.PORT}/api/Clientes/${client.identificacion}`;
+    return this.http.put(url, JSON.stringify(client), this.options);
+  }
 
-  // /**
-  //  * Solicitud HTTP DELETE para eliminar un productor
-  //  * @param id id del productor específico que se desea eliminar
-  //  */
-  // async deleteProducer(id: String): Promise<ApiResponse<null>> {
-  //   var url = `https://localhost:${this.PORT}/api/Productores/${id}`;
-  //   return this.send('DELETE', url, null);
-  // }
+  /**
+   * Solicitud HTTP DELETE para eliminar un cliente
+   * @param id id del cliente específico que se desea eliminar
+   */
+  deleteClient(id:string) {
+    console.log('Eliminando cliente id: ' + id);
+    var url = `https://localhost:${this.PORT}/api/Clientes/${id}`;
+    return this.http.delete(url, this.options);
+  }
 
 }
