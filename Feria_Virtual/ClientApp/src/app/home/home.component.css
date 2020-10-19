@@ -44,3 +44,7 @@
     padding: 10px;
 }
 
+.col-custom {
+    display: grid;
+}
+
