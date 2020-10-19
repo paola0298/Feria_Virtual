@@ -50,6 +50,43 @@ export class ProductComponent implements OnInit {
   }
 
   /**
+   * Metodo para obtener un producto desde el servicio
+   * @param nameProduct Nombre del producto
+   */
+  getProduct(nameProduct:string) {
+    var response = this.restClientService.getProduct(this.idActualProducer, nameProduct);
+    response.subscribe(
+      (value:Product) => {
+        this.actualProduct = value;
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+      });
+  }
+
+  /**
+   * Metodo que se conecta con el servicio para modificar producto
+   * @param producer Objeto tipo Product
+   * @param htmlElements Elementos html input para limpiar los campos
+   * @param selectElements Elementos html select para limpiar los campos
+   */
+  modifyProduct(product:Product, htmlElements:HTMLInputElement[], selectElements:HTMLSelectElement[]) {
+    var response = this.restClientService.updateProduct(product);
+    response.subscribe(
+      (value:any) => {
+        this.getProducts();
+        this.utilsService.showInfoModal("Exito", "Producto actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.utilsService.cleanField(htmlElements, selectElements, ["Seleccione una categoria", "Seleccione un modo de venta"]);
+        this.updating = false;
+        (document.getElementById("saveButton") as HTMLButtonElement).textContent = "Guardar nuevo producto";
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+        this.utilsService.showInfoModal("Error", "Hubo un problema al actualizar el producto.", "saveMsjLabel", "msjText", 'saveMsj');
+      });
+  }
+
+  /**
    * Metodo para almacenar un nuevo producto
    */
   saveProduct() {
@@ -62,7 +99,8 @@ export class ProductComponent implements OnInit {
 
     
 
-    if (name.value == '' || availability.value == '' || price.value == '') {
+    if (name.value == '' || availability.value == '' || price.value == '' || category.value == 'Seleccione una categoria' || 
+    saleMode.value == 'Seleccione un modo de venta') {
       this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
       return;
     } 
@@ -76,10 +114,7 @@ export class ProductComponent implements OnInit {
       saleMode.value, image.value)
 
     if (this.updating) {
-      this.utilsService.showInfoModal("Exito", "Producto actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
-      // this.utilsService.cleanField(htmlElements, selectElements, ["Seleccione una categoria", "Seleccione un modo de venta"]);
-      //actualizar productos
-      this.updating = false;
+      this.modifyProduct(product, [name, availability, price, image], [category, saleMode])
     } else {
       this.createProduct(product, [name, availability, price, image], [category, saleMode])
     }
@@ -92,11 +127,12 @@ export class ProductComponent implements OnInit {
   updateProduct() {
     console.log(this.actualProduct.idCategoria);
     this.updating = true;
+    (document.getElementById("saveButton") as HTMLButtonElement).textContent = "Actualizar producto";
     (document.getElementById("productName") as HTMLInputElement).value = this.actualProduct.nombre;
     (document.getElementById("availability") as HTMLInputElement).value = this.actualProduct.disponibilidad.toString();
     (document.getElementById("price") as HTMLInputElement).value = this.actualProduct.precio.toString();
     //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
-    (document.getElementById("category") as HTMLSelectElement).value = this.actualProduct.idCategoria.toString(); //cambiar id por nombre
+    (document.getElementById("category") as HTMLSelectElement).value = this.getNameCategory(this.actualProduct.idCategoria);
     (document.getElementById("saleMode") as HTMLSelectElement).value = this.actualProduct.modoVenta;
   }
 
@@ -105,8 +141,17 @@ export class ProductComponent implements OnInit {
    */
   deleteProduct() {
     document.getElementById('optionMsj').style.setProperty('display', 'none');
-    const index = this.products.indexOf(this.actualProduct, 0);
-    this.products.splice(index, 1);
+    var response = this.restClientService.deleteProduct(this.actualProduct.nombre, this.idActualProducer);
+    response.subscribe(
+      (value:any) => {
+        console.log("Deleted");
+        this.utilsService.showInfoModal("Exito", "Producto eliminado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.getProducts();
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+        this.utilsService.showInfoModal("Error", "Hubo un problema al eliminar el producto.", "saveMsjLabel", "msjText", 'saveMsj');
+      });
   }
 
   getIdCategory(category:string):number {
@@ -116,6 +161,15 @@ export class ProductComponent implements OnInit {
       }
     }
     return -1;
+  }
+
+  getNameCategory(idCategory:number):string {
+    for (let i = 0; i < this.categories.length; i++) {
+      if (this.categories[i].id == idCategory) {
+        return this.categories[i].nombre;
+      }
+    }
+    return "";
   }
 
   /**
@@ -149,9 +203,9 @@ export class ProductComponent implements OnInit {
    * @param event Evento de click derecho
    * @param product Producto seleccionado
    */
-  onProducerClick(event:any, product:any): boolean {
+  onProducerClick(event:any, product:Product): boolean {
     this.utilsService.showContextMenu(event);
-    this.actualProduct = product;
+    this.getProduct(product.nombre);
     return false;
   }
 

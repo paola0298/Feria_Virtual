@@ -208,6 +208,17 @@ export class RestclientService {
   }
 
   /**
+   * Solicitud HTTP GET para obtener un producto de un productor específico
+   * @param idProducer Id del productor del que se desea obtener el producto
+   * @param nameProduct Nombre del producto que se desea obtener
+   */
+  getProduct(idProducer: string, nameProduct: string) {
+    console.log("Obteniendo producto: " + nameProduct + " de productor: " + idProducer); 
+    var url = `https://localhost:${this.PORT}/api/Productos/${nameProduct}/${idProducer}`;
+    return this.http.get(url, this.options);
+  }
+
+  /**
    * Solicitud HTTP POST para crear un producto
    * @param product Objeto de tipo Product
    */
@@ -228,19 +239,19 @@ export class RestclientService {
     // console.log('\n');
     // console.log(product);
     // console.log('\n');
-    return this.http.put(`https://localhost:${this.PORT}/api/Productos/${product.nombre}`, JSON.stringify(product), this.options);
+    return this.http.put(`https://localhost:${this.PORT}/api/Productos/${product.nombre}/${product.idProductor}`, JSON.stringify(product), this.options);
   }
 
   /**
    * Solicitud HTTP DELETE para eliminar un producto
    * @param id id del producto específico que se desea eliminar
    */
-  deleteProduct(nombre: string) {
+  deleteProduct(nombre: string, idProducer:string) {
     console.log('Eliminando producto: ' + nombre);
     // console.log('\n');
     // console.log(id);
     // console.log('\n');
-    return this.http.delete(`https://localhost:${this.PORT}/api/Productos/${nombre}`, this.options);
+    return this.http.delete(`https://localhost:${this.PORT}/api/Productos/${nombre}/${idProducer}`, this.options);
   }
 
   /**
