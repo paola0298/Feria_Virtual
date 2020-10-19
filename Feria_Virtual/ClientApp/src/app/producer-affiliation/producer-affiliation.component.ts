@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service'
+import { Producer } from '../models/producer';
+import { RestclientService } from '../services/restclient.service'
 
 @Component({
   selector: 'app-producer-affiliation',
@@ -8,16 +10,34 @@ import { UtilsService } from 'src/app/services/utils.service'
 })
 export class ProducerAffiliationComponent implements OnInit {
 
-  private utilsService: UtilsService = new UtilsService();
   provinces = [];
   cantons = [];
   districts = [];
   deliveryZones = [];
 
-  constructor() { }
+  constructor(private utilsService: UtilsService, private restClientService: RestclientService) { }
 
   ngOnInit() { 
     this.getProvinces();
+  }
+
+  /**
+   * Metodo que se conecta con el servicio para enviar una solicitud de afiliacion de un productor
+   * @param producer Productor a crear
+   * @param htmlElements Elementos html input para limpiar los campos
+   * @param selectElements Elementos html select para limpiar los campos
+   */
+  sendAffiliation(producer: Producer, htmlElements:HTMLInputElement[], selectElements:HTMLSelectElement[]) {
+    var response = this.restClientService.sendAffiliationRequest(producer);
+    response.subscribe(
+      (value:any) => {
+        this.utilsService.showInfoModal("Exito", "Su solicitud esta siendo vertificada.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.utilsService.cleanField(htmlElements, selectElements, ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
+        this.deliveryZones = [];
+    }, (error:any) => {
+      console.log(error.statusText);
+      console.log(error.status);
+    });
   }
 
   /**
@@ -34,23 +54,26 @@ export class ProducerAffiliationComponent implements OnInit {
     let province = (document.getElementById("province") as HTMLSelectElement);
     let canton = (document.getElementById("canton") as HTMLSelectElement);
     let district = (document.getElementById("district") as HTMLSelectElement);
-    let deliver = (document.getElementById("deliver") as HTMLInputElement);
+    let pass = (document.getElementById("pass") as HTMLInputElement);
+    let passConfirm = (document.getElementById("passConfirm") as HTMLInputElement);
+    
 
     if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
-        this.deliveryZones.length == 0) {
+        this.deliveryZones.length == 0 || passConfirm.value == '' || pass.value == '' || province.value == 'Seleccione una provincia' || 
+        canton.value == 'Seleccione un cantón' || district.value == 'Seleccione un distrito') {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
-
-    } else {
-      this.utilsService.showInfoModal("Exito", "Su solicitud esta siendo vertificada.", "saveMsjLabel", "msjText", 'saveMsj');
-      let idN = Number(id.value);
-      let phoneN = Number(phone.value);
-      let sinpeN = Number(sinpe.value);
-
-      //TODO enviar solicitud de afiliacion
-      this.utilsService.cleanField([id, name, lastName1, lastName2, sinpe, phone, birth],
-        [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
-      this.deliveryZones = [];
+        return;
     }
+
+    if (passConfirm.value != pass.value) {
+      this.utilsService.showInfoModal("Error", "La contraseña debe ser igual en ambos campos", "saveMsjLabel", "msjText", 'saveMsj');
+      return;
+    }
+
+    var producer = new Producer(name.value, id.value, pass.value, lastName1.value, lastName2.value, sinpe.value,
+      phone.value, birth.value, province.value, canton.value, district.value, this.deliveryZones);
+    this.sendAffiliation(producer, [id, name, lastName1, lastName2, sinpe, phone, birth, pass, passConfirm],
+      [province, canton, district]);
   }
 
   /**
@@ -96,7 +119,7 @@ export class ProducerAffiliationComponent implements OnInit {
    */
   loadDistrict(canton: string): void {
     var idCanton = this.cantons.indexOf(canton) + 1;
-    var idProvince = this.provinces.indexOf(document.getElementById("province").getAttribute("selected")) + 1;
+    var idProvince = this.provinces.indexOf((document.getElementById("province") as HTMLSelectElement).value) + 1;
     console.log(idCanton + '\n' + idProvince);
     this.getDistricts(idCanton.toString(), idProvince.toString());
   }
