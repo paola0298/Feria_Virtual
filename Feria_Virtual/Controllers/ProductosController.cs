@@ -32,12 +32,15 @@ namespace Feria_Virtual.Controllers
             return Ok(productosSel);
         }
 
-        [HttpGet("{nombreProducto}")]
-        public async Task<IActionResult> GetProductoAsync(string nombreProducto) {
+        [HttpGet("{nombreProducto}/{productorId}")]
+        public async Task<IActionResult> GetProductoAsync(string nombreProducto, string productorId) {
             var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
 
             // var producto = productos.FirstOrDefault(p => p.Id == id);
-            var producto = productos.FirstOrDefault(p => p.Nombre == nombreProducto);
+            // var producto = productos.FirstOrDefault(p => p.Nombre == nombreProducto); //obtener el que le corresponde al productor
+            var producto = productos.FirstOrDefault(p => {
+                return p.Nombre == nombreProducto && p.IdProductor == productorId;
+            });
 
             if (producto == null)
                 return NotFound();
@@ -57,7 +60,8 @@ namespace Feria_Virtual.Controllers
             
             var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
 
-            if (productos.Any(p => p.Nombre == producto.Nombre))
+            // if (productos.Any(p => p.Nombre == producto.Nombre))
+            if (productos.Any(p => p.Nombre == producto.Nombre) && productos.Any(p => p.IdProductor == producto.IdProductor))
                 return Conflict();
 
             // producto.Id = productos.Count;
@@ -68,14 +72,17 @@ namespace Feria_Virtual.Controllers
             return CreatedAtRoute("default", new { nombreProducto = producto.Nombre }, producto);
         }
 
-        [HttpPut("{nombreProducto}")]
-        public async Task<IActionResult> UpdateProductoAsync(string nombreProducto, Producto producto) {
+        [HttpPut("{nombreProducto}/{productorId}")]
+        public async Task<IActionResult> UpdateProductoAsync(string nombreProducto, string productorId, Producto producto) {
             if (producto == null || producto.Nombre != nombreProducto)
                 return BadRequest();
 
             var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
 
-            var old = productos.FirstOrDefault(p => p.Nombre == nombreProducto);
+            // var old = productos.FirstOrDefault(p => p.Nombre == nombreProducto);
+            var old = productos.FirstOrDefault(p => {
+                return p.Nombre == nombreProducto && p.IdProductor == productorId;
+            });
 
             if (old == null)
                 return NotFound();
@@ -88,12 +95,15 @@ namespace Feria_Virtual.Controllers
             return NoContent();
         } 
 
-        [HttpDelete("{nombreProducto}")]
-        public async Task<IActionResult> DeleteProductoAsync(string nombreProducto) {
+        [HttpDelete("{nombreProducto}/{productorId}")]
+        public async Task<IActionResult> DeleteProductoAsync(string nombreProducto, string productorId) {
             var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
 
             // var producto = productos.FirstOrDefault(p => p.Id == id);
-            var producto = productos.FirstOrDefault(p => p.Nombre == nombreProducto);
+            // var producto = productos.FirstOrDefault(p => p.Nombre == nombreProducto);
+            var producto = productos.FirstOrDefault(p => {
+                return p.Nombre == nombreProducto && p.IdProductor == productorId;
+            });
 
             if (producto == null)
                 return NotFound();
