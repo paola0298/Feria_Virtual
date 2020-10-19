@@ -134,7 +134,7 @@ export class ProfileClientComponent implements OnInit {
   setProfileEditable(id : HTMLInputElement, name : HTMLInputElement, lastName1 : HTMLInputElement, lastName2 : HTMLInputElement, 
     birth : HTMLInputElement, dir : HTMLInputElement, phone : HTMLInputElement, province : HTMLSelectElement, 
     canton : HTMLSelectElement, district : HTMLSelectElement) {
-      id.removeAttribute("disabled");
+      // id.removeAttribute("disabled");
       name.removeAttribute("disabled");
       lastName1.removeAttribute("disabled");
       lastName2.removeAttribute("disabled");
@@ -163,7 +163,7 @@ export class ProfileClientComponent implements OnInit {
   saveProfileData(id : HTMLInputElement, name : HTMLInputElement, lastName1 : HTMLInputElement, lastName2 : HTMLInputElement, 
     birth : HTMLInputElement, dir : HTMLInputElement, phone : HTMLInputElement, province : HTMLSelectElement, 
     canton : HTMLSelectElement, district : HTMLSelectElement) {
-      id.setAttribute("disabled", "true");
+      // id.setAttribute("disabled", "true");
       name.setAttribute("disabled", "true");
       lastName1.setAttribute("disabled", "true");
       lastName2.setAttribute("disabled", "true");
