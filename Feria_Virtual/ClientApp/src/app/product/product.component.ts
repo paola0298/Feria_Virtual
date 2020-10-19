@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UtilsService } from 'src/app/services/utils.service'
+import { UtilsService } from 'src/app/services/utils.service';
+import { RestclientService } from 'src/app/services/restclient.service';
+import { Product } from 'src/app/models/product';
+import { Category } from 'src/app/models/category'
+import { error } from 'protractor';
 
 @Component({
   selector: 'app-product',
@@ -8,25 +12,41 @@ import { UtilsService } from 'src/app/services/utils.service'
 })
 export class ProductComponent implements OnInit {
 
-  private utilsService: UtilsService = new UtilsService();
+  
   updating: boolean = false;
   categories = [];
   modesSale = ["Kilogramo", "Paquete", "Caja"];
-  products = [{
-    name:"Papa",
-    availability:10,
-    price:1000,
-    image:"image",
-    category:"Verdura",
-    saleMode:"Kilogramo"
-  }];
-  actualProduct;
+  products:Product[] = [];
+  actualProduct: Product;
+  idActualProducer:string = window.localStorage.getItem("producerId");
 
-  constructor() { }
+  constructor(private utilsService: UtilsService, private restClientService:RestclientService) { }
 
   ngOnInit() {
     this.utilsService.configureContextMenu();
     this.getCategories();
+    this.getProducts();
+    
+  }
+
+  /**
+   * Metodo que se conecta con el servicio para crear un nuevo producto
+   * @param producer Producto a crear
+   * @param htmlElements Elementos html input para limpiar los campos
+   * @param selectElements Elementos html select para limpiar los campos
+   */
+  createProduct(product:Product, htmlElements:HTMLInputElement[], selectElements:HTMLSelectElement[]) {
+    var response = this.restClientService.createProduct(product);
+    response.subscribe(
+      (value:Product) => {
+        this.getProducts();
+        this.utilsService.showInfoModal("Exito", "Nuevo producto guardado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.utilsService.cleanField(htmlElements, selectElements, ["Seleccione una categoria", "Seleccione un modo de venta"]);
+
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+      });
   }
 
   /**
@@ -36,46 +56,48 @@ export class ProductComponent implements OnInit {
     let name = (document.getElementById("productName") as HTMLInputElement);
     let availability = (document.getElementById("availability") as HTMLInputElement);
     let price = (document.getElementById("price") as HTMLInputElement);
-    //(document.getElementById("image") as HTMLInputElement).value = this.actualProduct.image;
+    let image = document.getElementById("image") as HTMLInputElement;
     let category = (document.getElementById("category") as HTMLSelectElement);
     let saleMode = (document.getElementById("saleMode") as HTMLSelectElement);
 
+    
+
     if (name.value == '' || availability.value == '' || price.value == '') {
       this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
+      return;
+    } 
+    
+    let availabilityN = Number(availability.value);
+    let priceN = Number(price.value);
+    let idCategory = this.getIdCategory(category.value);
+    
+
+    var product = new Product(name.value, idCategory, this.idActualProducer, availabilityN, priceN, 
+      saleMode.value, image.value)
+
+    if (this.updating) {
+      this.utilsService.showInfoModal("Exito", "Producto actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
+      // this.utilsService.cleanField(htmlElements, selectElements, ["Seleccione una categoria", "Seleccione un modo de venta"]);
+      //actualizar productos
+      this.updating = false;
     } else {
-      let availabilityN = Number(availability.value);
-      let priceN = Number(price.value);
-
-      var product = {
-        name:name.value, availability:availabilityN, 
-        price:priceN, image:'image', category:category.value, 
-        saleMode:saleMode.value}
-
-      if (this.updating) {
-        this.utilsService.showInfoModal("Exito", "Producto actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
-        let indexProduct = this.products.indexOf(this.actualProduct);
-        this.products[indexProduct] = product;
-        this.updating = false;
-      } else {
-        this.utilsService.showInfoModal("Exito", "Nuevo producto guardado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
-        this.products.push(product);
-      }
-      this.utilsService.cleanField([name, availability, price], [category, saleMode], ["Seleccione una categoria", "Seleccione un modo de venta"]);
+      this.createProduct(product, [name, availability, price, image], [category, saleMode])
     }
+    
   }
 
   /**
    * Metodo para actualizar un producto seleccionado
    */
   updateProduct() {
-    console.log(this.actualProduct.category);
+    console.log(this.actualProduct.idCategoria);
     this.updating = true;
-    (document.getElementById("productName") as HTMLInputElement).value = this.actualProduct.name;
-    (document.getElementById("availability") as HTMLInputElement).value = this.actualProduct.availability;
-    (document.getElementById("price") as HTMLInputElement).value = this.actualProduct.price;
+    (document.getElementById("productName") as HTMLInputElement).value = this.actualProduct.nombre;
+    (document.getElementById("availability") as HTMLInputElement).value = this.actualProduct.disponibilidad.toString();
+    (document.getElementById("price") as HTMLInputElement).value = this.actualProduct.precio.toString();
     //(document.getElementById("productImage") as HTMLInputElement).value = this.actualProduct.image;
-    (document.getElementById("category") as HTMLSelectElement).value = this.actualProduct.category;
-    (document.getElementById("saleMode") as HTMLSelectElement).value = this.actualProduct.saleMode;
+    (document.getElementById("category") as HTMLSelectElement).value = this.actualProduct.idCategoria.toString(); //cambiar id por nombre
+    (document.getElementById("saleMode") as HTMLSelectElement).value = this.actualProduct.modoVenta;
   }
 
   /**
@@ -87,12 +109,39 @@ export class ProductComponent implements OnInit {
     this.products.splice(index, 1);
   }
 
+  getIdCategory(category:string):number {
+    for (let i = 0; i < this.categories.length; i++) {
+      if (this.categories[i].nombre == category) {
+        return this.categories[i].id;
+      }
+    }
+    return -1;
+  }
+
   /**
    * Metodo para obtener las categorias almacenadas
    */
   getCategories():void {
     //get categories saved
-    this.categories = ["Carne", "Verdura"];
+    var response = this.restClientService.getCategories();
+    response.subscribe(
+      (value:Category[]) => {
+        this.categories = value;
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+      });
+  }
+
+  getProducts():void {
+    var response = this.restClientService.getProducerProducts(this.idActualProducer);
+    response.subscribe(
+      (value:Product[]) => {
+        this.products = value;
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+      });
   }
 
   /**
@@ -110,7 +159,7 @@ export class ProductComponent implements OnInit {
    * Metodo para mostrar al usuario un modal para tomar una decision de si o no
    */
   askUser() {
-    this.utilsService.showInfoModal("Eliminar", "Esta seguro que desea eliminar el producto: " + this.actualProduct.name,
+    this.utilsService.showInfoModal("Eliminar", "Esta seguro que desea eliminar el producto: " + this.actualProduct.nombre,
     "optionMsjLabel", "optionText", "optionMsj");
   }
 
