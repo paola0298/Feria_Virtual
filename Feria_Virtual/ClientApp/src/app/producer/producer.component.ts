@@ -21,7 +21,7 @@ export class ProducerComponent implements OnInit {
 
 
   constructor(private restClientService: RestclientService, private utilsService: UtilsService) { 
-    this.testProducer = new Producer("Paola", "4023900831", "Villegas", "Chacon", "123456789", "83216963", "1998-02-06", "Heredia", "Heredia", "Varablanca", ["Heredia"]);
+    // this.testProducer = new Producer("Paola", "4023900831", "Villegas", "Chacon", "123456789", "83216963", "1998-02-06", "Heredia", "Heredia", "Varablanca", ["Heredia"]);
   }
 
   ngOnInit(): void {
@@ -100,6 +100,8 @@ export class ProducerComponent implements OnInit {
         console.log("Updated");
         this.utilsService.showInfoModal("Exito", "Productor actualizado correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
         document.getElementById("idProducer").removeAttribute('disabled');
+        document.getElementById("pass").removeAttribute('disabled');
+        document.getElementById("passConfirm").removeAttribute('disabled');
         this.utilsService.cleanField(htmlElements,selectElements, ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
         this.deliveryZones = [];
         this.loadProducers();
@@ -111,6 +113,17 @@ export class ProducerComponent implements OnInit {
         this.utilsService.showInfoModal("Error", "Hubo un problema al actualizar al productor.", "saveMsjLabel", "msjText", 'saveMsj');
       }
     );
+  }
+
+  getProducer(id:string) {
+    var response = this.restClientService.getProducer(id);
+    response.subscribe(
+      (value:Producer) => {
+        this.actualProducer = value;
+      }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+      });
   }
 
   /**
@@ -128,23 +141,36 @@ export class ProducerComponent implements OnInit {
     let province = (document.getElementById("province") as HTMLSelectElement);
     let canton = (document.getElementById("canton") as HTMLSelectElement);
     let district = (document.getElementById("district") as HTMLSelectElement);
+    let pass = (document.getElementById("pass") as HTMLInputElement);
+    let passConfirm = (document.getElementById("passConfirm") as HTMLInputElement);
     
     // TODO verificar que se haya ingresado alguna provincia, canton y distrito
     if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' || 
-    this.deliveryZones.length == 0) {
+    this.deliveryZones.length == 0 || province.value == 'Seleccione una provincia' || canton.value == 'Seleccione un cantón' || 
+    district.value == 'Seleccione un distrito') {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
         return;
     }
 
-    var producer = new Producer(name.value, id.value, lastName1.value, lastName2.value, 
+    var producer = new Producer(name.value, id.value, pass.value, lastName1.value, lastName2.value, 
       sinpe.value, phone.value, birth.value, province.value, canton.value, district.value,
       this.deliveryZones);
     
     if (this.updating) {
       producer.afiliado = true;
-      this.modifyProducer(producer, [id, name, lastName1, lastName2, sinpe, phone, birth], [province, canton, district]);
+      producer.password = this.actualProducer.password;
+      this.modifyProducer(producer, [id, name, lastName1, lastName2, sinpe, phone, birth, pass, passConfirm], [province, canton, district]);
     } else {
-      this.createProducer(producer, [id, name, lastName1, lastName2, sinpe, phone, birth], [province, canton, district]);
+      if (pass.value == '' || passConfirm.value == '') {
+        this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
+        return;
+      }
+      if (passConfirm.value != pass.value) {
+        this.utilsService.showInfoModal("Error", "La contraseña debe ser igual en ambos campos", "saveMsjLabel", "msjText", 'saveMsj');
+        return;
+      }
+
+      this.createProducer(producer, [id, name, lastName1, lastName2, sinpe, phone, birth, pass, passConfirm], [province, canton, district]);
     }
   }
 
@@ -158,6 +184,8 @@ export class ProducerComponent implements OnInit {
     this.loadDistrict(this.actualProducer.canton);
 
     document.getElementById("idProducer").setAttribute('disabled', 'true');
+    document.getElementById("pass").setAttribute('disabled', 'true');
+    document.getElementById("passConfirm").setAttribute('disabled', 'true');
     // Cargar los datos del productor en el formulario y deshabilitar el campo de id
 
     var birthDateTime = this.actualProducer.fechaNacimiento;
@@ -175,6 +203,8 @@ export class ProducerComponent implements OnInit {
     (document.getElementById("province") as HTMLSelectElement).value = this.actualProducer.provincia;
     (document.getElementById("canton") as HTMLSelectElement).value = this.actualProducer.canton;
     (document.getElementById('district') as HTMLSelectElement).value = this.actualProducer.distrito;  
+
+    
 
     this.deliveryZones = this.actualProducer.lugaresEntrega;
   }
@@ -248,9 +278,9 @@ export class ProducerComponent implements OnInit {
    * @param event Evento de click derecho
    * @param producer Productor seleccionado
    */
-  onProducerClick(event: any, producer: any): boolean {
+  onProducerClick(event: any, producer: Producer): boolean {
     this.utilsService.showContextMenu(event);
-    this.actualProducer = producer;
+    this.getProducer(producer.identificacion);
     return false;
   }
   
