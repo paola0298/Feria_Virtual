@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service'
+import { RestclientService } from 'src/app/services/restclient.service';
+import { Client } from '../models/client';
+import { Router } from '@angular/router'; 
 
 
 @Component({
@@ -9,16 +12,30 @@ import { UtilsService } from 'src/app/services/utils.service'
 })
 export class RegisterClientComponent implements OnInit {
 
-  private utilsService: UtilsService = new UtilsService();
   provinces = [];
   cantons = [];
   districts = [];
+  created:boolean = false;
 
-  constructor() { }
+  constructor(private utilsService: UtilsService, private restClientService: RestclientService, 
+    private router: Router) { }
 
   ngOnInit() {
     this.getProvinces();
    }
+
+   createClient(client:Client) {
+     var response = this.restClientService.createClient(client);
+     response.subscribe(
+       (value:Client) => {
+        this.created = true;
+        this.utilsService.showInfoModal("Exito", "Registro completado", "saveMsjLabel", "msjText", 'saveMsj');
+       }, (error:any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+       });
+   }
+
 
   saveClient() {
     let idClient = (document.getElementById("idClient") as HTMLInputElement);
@@ -37,19 +54,23 @@ export class RegisterClientComponent implements OnInit {
 
     //TODO verificacion de contraseña sean igual
     if (idClient.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || username.value == '' || phone.value == '' || birth.value == '' ||
-      dir.value == '' || pass.value == '' || passConfirm.value == '') {
+      dir.value == '' || pass.value == '' || passConfirm.value == '' || province.value == 'Seleccione una provincia' ||
+      canton.value == 'Seleccione un cantón' || district.value == 'Seleccione un distrito') {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
-
-    } else {
-      this.utilsService.showInfoModal("Exito", "Registro completado", "saveMsjLabel", "msjText", 'saveMsj');
-      let idN = Number(idClient.value);
-      let phoneN = Number(phone.value);
-
-      //TODO enviar solicitud de afiliacion
-      
-      this.utilsService.cleanField([idClient, name, lastName1, lastName2, username, pass, phone, dir, passConfirm, birth],
-        [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
+        return;
+    } 
+    
+    if (pass.value != passConfirm.value) {
+      this.utilsService.showInfoModal("Error", "La contraseña debe ser igual en ambos campos", "saveMsjLabel", "msjText", 'saveMsj');
+      return;
     }
+  
+    var client = new Client(idClient.value, phone.value, birth.value, lastName1.value, lastName2.value,
+      province.value, canton.value, district.value, username.value, pass.value, name.value);
+    this.createClient(client);
+      // this.utilsService.cleanField([idClient, name, lastName1, lastName2, username, pass, phone, dir, passConfirm, birth],
+      //   [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
+    
   }
 
    /**
@@ -103,5 +124,8 @@ export class RegisterClientComponent implements OnInit {
    */
   closeModal(id: string): void {
     document.getElementById(id).style.setProperty('display', 'none');
+    if (this.created) {
+      this.router.navigate(['']);
+    }
   }
 }

@@ -3,6 +3,7 @@
 export class Producer {
   nombre: string;
   identificacion: string;
+  password: string;
   apellido1: string;
   apellido2: string;
   sinpe: string;
@@ -17,6 +18,7 @@ export class Producer {
   constructor(
     nombre: string,
     identificacion: string,
+    password: string,
     apellido1: string,
     apellido2: string,
     sinpe: string,
@@ -29,6 +31,7 @@ export class Producer {
   ) {
     this.nombre = nombre;
     this.identificacion = identificacion;
+    this.password = password;
     this.apellido1 = apellido1;
     this.apellido2 = apellido2;
     this.sinpe = sinpe;

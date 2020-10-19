@@ -68,7 +68,7 @@
                     </div> <!-- form-group// -->
 
                     <div class="form-group col">
-                        <button type="submit" class="btn btn-danger btn-block" (click)="deleteAccount()">Eliminar mi cuenta</button>
+                        <button type="submit" class="btn btn-danger btn-block" (click)="askUser()">Eliminar mi cuenta</button>
                     </div> <!-- form-group// -->
                 </div> <!-- row -->
             </form>
@@ -76,14 +76,43 @@
     </div>
 </div>
 
-
-
-<!-- <div class="container">
-    <form>
-        <div class="input-group">
-            <input type="text" name="" id="" required placeholder="Nombre">
-            <span class="bar"></span>
-            
+<!-- The Modal -->
+<div class="modal" id="saveMsj">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="saveMsjLabel"></h4>
         </div>
-    </form>
-</div> -->
+        <!-- Modal body -->
+        <div class="modal-body">
+          <a id="msjText"></a>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" (click)="closeModal('saveMsj')">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Option Modal -->
+<div class="modal" id="optionMsj">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="optionMsjLabel"></h4>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <a id="optionText"></a>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal" (click)="deleteAccount()">Si</button>
+          <button type="button" class="btn btn-info" data-dismiss="modal" (click)="closeModal('optionMsj')">No</button>
+        </div>
+      </div>
+    </div>
+  </div>

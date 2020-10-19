@@ -39,17 +39,17 @@
 
                       <div class="form-group input-group col">
                         <div class="input-group-prepend">
-                          <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+                          <span class="input-group-text"> <i class="fas fa-box-open"></i> </span>
                         </div>
                         <select class="form-control" id="category">
                           <option selected="" value="Seleccione una categoria"> Seleccione una categoria</option>
-                          <option *ngFor="let category of categories" value="{{category}}">{{ category }}</option>
+                          <option *ngFor="let category of categories" value="{{category.nombre}}">{{ category.nombre }}</option>
                         </select>
                       </div> <!-- form-group end.// -->
     
                       <div class="form-group input-group col">
                         <div class="input-group-prepend">
-                          <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i> </span>
+                          <span class="input-group-text"> <i class="fas fa-balance-scale-right"></i> </span>
                         </div>
                         <select class="form-control" id="saleMode">
                           <option selected="" value="Seleccione un modo de venta"> Seleccione un modo de venta</option>
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn-save btn btn-primary btn-block" (click)="saveProduct()">Guardar nuevo producto</button>
+                    <button id="saveButton" type="submit" class="btn-save btn btn-primary btn-block" (click)="saveProduct()">Guardar nuevo producto</button>
                   </div> <!-- form-group// -->
             </form>
 
@@ -81,12 +81,12 @@
                         </thead>
                         <tbody *ngFor="let product of products; let i = index">
                             <tr>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.name }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.availability }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.price }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.image }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.category }}</td>
-                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.saleMode }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.nombre }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.disponibilidad }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.precio }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.imagen }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.idCategoria }}</td>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.modoVenta }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -136,7 +136,7 @@
         </div>
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-dismiss="modal" (click)="deleteProducer()">Si</button>
+          <button type="button" class="btn btn-info" data-dismiss="modal" (click)="deleteProduct()">Si</button>
           <button type="button" class="btn btn-info" data-dismiss="modal" (click)="closeModal('optionMsj')">No</button>
         </div>
       </div>

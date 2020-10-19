@@ -41,7 +41,7 @@ namespace Feria_Virtual.Controllers
             var ordenDetalle = new
             {
                 comprobanteSinpe = orden.ComprobanteSinpe,
-                productos = detalles.Select(s => new { s.IdProducto, s.PrecioUnitario, s.Cantidad })
+                productos = detalles.Select(s => new { s.NombreProducto, s.PrecioUnitario, s.Cantidad })
             };
 
             return Ok(ordenDetalle);
@@ -77,7 +77,7 @@ namespace Feria_Virtual.Controllers
 
             foreach (var carrito in carritoCliente)
             {
-                var producto = allProductos.FirstOrDefault(p => p.Id == carrito.IdProducto);
+                var producto = allProductos.FirstOrDefault(p => p.Nombre == carrito.NombreProducto);
 
                 if (producto == null)
                     continue;
@@ -87,7 +87,7 @@ namespace Feria_Virtual.Controllers
                 detalles.Add(new Detalle
                 {
                     IdOrden = orden.ComprobanteSinpe,
-                    IdProducto = carrito.IdProducto,
+                    NombreProducto = carrito.NombreProducto,
                     PrecioUnitario = producto.Precio,
                     Cantidad = carrito.Cantidad
                 });
@@ -108,7 +108,7 @@ namespace Feria_Virtual.Controllers
             var ordenDetalle = new
             {
                 comprobanteSinpe = orden.ComprobanteSinpe,
-                productos = detalles.Select(s => new { s.IdProducto, s.PrecioUnitario, s.Cantidad })
+                productos = detalles.Select(s => new { s.NombreProducto, s.PrecioUnitario, s.Cantidad })
             };
 
             return CreatedAtRoute("default", new { orden.ComprobanteSinpe }, ordenDetalle);

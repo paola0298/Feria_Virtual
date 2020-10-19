@@ -15,6 +15,8 @@ namespace Feria_Virtual.Models
         public string Telefono { get; set; }
         public DateTimeOffset FechaNacimiento { get; set; }
 
+        public string Nombre { get; set; }
+
         #region Apellido
         public string Apellido1 { get; set; }
         public string Apellido2 { get; set; }

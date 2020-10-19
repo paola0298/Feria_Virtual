@@ -5,7 +5,7 @@ namespace Feria_Virtual.Models
     public class Producto
     {
         [Key]
-        public int Id { get; set; }
+        // public int Id { get; set; }
         public string Nombre { get; set; }
         public int IdCategoria { get; set; }
         public string IdProductor { get; set; }
