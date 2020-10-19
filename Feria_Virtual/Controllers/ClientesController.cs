@@ -24,7 +24,7 @@ namespace Feria_Virtual.Controllers
             return Ok(clientes);
         }
 
-        public string encrypt(string text){
+        public string Encrypt(string text){
            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
            md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
            byte[] result = md5.Hash;
@@ -53,7 +53,7 @@ namespace Feria_Virtual.Controllers
         [HttpPost]
         public async Task<IActionResult> AddClienteAsync(Cliente cliente)
         {
-            cliente.Password = encrypt(cliente.Password);
+            cliente.Password = Encrypt(cliente.Password);
 
             if (cliente == null || string.IsNullOrWhiteSpace(cliente.Identificacion))
                 return BadRequest();
@@ -88,7 +88,8 @@ namespace Feria_Virtual.Controllers
 
             if (oldCliente == null)
                 return BadRequest();
-
+                
+            //TODO: Encriptar contraseña si se cambió.
             cliente.Remove(oldCliente);
             cliente.Add(newCliente);
 
