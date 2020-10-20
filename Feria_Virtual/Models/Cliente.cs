@@ -21,16 +21,17 @@ namespace Feria_Virtual.Models
         public string Apellido1 { get; set; }
         public string Apellido2 { get; set; }
         #endregion
-        
+
         #region Dirección
         public string Provincia { get; set; }
         public string Canton { get; set; }
         public string Distrito { get; set; }
+        public string DireccionExacta { get; set; }
         #endregion
 
         #region LogIn
-        public string Usuario {get; set; }
-        public string Password{get; set;}
+        public string Usuario { get; set; }
+        public string Password { get; set; }
         #endregion
 
 
