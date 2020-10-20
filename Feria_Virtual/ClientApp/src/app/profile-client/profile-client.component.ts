@@ -174,7 +174,12 @@ export class ProfileClientComponent implements OnInit {
       canton.disabled=true;
       district.disabled=true;
 
-      console.log("Nombre " + name.value);
+      if (name.value == "" || lastName1.value == "" || lastName2.value == "" || birth.value == "" ||
+      phone.value == "" || province.value == "Seleccione una provincia" || canton.value == "Seleccione un cantón" ||
+      district.value == "Seleccione un distrito") {
+        this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
+        return;
+      }
 
       var client = new Client(id.value, phone.value, birth.value, lastName1.value, lastName2.value, province.value, 
         canton.value, district.value, this.actualClient.usuario, this.actualClient.password, name.value);
