@@ -23,12 +23,15 @@ export class LoginAdminComponent implements OnInit {
       return;
     } 
 
-    if (Number(adminCode.value) == 12345) {
-      //cargar pagina
-      console.log('Code is valid!');
-      (document.getElementById("adminCode") as HTMLInputElement).value = "";
-      this.router.navigate(['menu-admin'] );
+    if (Number(adminCode.value) != 12345) {
+      this.utilsService.showInfoModal("Error", "El código ingresado es incorrecto", "saveMsjLabel", "msjText", "saveMsj");
+      return;
     }
+
+    //cargar pagina
+    console.log('Code is valid!');
+    (document.getElementById("adminCode") as HTMLInputElement).value = "";
+    this.router.navigate(['menu-admin'] );
   }
 
   closeModal(modal:string) {
