@@ -144,7 +144,7 @@ namespace Feria_Virtual.Helpers
             return fullPath.ToString();
         }
 
-        private static string GetDirectory()
+        public static string GetDirectory()
         {
             var currentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (string.IsNullOrWhiteSpace(currentPath))

@@ -1,9 +1,12 @@
+using System.IO;
+using Feria_Virtual.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace Feria_Virtual
@@ -43,7 +46,22 @@ namespace Feria_Virtual
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(); //For wwwroot folder
+
+            var uploadsPath = $"{JsonHandler.GetDirectory()}/{UploadHelper.UploadsDirectory}";
+
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
+
+            //Para habilitar el servir las imagenes subidas al servidor.
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(uploadsPath),
+                RequestPath = "/WebUploads"
+            });
+
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
