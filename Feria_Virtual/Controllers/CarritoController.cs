@@ -36,6 +36,12 @@ namespace Feria_Virtual.Controllers
             if (exists)
                 return Conflict();
 
+            var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
+            var producto = productos.FirstOrDefault(p => p.Nombre == carrito.NombreProducto);
+
+            if (producto == null || carrito.Cantidad > producto.Disponibilidad)
+                return BadRequest();
+
             carrito.IdCliente = idCliente;
 
             await JsonHandler.AddToFileAsync(FilePath.Carrito, carrito);
