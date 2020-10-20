@@ -47,11 +47,12 @@ namespace Feria_Virtual.Controllers
             return Ok(ordenDetalle);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateOrdenAsync(InfoOrden info)
+        [HttpPost("{idCliente}")]
+        public async Task<IActionResult> CreateOrdenAsync(string idCliente)
         {
             var clientes = await JsonHandler.LoadFileAsync<Cliente>(FilePath.Clientes);
-            if (!clientes.Any(c => c.Identificacion == info.IdCliente))
+            var cliente = clientes.FirstOrDefault(c => c.Identificacion == idCliente);
+            if (cliente == null)
                 return BadRequest();
 
             var allProductos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos);
@@ -59,19 +60,19 @@ namespace Feria_Virtual.Controllers
             var allOrdenes = await JsonHandler.LoadFileAsync<Orden>(FilePath.Orden);
             var allDetalles = await JsonHandler.LoadFileAsync<Detalle>(FilePath.Detalle);
 
-            var carritoCliente = allCarritos.FindAll(c => c.IdCliente == info.IdCliente);
+            var carritoCliente = allCarritos.FindAll(c => c.IdCliente == idCliente);
 
             if (carritoCliente.Count == 0)
                 return BadRequest();
 
-            allCarritos.RemoveAll(p => p.IdCliente == info.IdCliente);
+            allCarritos.RemoveAll(p => p.IdCliente == idCliente);
 
+            var direccionCliente = $"{cliente.DireccionExacta}, {cliente.Provincia}, {cliente.Canton}, {cliente.Distrito}";
             var orden = new Orden
             {
                 ComprobanteSinpe = GetComprobanteSinpe(8),
-                IdCliente = info.IdCliente,
-                DireccionEntrega = info.DireccionEntrega,
-                
+                IdCliente = idCliente,
+                DireccionEntrega = direccionCliente,
             };
             var detalles = new List<Detalle>();
 
