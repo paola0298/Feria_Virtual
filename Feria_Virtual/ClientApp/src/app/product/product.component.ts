@@ -4,6 +4,7 @@ import { RestclientService } from 'src/app/services/restclient.service';
 import { Product } from 'src/app/models/product';
 import { Category } from 'src/app/models/category'
 import { error } from 'protractor';
+import { read } from 'fs';
 
 @Component({
   selector: 'app-product',
@@ -27,6 +28,24 @@ export class ProductComponent implements OnInit {
     this.getCategories();
     this.getProducts();
     
+  }
+
+  encodeImageFileAsURL(): Promise<string> {
+    var promise = new Promise<string>(function (resolve, result) {
+      var image = document.getElementById("image") as HTMLInputElement;
+      var file = image.files[0];
+      var reader = new FileReader();
+
+      reader.onloadend = function() {
+        console.log('File readed: ', reader.result);
+        resolve(reader.result.toString());
+      }
+      reader.onerror = function () {
+        resolve(null);
+      }
+      reader.readAsDataURL(file);
+    });
+    return promise;
   }
 
   /**
@@ -89,7 +108,7 @@ export class ProductComponent implements OnInit {
   /**
    * Metodo para almacenar un nuevo producto
    */
-  saveProduct() {
+  async saveProduct() {
     let name = (document.getElementById("productName") as HTMLInputElement);
     let availability = (document.getElementById("availability") as HTMLInputElement);
     let price = (document.getElementById("price") as HTMLInputElement);
@@ -109,9 +128,10 @@ export class ProductComponent implements OnInit {
     let priceN = Number(price.value);
     let idCategory = this.getIdCategory(category.value);
     
+    let imageUrl = await this.encodeImageFileAsURL();
 
     var product = new Product(name.value, idCategory, this.idActualProducer, availabilityN, priceN, 
-      saleMode.value, image.value)
+      saleMode.value, imageUrl)
 
     if (this.updating) {
       this.modifyProduct(product, [name, availability, price, image], [category, saleMode])
