@@ -98,12 +98,15 @@ export class UtilsService {
   configureContextMenu() {
     document.getElementsByTagName('body')[0].addEventListener('click', (e: Event) => {
       var menu = document.getElementById('context-menu');
-      if (menu.style.getPropertyValue('display') == 'block') {
-        menu.style.setProperty('display', 'none');
-      }
-      var tds = document.getElementsByTagName('td');
-      for (let i = 0; i < tds.length; i++) {
-        tds[i].style.setProperty('box-shadow', 'none');
+
+      if (menu != null) {
+        if (menu.style.getPropertyValue('display') == 'block') {
+          menu.style.setProperty('display', 'none');
+        }
+        var tds = document.getElementsByTagName('td');
+        for (let i = 0; i < tds.length; i++) {
+          tds[i].style.setProperty('box-shadow', 'none');
+        }
       }
     });
 
