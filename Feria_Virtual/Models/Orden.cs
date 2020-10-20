@@ -10,5 +10,6 @@ namespace Feria_Virtual.Models
         public string IdProductor { get; set; }
         public double Total { get; set; }
         public string DireccionEntrega { get; set; }
+        public double Calificacion { get; set; }
     }
 }

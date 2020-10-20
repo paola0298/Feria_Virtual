@@ -115,6 +115,29 @@ namespace Feria_Virtual.Controllers
             return CreatedAtRoute("default", new { orden.ComprobanteSinpe }, ordenDetalle);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateOrdenAsync(CalificacionOrden calificacion)
+        {
+            var ordenes = await JsonHandler.LoadFileAsync<Orden>(FilePath.Orden);
+            var orden = ordenes.FirstOrDefault(o => o.ComprobanteSinpe == calificacion.Comprobante);
+
+            if (orden == null || orden.IdCliente != calificacion.IdCliente)
+                return BadRequest();
+
+            ordenes.Remove(orden);
+
+            if (calificacion.Calificacion < 1 || calificacion.Calificacion > 5)
+                return BadRequest();
+
+            orden.Calificacion = calificacion.Calificacion;
+
+            ordenes.Add(orden);
+
+            await JsonHandler.OvewriteFileAsync(FilePath.Orden, ordenes);
+
+            return NoContent();
+        }
+
         private string GetComprobanteSinpe(int length)
         {
             StringBuilder comprobante = new StringBuilder();
