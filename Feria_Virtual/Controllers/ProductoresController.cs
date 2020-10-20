@@ -25,12 +25,13 @@ namespace Feria_Virtual.Controllers
         }
 
         [HttpGet("{prov}/{can}/{dis}")]
-        public async Task<IActionResult> GetProductoresInRegionAsync(string prov, string can, string dis) {
+        public async Task<IActionResult> GetProductoresInRegionAsync(string prov, string can, string dis)
+        {
             var productores = await JsonHandler.LoadFileAsync<Productor>(FilePath.Productores);
 
             var inRegion = productores.FindAll(
-                p => p.Provincia == prov && 
-                p.Canton == can && 
+                p => p.Provincia == prov &&
+                p.Canton == can &&
                 p.Distrito == dis);
 
             return Ok(inRegion);
@@ -66,6 +67,7 @@ namespace Feria_Virtual.Controllers
 
             //Los productores agregados desde la vista de administración están afiliados por defecto
             productor.Afiliado = true;
+            productor.Password = Encryption.Encrypt(productor.Password);
 
             await JsonHandler.AddToFileAsync(FilePath.Productores, productor)
                 .ConfigureAwait(false);
@@ -74,8 +76,8 @@ namespace Feria_Virtual.Controllers
             return CreatedAtRoute("default", new { id = productor.Identificacion }, productor);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProductorAsync(string id, Productor newProductor)
+        [HttpPut("{id}/{passUpdate?}")]
+        public async Task<IActionResult> UpdateProductorAsync(string id, Productor newProductor, bool? passUpdate)
         {
             if (id != newProductor.Identificacion)
                 return BadRequest();
@@ -89,6 +91,12 @@ namespace Feria_Virtual.Controllers
                 return BadRequest();
 
             productores.Remove(oldProductor);
+
+            if (passUpdate != null && passUpdate == true)
+            {
+                newProductor.Password = Encryption.Encrypt(newProductor.Password);
+            }
+
             productores.Add(newProductor);
 
             await JsonHandler.OvewriteFileAsync(FilePath.Productores, productores)

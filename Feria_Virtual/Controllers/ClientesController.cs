@@ -13,7 +13,7 @@ namespace Feria_Virtual.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+
     public class ClientesController : ControllerBase
     {
         [HttpGet]
@@ -22,17 +22,6 @@ namespace Feria_Virtual.Controllers
             var clientes = await JsonHandler.LoadFileAsync<Cliente>(FilePath.Clientes)
                 .ConfigureAwait(false);
             return Ok(clientes);
-        }
-
-        public string Encrypt(string text){
-           MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-           md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
-           byte[] result = md5.Hash;
-           StringBuilder str = new StringBuilder();
-           for(int i=1;i<result.Length;i++){
-               str.Append(result[i].ToString("x2"));
-           }
-           return str.ToString();
         }
 
         [HttpGet("{id}")]
@@ -53,7 +42,7 @@ namespace Feria_Virtual.Controllers
         [HttpPost]
         public async Task<IActionResult> AddClienteAsync(Cliente cliente)
         {
-            cliente.Password = Encrypt(cliente.Password);
+            cliente.Password = Encryption.Encrypt(cliente.Password);
 
             if (cliente == null || string.IsNullOrWhiteSpace(cliente.Identificacion))
                 return BadRequest();
@@ -70,7 +59,7 @@ namespace Feria_Virtual.Controllers
                 .ConfigureAwait(false);
 
             return CreatedAtRoute("default", new { id = cliente.Identificacion }, cliente);
-            
+
 
 
         }
@@ -88,7 +77,7 @@ namespace Feria_Virtual.Controllers
 
             if (oldCliente == null)
                 return BadRequest();
-                
+
             //TODO: Encriptar contraseña si se cambió.
             cliente.Remove(oldCliente);
             cliente.Add(newCliente);
@@ -120,6 +109,6 @@ namespace Feria_Virtual.Controllers
             return Ok(clientes);
         }
 
-        
+
     }
 }

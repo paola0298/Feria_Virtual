@@ -17,19 +17,6 @@ namespace Feria_Virtual.Controllers
 
     public class ClienteLogController : ControllerBase
     {
-        public string EncryptLogin(string text)
-        {
-            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-            md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
-            byte[] result = md5.Hash;
-            StringBuilder str = new StringBuilder();
-            for (int i = 1; i < result.Length; i++)
-            {
-                str.Append(result[i].ToString("x2"));
-            }
-            return str.ToString();
-        }
-
         [HttpPost]
         public async Task<IActionResult> ClienteLogAsync(ClienteLog log)
         {
@@ -55,8 +42,7 @@ namespace Feria_Virtual.Controllers
                     return Forbid();
 
                 //Usar productor;
-                //if (!productor.Password.Equals(EncryptLogin(log.Password)))
-                if (!productor.Password.Equals(log.Password))
+                if (!Encryption.Equals(log.Password, productor.Password))
                     return BadRequest();
 
                 //Mandar datos de productor.
@@ -67,7 +53,7 @@ namespace Feria_Virtual.Controllers
                 });
             }
 
-            if (!cliente.Password.Equals(EncryptLogin(log.Password)))
+            if (!Encryption.Equals(log.Password, cliente.Password))
                 return BadRequest();
 
             return Ok(new
