@@ -6,29 +6,6 @@
     margin-bottom: 75px;
 }
 
-/* input {
-  padding:10px 10px 10px 5px;
-  display:block;
-  width:250px;
-  border:none;
-  border-bottom:1px solid #757575;
-  background-color: transparent;
-  
-} */
-
-/* select {
-    padding:1px 10px 10px 5px;
-    display:block;
-    width:250px;
-    border:none;
-    border-bottom:1px solid #757575;
-    background-color: transparent !important;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    text-indent: 1px;
-    text-overflow: '';
-    color: black !important;
-} */
 
 input:disabled {
     background-color: transparent;
@@ -37,6 +14,7 @@ input:disabled {
     width:250px;
     border:none;
     border-bottom:1px solid #757575;
+    color: black !important;
 }
 
 select:disabled {

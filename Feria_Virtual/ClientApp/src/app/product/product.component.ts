@@ -65,6 +65,11 @@ export class ProductComponent implements OnInit {
       }, (error:any) => {
         console.log(error.statusText);
         console.log(error.status);
+        var status = error.status;
+        if (status == 409) {
+          this.utilsService.showInfoModal("Error", "El producto ya esta almacenado.", "saveMsjLabel", "msjText", 'saveMsj');
+          return;
+        }
       });
   }
 
@@ -119,7 +124,7 @@ export class ProductComponent implements OnInit {
     
 
     if (name.value == '' || availability.value == '' || price.value == '' || category.value == 'Seleccione una categoria' || 
-    saleMode.value == 'Seleccione un modo de venta') {
+    saleMode.value == 'Seleccione un modo de venta' || image.value == '') {
       this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
       return;
     } 
@@ -127,11 +132,13 @@ export class ProductComponent implements OnInit {
     let availabilityN = Number(availability.value);
     let priceN = Number(price.value);
     let idCategory = this.getIdCategory(category.value);
+
     
     let imageUrl = await this.encodeImageFileAsURL();
+    console.log("Image url " + imageUrl);
 
     var product = new Product(name.value, idCategory, this.idActualProducer, availabilityN, priceN, 
-      saleMode.value, imageUrl)
+      saleMode.value, imageUrl);
 
     if (this.updating) {
       this.modifyProduct(product, [name, availability, price, image], [category, saleMode])
