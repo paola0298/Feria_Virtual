@@ -72,9 +72,11 @@ namespace Feria_Virtual.Controllers
             var allCalificaciones = await JsonHandler.LoadFileAsync<Calificacion>(FilePath.Calificacion);
             var calificaciones = allCalificaciones.FindAll(c => c.IdProductor == id);
 
-            productor.Calificaciones = calificaciones.Count;
-            productor.Calificacion = calificaciones.Sum(c => c.Valor) / calificaciones.Count;
-
+            if (calificaciones.Count > 0) {
+                productor.Calificaciones = calificaciones.Count;
+                productor.Calificacion = calificaciones.Sum(c => c.Valor) / calificaciones.Count;
+            }
+            
             return Ok(productor);
         }
 
