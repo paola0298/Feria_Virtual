@@ -4,6 +4,7 @@ using Feria_Virtual.Models;
 using Feria_Virtual.Helpers;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace Feria_Virtual.Controllers
 {
@@ -48,7 +49,7 @@ namespace Feria_Virtual.Controllers
             var categorias = await JsonHandler.LoadFileAsync<Categoria>(FilePath.Categorias);
 
             //Id de categoría autoincrementable
-            categoria.Id = categorias.Count;
+            categoria.Id = Math.Abs(categoria.Nombre.GetHashCode());
 
             await JsonHandler.AddToFileAsync(FilePath.Categorias, categoria);
 
