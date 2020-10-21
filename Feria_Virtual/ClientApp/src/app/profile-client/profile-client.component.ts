@@ -17,6 +17,7 @@ export class ProfileClientComponent implements OnInit {
   districts: string[] = [];
   actionFlag: boolean = false;
   actualClient: Client; 
+  updating: boolean = false;
 
   constructor(private changeDetection: ChangeDetectorRef, private utilsService: UtilsService,
     private restClientService: RestclientService, private router: Router) { }
@@ -113,9 +114,11 @@ export class ProfileClientComponent implements OnInit {
 
     if (this.actionFlag) {
       this.setProfileEditable(id, name, lastName1, lastName2, birth, dir, phone, province, canton, district);
+      this.updating = true;
 
     } else { 
       this.saveProfileData(id, name, lastName1, lastName2, birth, dir, phone, province, canton, district);
+      this.updating = false;
     }
   }
 
@@ -230,8 +233,14 @@ export class ProfileClientComponent implements OnInit {
    * @param canton Canton
    */
   async loadDistrict(canton: string) {
-    var provinceId = this.provinces.indexOf(this.actualClient.provincia) + 1;
+    // 
     var cantonId = this.cantons.indexOf(canton) + 1;
+    if (this.updating) {
+      var provinceId = this.provinces.indexOf((document.getElementById("province") as HTMLSelectElement).value) + 1;
+    } else {
+      var provinceId = this.provinces.indexOf(this.actualClient.provincia) + 1;
+    }
+
 
     if (cantonId == 0) {
       console.log('invalid canton id: ' + cantonId);
