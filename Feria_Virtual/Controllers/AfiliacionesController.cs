@@ -66,6 +66,8 @@ namespace Feria_Virtual.Controllers
             */
             productor.Afiliado = false;
 
+            productor.Password = Encryption.Encrypt(productor.Password);
+
             afiliaciones.Add(afiliacion);
 
             await JsonHandler.OvewriteFileAsync(FilePath.Afiliaciones, afiliaciones);
