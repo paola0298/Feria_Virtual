@@ -10,6 +10,7 @@ export class Client {
     usuario:string;
     password:string;
     nombre:string;
+    direccionExacta:string;
 
     constructor(
         identificacion:string,
@@ -22,7 +23,8 @@ export class Client {
         distrito:string,
         usuario:string,
         password:string,
-        nombre:string
+        nombre:string,
+        direccionExacta:string
 
     ) {
         this.identificacion = identificacion;
@@ -36,5 +38,6 @@ export class Client {
         this.usuario = usuario;
         this.password = password;
         this.nombre = nombre;
+        this.direccionExacta = direccionExacta;
     }
 }

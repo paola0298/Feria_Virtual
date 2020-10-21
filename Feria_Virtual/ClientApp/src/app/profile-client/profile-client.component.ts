@@ -83,6 +83,7 @@ export class ProfileClientComponent implements OnInit {
     (document.getElementById("birth") as HTMLInputElement).value = birth;
     // (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.direccionExacta;
     (document.getElementById("phone") as HTMLInputElement).value = this.actualClient.telefono;
+    (document.getElementById("dir") as HTMLInputElement).value = this.actualClient.direccionExacta;
 
     var provinceSelect = (document.getElementById("province") as HTMLSelectElement); 
     provinceSelect.value = this.actualClient.provincia;
@@ -176,13 +177,13 @@ export class ProfileClientComponent implements OnInit {
 
       if (name.value == "" || lastName1.value == "" || lastName2.value == "" || birth.value == "" ||
       phone.value == "" || province.value == "Seleccione una provincia" || canton.value == "Seleccione un cantón" ||
-      district.value == "Seleccione un distrito") {
+      district.value == "Seleccione un distrito" || dir.value == "") {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
         return;
       }
 
       var client = new Client(id.value, phone.value, birth.value, lastName1.value, lastName2.value, province.value, 
-        canton.value, district.value, this.actualClient.usuario, this.actualClient.password, name.value);
+        canton.value, district.value, this.actualClient.usuario, this.actualClient.password, name.value, dir.value);
       this.updateClient(client);
   }
 

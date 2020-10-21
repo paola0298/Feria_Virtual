@@ -55,7 +55,7 @@ export class RegisterClientComponent implements OnInit {
     //TODO verificacion de contraseña sean igual
     if (idClient.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || username.value == '' || phone.value == '' || birth.value == '' ||
       dir.value == '' || pass.value == '' || passConfirm.value == '' || province.value == 'Seleccione una provincia' ||
-      canton.value == 'Seleccione un cantón' || district.value == 'Seleccione un distrito') {
+      canton.value == 'Seleccione un cantón' || district.value == 'Seleccione un distrito' || dir.value == '') {
         this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
         return;
     } 
@@ -66,7 +66,7 @@ export class RegisterClientComponent implements OnInit {
     }
   
     var client = new Client(idClient.value, phone.value, birth.value, lastName1.value, lastName2.value,
-      province.value, canton.value, district.value, username.value, pass.value, name.value);
+      province.value, canton.value, district.value, username.value, pass.value, name.value, dir.value);
     this.createClient(client);
       // this.utilsService.cleanField([idClient, name, lastName1, lastName2, username, pass, phone, dir, passConfirm, birth],
       //   [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
