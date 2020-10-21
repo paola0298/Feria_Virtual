@@ -138,6 +138,9 @@ namespace Feria_Virtual.Helpers
                 case FilePath.Clientes:
                     fullPath.Append("/clientes.json");
                     break;
+                case FilePath.Calificacion:
+                    fullPath.Append("/calificacion.json");
+                    break;
                 default:
                     return null;
             }

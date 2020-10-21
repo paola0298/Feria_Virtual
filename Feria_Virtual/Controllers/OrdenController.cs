@@ -15,7 +15,7 @@ namespace Feria_Virtual.Controllers
     [ApiController]
     public class OrdenController : ControllerBase
     {
-        [HttpGet("productor/{id}")]
+        [HttpGet("productor/{idProductor}")]
         public async Task<IActionResult> GetOrdenesProductor(string idProductor)
         {
             var allOrdenes = await JsonHandler.LoadFileAsync<Orden>(FilePath.Orden);

@@ -16,7 +16,7 @@ namespace Feria_Virtual.Helpers
         Detalle,
         Clientes,
         ClienteLog,
-
+        Calificacion
 
     }
 }

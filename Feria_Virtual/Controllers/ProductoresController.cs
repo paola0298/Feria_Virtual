@@ -18,10 +18,31 @@ namespace Feria_Virtual.Controllers
         {
             var productores = await JsonHandler.LoadFileAsync<Productor>(FilePath.Productores)
                 .ConfigureAwait(false);
+            var calificaciones = await JsonHandler.LoadFileAsync<Calificacion>(FilePath.Calificacion)
+                .ConfigureAwait(false);
 
-            var productoresAfiliados = productores.FindAll(p => p.Afiliado == true);
+            var afiliados = await CargarCalificaciones(productores.FindAll(p => p.Afiliado == true));
 
-            return Ok(productoresAfiliados);
+            return Ok(afiliados);
+        }
+
+        public async Task<List<Productor>> CargarCalificaciones(List<Productor> productores)
+        {
+            var allCalificaciones = await JsonHandler.LoadFileAsync<Calificacion>(FilePath.Calificacion);
+
+            foreach (var productor in productores)
+            {
+                var calificaciones = allCalificaciones.FindAll(x => x.IdProductor == productor.Identificacion);
+                var count = calificaciones.Count;
+
+                if (count == 0)
+                    continue;
+
+                productor.Calificaciones = count;
+                productor.Calificacion = calificaciones.Sum(c => c.Valor) / count;
+            }
+
+            return productores;
         }
 
         [HttpGet("{prov}/{can}/{dis}")]
@@ -29,10 +50,10 @@ namespace Feria_Virtual.Controllers
         {
             var productores = await JsonHandler.LoadFileAsync<Productor>(FilePath.Productores);
 
-            var inRegion = productores.FindAll(
+            var inRegion = await CargarCalificaciones(productores.FindAll(
                 p => p.Provincia == prov &&
                 p.Canton == can &&
-                p.Distrito == dis);
+                p.Distrito == dis));
 
             return Ok(inRegion);
         }
@@ -47,6 +68,12 @@ namespace Feria_Virtual.Controllers
 
             if (productor == null)
                 return NotFound();
+
+            var allCalificaciones = await JsonHandler.LoadFileAsync<Calificacion>(FilePath.Calificacion);
+            var calificaciones = allCalificaciones.FindAll(c => c.IdProductor == id);
+
+            productor.Calificaciones = calificaciones.Count;
+            productor.Calificacion = calificaciones.Sum(c => c.Valor) / calificaciones.Count;
 
             return Ok(productor);
         }
@@ -74,6 +101,49 @@ namespace Feria_Virtual.Controllers
 
             //return CreatedAtRoute("GetProductor", productor);
             return CreatedAtRoute("default", new { id = productor.Identificacion }, productor);
+        }
+
+        [HttpPut("calificar")]
+        public async Task<IActionResult> CalificarProductorAsync(CalificacionInfo calificacion)
+        {
+            if (string.IsNullOrWhiteSpace(calificacion.IdProductor) || string.IsNullOrWhiteSpace(calificacion.IdCliente))
+                return BadRequest();
+
+            var productores = await JsonHandler.LoadFileAsync<Productor>(FilePath.Productores);
+            var clientes = await JsonHandler.LoadFileAsync<Cliente>(FilePath.Clientes);
+            var ordenes = await JsonHandler.LoadFileAsync<Orden>(FilePath.Orden);
+            var calificaciones = await JsonHandler.LoadFileAsync<Calificacion>(FilePath.Calificacion);
+
+            if (!productores.Any(p => p.Identificacion == calificacion.IdProductor) ||
+                !clientes.Any(c => c.Identificacion == calificacion.IdCliente))
+                return BadRequest();
+
+            if (calificacion.Calificacion < 1 || calificacion.Calificacion > 5)
+                return BadRequest();
+
+            //TODO: Verificar que el cliente tenga alguna compra realizada al productor a calificar
+            var compraRealizada = ordenes.Any(
+                o => o.IdCliente == calificacion.IdCliente
+                && o.IdProductor == calificacion.IdProductor);
+
+            var calificacionDada = calificaciones.Any(c => c.IdCliente == calificacion.IdCliente);
+
+            //No calificar si no se ha comprado al productor o si ya se calificó
+            if (!compraRealizada || calificacionDada)
+                return BadRequest();
+
+            var cal = new Calificacion
+            {
+                IdProductor = calificacion.IdProductor,
+                IdCliente = calificacion.IdCliente,
+                Valor = calificacion.Calificacion
+            };
+
+            calificaciones.Add(cal);
+
+            await JsonHandler.OvewriteFileAsync(FilePath.Calificacion, calificaciones);
+
+            return CreatedAtRoute("default", cal);
         }
 
         [HttpPut("{id}/{passUpdate?}")]

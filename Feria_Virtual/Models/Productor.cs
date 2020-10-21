@@ -28,5 +28,10 @@ namespace Feria_Virtual.Models
         public string Distrito { get; set; }
         #endregion
         public List<string> LugaresEntrega { get; set; }
+
+        #region Calificación
+        public double Calificacion { get; set; }
+        public int Calificaciones { get; set; }
+        #endregion
     }
 }
