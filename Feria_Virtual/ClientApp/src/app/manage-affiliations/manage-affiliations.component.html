@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+<div class="primary-container">
+    <div class="card bg-light article-custom">
+        <div class="margin-div">
+            <h2>Solicitudes de afiliacion</h2>
+            <div>
+              <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th class="text-center align-middle" scope="col">Id</th>
+                      <th class="text-center align-middle" scope="col">Estado</th>
+                      <th class="text-center align-middle" scope="col">Id Productor</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngFor="let affiliation of affiliations; let i = index;">
+                    <tr>
+                      <td (contextmenu)="onAffiliationClick($event, affiliation)" class="text-center align-middle">{{ affiliation.id }}</td>
+                      <td (contextmenu)="onAffiliationClick($event, affiliation)" class="text-center align-middle">Pendiente</td>
+                      <td (contextmenu)="onAffiliationClick($event, affiliation)" class="text-center align-middle">{{ affiliation.idProductor }}</td>
+                    </tr>
+          
+                  </tbody>
+            </table>
+
+            <div class="dropdown-menu" aria-labelledby="tableMenu" id="context-menu">
+                <a class="dropdown-item btn btn-default" (click)="accept()">Aceptar</a>  
+                <a class="dropdown-item btn" (click)="deny()">Rechazar</a> 
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

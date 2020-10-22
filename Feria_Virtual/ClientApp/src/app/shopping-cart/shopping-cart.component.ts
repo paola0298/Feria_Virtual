@@ -9,11 +9,11 @@ import { Product } from '../models/product';
 export class ShoppingCartComponent implements OnInit {
 
   products: Product[] = [];
-  totalProduct: number = 0;
-  total: number = 0;
-  productQuantity: number = 1;
+  totalProduct = 0;
+  total = 0;
+  productQuantity = 1;
 
-  productsQuantity:number[] = [1,2]; 
+  productsQuantity: number[] = [1, 2];
 
 
   constructor() {
@@ -38,26 +38,26 @@ export class ShoppingCartComponent implements OnInit {
    }
 
   ngOnInit() {
-    //this.calculateTotal();
+    // this.calculateTotal();
   }
 
   calculateTotal() {
 
-    var elements = document.getElementsByClassName("productQuantity");
-    for (let i=0; i<elements.length; i++) {
-      var element = elements[i] as HTMLInputElement;
+    const elements = document.getElementsByClassName('productQuantity');
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i] as HTMLInputElement;
       element.value = this.productsQuantity[i].toString();
     }
 
-    var quantity = (document.getElementById("productQuantity") as HTMLInputElement);
-    var self = this;
+    const quantity = (document.getElementById('productQuantity') as HTMLInputElement);
+    const self = this;
     quantity.onchange = function (this: GlobalEventHandlers, ev: Event) {
-      console.log((document.getElementById("productQuantity") as HTMLInputElement).value);
-    }
+      console.log((document.getElementById('productQuantity') as HTMLInputElement).value);
+    };
   }
 
-  removeProduct(product:Product) {
-    var index = this.products.indexOf(product);
+  removeProduct(product: Product) {
+    const index = this.products.indexOf(product);
     this.products.splice(index, 1);
   }
 

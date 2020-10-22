@@ -1,0 +1,92 @@
+<link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+/>
+<div class="primary-container">
+  <div class="card bg-light article-custom">
+    <div class="margin-div">
+      <h2>Productores disponibles</h2>
+      <div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="text-center align-middle" scope="col">Nombre</th>
+              <th class="text-center align-middle" scope="col">
+                Primer Apellido
+              </th>
+              <th class="text-center align-middle" scope="col">
+                Segundo Apellido
+              </th>
+              <th class="text-center align-middle" scope="col">Sinpe Movil</th>
+              <th class="text-center align-middle" scope="col">Telefono</th>
+              <th class="text-center align-middle" scope="col">Provincia</th>
+              <th class="text-center align-middle" scope="col">Canton</th>
+              <th class="text-center align-middle" scope="col">Distrito</th>
+              <th class="text-center align-middle" scope="col">
+                Lugares de entrega
+              </th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let producer of producers; let i = index">
+            <tr>
+              <td
+                (click)="onProducerClick(producer)"
+                class="text-center align-middle"
+              >
+                {{ producer.nombre }}
+              </td>
+              <td
+                (click)="onProducerClick(producer)"
+                class="text-center align-middle"
+              >
+                {{ producer.apellido1 }}
+              </td>
+              <td
+                (click)="onProducerClick(producer)"
+                class="text-center align-middle"
+              >
+                {{ producer.apellido2 }}
+              </td>
+              <td
+                (click)="onProducerClick(producer)"
+                class="text-center align-middle"
+              >
+                {{ producer.sinpe }}
+              </td>
+              <td
+                (click)="onProducerClick(producer)"
+                class="text-center align-middle"
+              >
+                {{ producer.telefono }}
+              </td>
+              <td
+                (click)="onProducerClick(producer)"
+                class="text-center align-middle"
+              >
+                {{ producer.provincia }}
+              </td>
+              <td
+                (click)="onProducerClick(producer)"
+                class="text-center align-middle"
+              >
+                {{ producer.canton }}
+              </td>
+              <td
+                (click)="onProducerClick(producer)"
+                class="text-center align-middle"
+              >
+                {{ producer.distrito }}
+              </td>
+              <td
+                (click)="onProducerClick(producer)"
+                class="text-center align-middle"
+              >
+                {{ producer.lugaresEntrega }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

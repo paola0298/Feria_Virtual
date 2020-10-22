@@ -1,0 +1,69 @@
+<link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+/>
+<div class="primary-container">
+  <div class="card bg-light article-custom">
+    <div class="margin-div">
+      <h2>Productores disponibles</h2>
+      <div class="table-div">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="text-center align-middle" scope="col">Nombre</th>
+              <th class="text-center align-middle" scope="col">Categoría</th>
+              <th class="text-center align-middle" scope="col">
+                Disponibilidad
+              </th>
+              <th class="text-center align-middle" scope="col">
+                Precio (Colones)
+              </th>
+              <th class="text-center align-middle" scope="col">Modo de venta</th>
+              <th class="text-center align-middle" scope="col">Foto</th>
+              <th class="text-center align-middle" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let product of products; let i = index">
+            <tr>
+              <td
+                class="text-center align-middle"
+              >
+                {{ product.nombre }}
+              </td>
+              <td
+                class="text-center align-middle"
+              >
+                {{ parseCategory(product.idCategoria) }}
+              </td>
+              <td
+                class="text-center align-middle"
+              >
+                {{ product.disponibilidad }}
+              </td>
+              <td
+                class="text-center align-middle"
+              >
+                {{ product.precio }}
+              </td>
+              <td
+                class="text-center align-middle"
+              >
+                {{ product.modoVenta }}
+              </td>
+              <td
+                class="text-center align-middle"
+              >
+              <img class="pic" src="{{ product.foto }}">
+              </td>
+              <td
+                class="text-center align-middle"
+              >
+                <button *ngIf="product.disponibilidad != 0" class="btn-primary" (click)="addToCart(product)"><i class="fas fa-cart-plus"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

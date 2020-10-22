@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils.service';
 import { RestclientService } from 'src/app/services/restclient.service';
 import { Client } from '../models/client';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-client',
@@ -11,22 +11,22 @@ import { Router } from '@angular/router';
 })
 export class ProfileClientComponent implements OnInit {
 
-  
+
   provinces: string[] = [];
   cantons: string[] = [];
   districts: string[] = [];
-  actionFlag: boolean = false;
-  actualClient: Client; 
-  updating: boolean = false;
+  actionFlag = false;
+  actualClient: Client;
+  updating = false;
 
   constructor(private changeDetection: ChangeDetectorRef, private utilsService: UtilsService,
     private restClientService: RestclientService, private router: Router) { }
 
   ngOnInit() {
-    (document.getElementById("province") as HTMLSelectElement).disabled=true;
-    (document.getElementById("canton") as HTMLSelectElement).disabled=true;
-    (document.getElementById("district") as HTMLSelectElement).disabled=true; 
-    
+    (document.getElementById('province') as HTMLSelectElement).disabled = true;
+    (document.getElementById('canton') as HTMLSelectElement).disabled = true;
+    (document.getElementById('district') as HTMLSelectElement).disabled = true;
+
     this.getClient();
   }
 
@@ -34,13 +34,13 @@ export class ProfileClientComponent implements OnInit {
    * Metodo para obtener la información del cliente actual
    */
   getClient() {
-    var idClient = window.localStorage.getItem("userId");
-    var response = this.restClientService.getClient(idClient);
+    const idClient = window.localStorage.getItem('userId');
+    const response = this.restClientService.getClient(idClient);
     response.subscribe(
-      (value:Client) => {
+      (value: Client) => {
         this.actualClient = value;
         this.setData();
-      }, (error:any) => {
+      }, (error: any) => {
         console.log(error.statusText);
         console.log(error.status);
       });
@@ -51,15 +51,15 @@ export class ProfileClientComponent implements OnInit {
    * Metodo para actualizar la información de un cliente
    * @param client Objeto tipo Client
    */
-  updateClient(client:Client) {
-    var response = this.restClientService.updateClient(client);
+  updateClient(client: Client) {
+    const response = this.restClientService.updateClient(client);
     response.subscribe(
-      (value:any) => {
-        this.utilsService.showInfoModal("Exito", "Sus datos han sido actualizados correctamente.", "saveMsjLabel", "msjText", 'saveMsj');
-      }, (error:any) => {
+      (value: any) => {
+        this.utilsService.showInfoModal('Exito', 'Sus datos han sido actualizados correctamente.', 'saveMsjLabel', 'msjText', 'saveMsj');
+      }, (error: any) => {
         console.log(error.statusText);
         console.log(error.status);
-        this.utilsService.showInfoModal("Error", "No se han podido actualizar sus datos.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.utilsService.showInfoModal('Error', 'No se han podido actualizar sus datos.', 'saveMsjLabel', 'msjText', 'saveMsj');
 
       });
   }
@@ -73,24 +73,24 @@ export class ProfileClientComponent implements OnInit {
     await this.loadDistrict(this.actualClient.canton);
     this.changeDetection.detectChanges();
 
-    var birthDateTime = this.actualClient.fechaNacimiento;
-    var index = birthDateTime.indexOf("T");
-    var birth = birthDateTime.substring(0, index);
+    const birthDateTime = this.actualClient.fechaNacimiento;
+    const index = birthDateTime.indexOf('T');
+    const birth = birthDateTime.substring(0, index);
 
-    (document.getElementById("idClient") as HTMLInputElement).value = this.actualClient.identificacion;
-    (document.getElementById("name") as HTMLInputElement).value = this.actualClient.nombre;
-    (document.getElementById("last-name1") as HTMLInputElement).value = this.actualClient.apellido1;
-    (document.getElementById("last-name2") as HTMLInputElement).value = this.actualClient.apellido2;
-    (document.getElementById("birth") as HTMLInputElement).value = birth;
+    (document.getElementById('idClient') as HTMLInputElement).value = this.actualClient.identificacion;
+    (document.getElementById('name') as HTMLInputElement).value = this.actualClient.nombre;
+    (document.getElementById('last-name1') as HTMLInputElement).value = this.actualClient.apellido1;
+    (document.getElementById('last-name2') as HTMLInputElement).value = this.actualClient.apellido2;
+    (document.getElementById('birth') as HTMLInputElement).value = birth;
     // (document.getElementById("dir") as HTMLInputElement).value = this.actualProducer.direccionExacta;
-    (document.getElementById("phone") as HTMLInputElement).value = this.actualClient.telefono;
-    (document.getElementById("dir") as HTMLInputElement).value = this.actualClient.direccionExacta;
+    (document.getElementById('phone') as HTMLInputElement).value = this.actualClient.telefono;
+    (document.getElementById('dir') as HTMLInputElement).value = this.actualClient.direccionExacta;
 
-    var provinceSelect = (document.getElementById("province") as HTMLSelectElement); 
+    const provinceSelect = (document.getElementById('province') as HTMLSelectElement);
     provinceSelect.value = this.actualClient.provincia;
-    var cantonSelect = (document.getElementById("canton") as HTMLSelectElement);
+    const cantonSelect = (document.getElementById('canton') as HTMLSelectElement);
     cantonSelect.value = this.actualClient.canton;
-    var districtSelect = (document.getElementById("district") as HTMLSelectElement);
+    const districtSelect = (document.getElementById('district') as HTMLSelectElement);
     districtSelect.value = this.actualClient.distrito;
 
   }
@@ -101,22 +101,22 @@ export class ProfileClientComponent implements OnInit {
   updateData() {
 
     this.actionFlag = !this.actionFlag;
-    var id = (document.getElementById("idClient") as HTMLInputElement);
-    var name = (document.getElementById("name") as HTMLInputElement);
-    var lastName1 = (document.getElementById("last-name1") as HTMLInputElement);
-    var lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
-    var birth = (document.getElementById("birth") as HTMLInputElement);
-    var dir = (document.getElementById("dir") as HTMLInputElement);
-    var phone = (document.getElementById("phone") as HTMLInputElement);
-    var province = (document.getElementById("province") as HTMLSelectElement);
-    var canton = (document.getElementById("canton") as HTMLSelectElement);
-    var district = (document.getElementById("district") as HTMLSelectElement); 
+    const id = (document.getElementById('idClient') as HTMLInputElement);
+    const name = (document.getElementById('name') as HTMLInputElement);
+    const lastName1 = (document.getElementById('last-name1') as HTMLInputElement);
+    const lastName2 = (document.getElementById('last-name2') as HTMLInputElement);
+    const birth = (document.getElementById('birth') as HTMLInputElement);
+    const dir = (document.getElementById('dir') as HTMLInputElement);
+    const phone = (document.getElementById('phone') as HTMLInputElement);
+    const province = (document.getElementById('province') as HTMLSelectElement);
+    const canton = (document.getElementById('canton') as HTMLSelectElement);
+    const district = (document.getElementById('district') as HTMLSelectElement);
 
     if (this.actionFlag) {
       this.setProfileEditable(id, name, lastName1, lastName2, birth, dir, phone, province, canton, district);
       this.updating = true;
 
-    } else { 
+    } else {
       this.saveProfileData(id, name, lastName1, lastName2, birth, dir, phone, province, canton, district);
       this.updating = false;
     }
@@ -126,8 +126,8 @@ export class ProfileClientComponent implements OnInit {
    * Metodo para hacer que el perfil del usuario se pueda editar
    * @param id HTMLInputElement de la identificacion
    * @param name HTMLInputElement del nombre
-   * @param lastName1 HTMLInputElement del apellido1 
-   * @param lastName2 HTMLInputElement del apellido2 
+   * @param lastName1 HTMLInputElement del apellido1
+   * @param lastName2 HTMLInputElement del apellido2
    * @param birth HTMLInputElement de la fecha de nacimiento
    * @param dir HTMLInputElement de la direccion exacta
    * @param phone HTMLInputElement del telefono
@@ -135,19 +135,19 @@ export class ProfileClientComponent implements OnInit {
    * @param canton HTMLSelectElement del canton
    * @param district HTMLSelectElement del distrito
    */
-  setProfileEditable(id : HTMLInputElement, name : HTMLInputElement, lastName1 : HTMLInputElement, lastName2 : HTMLInputElement, 
-    birth : HTMLInputElement, dir : HTMLInputElement, phone : HTMLInputElement, province : HTMLSelectElement, 
-    canton : HTMLSelectElement, district : HTMLSelectElement) {
+  setProfileEditable(id: HTMLInputElement, name: HTMLInputElement, lastName1: HTMLInputElement, lastName2: HTMLInputElement,
+    birth: HTMLInputElement, dir: HTMLInputElement, phone: HTMLInputElement, province: HTMLSelectElement,
+    canton: HTMLSelectElement, district: HTMLSelectElement) {
       // id.removeAttribute("disabled");
-      name.removeAttribute("disabled");
-      lastName1.removeAttribute("disabled");
-      lastName2.removeAttribute("disabled");
-      birth.removeAttribute("disabled");
-      dir.removeAttribute("disabled");
-      phone.removeAttribute("disabled");
-      province.disabled=false;
-      canton.disabled=false;
-      district.disabled=false; 
+      name.removeAttribute('disabled');
+      lastName1.removeAttribute('disabled');
+      lastName2.removeAttribute('disabled');
+      birth.removeAttribute('disabled');
+      dir.removeAttribute('disabled');
+      phone.removeAttribute('disabled');
+      province.disabled = false;
+      canton.disabled = false;
+      district.disabled = false;
 
   }
 
@@ -155,8 +155,8 @@ export class ProfileClientComponent implements OnInit {
    * Metodo para obtener los nuevos datos del cliente y actualizarlo
    * @param id HTMLInputElement de la identificacion
    * @param name HTMLInputElement del nombre
-   * @param lastName1 HTMLInputElement del apellido1 
-   * @param lastName2 HTMLInputElement del apellido2 
+   * @param lastName1 HTMLInputElement del apellido1
+   * @param lastName2 HTMLInputElement del apellido2
    * @param birth HTMLInputElement de la fecha de nacimiento
    * @param dir HTMLInputElement de la direccion exacta
    * @param phone HTMLInputElement del telefono
@@ -164,28 +164,28 @@ export class ProfileClientComponent implements OnInit {
    * @param canton HTMLSelectElement del canton
    * @param district HTMLSelectElement del distrito
    */
-  saveProfileData(id : HTMLInputElement, name : HTMLInputElement, lastName1 : HTMLInputElement, lastName2 : HTMLInputElement, 
-    birth : HTMLInputElement, dir : HTMLInputElement, phone : HTMLInputElement, province : HTMLSelectElement, 
-    canton : HTMLSelectElement, district : HTMLSelectElement) {
+  saveProfileData(id: HTMLInputElement, name: HTMLInputElement, lastName1: HTMLInputElement, lastName2: HTMLInputElement,
+    birth: HTMLInputElement, dir: HTMLInputElement, phone: HTMLInputElement, province: HTMLSelectElement,
+    canton: HTMLSelectElement, district: HTMLSelectElement) {
       // id.setAttribute("disabled", "true");
-      name.setAttribute("disabled", "true");
-      lastName1.setAttribute("disabled", "true");
-      lastName2.setAttribute("disabled", "true");
-      birth.setAttribute("disabled", "true");
-      dir.setAttribute("disabled", "true");
-      phone.setAttribute("disabled", "true");
-      province.disabled=true;
-      canton.disabled=true;
-      district.disabled=true;
+      name.setAttribute('disabled', 'true');
+      lastName1.setAttribute('disabled', 'true');
+      lastName2.setAttribute('disabled', 'true');
+      birth.setAttribute('disabled', 'true');
+      dir.setAttribute('disabled', 'true');
+      phone.setAttribute('disabled', 'true');
+      province.disabled = true;
+      canton.disabled = true;
+      district.disabled = true;
 
-      if (name.value == "" || lastName1.value == "" || lastName2.value == "" || birth.value == "" ||
-      phone.value == "" || province.value == "Seleccione una provincia" || canton.value == "Seleccione un cantón" ||
-      district.value == "Seleccione un distrito" || dir.value == "") {
-        this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
+      if (name.value === '' || lastName1.value === '' || lastName2.value === '' || birth.value === '' ||
+      phone.value === '' || province.value === 'Seleccione una provincia' || canton.value === 'Seleccione un cantón' ||
+      district.value === 'Seleccione un distrito' || dir.value === '') {
+        this.utilsService.showInfoModal('Error', 'Por favor complete todos los campos.', 'saveMsjLabel', 'msjText', 'saveMsj');
         return;
       }
 
-      var client = new Client(id.value, phone.value, birth.value, lastName1.value, lastName2.value, province.value, 
+      const client = new Client(id.value, phone.value, birth.value, lastName1.value, lastName2.value, province.value,
         canton.value, district.value, this.actualClient.usuario, this.actualClient.password, name.value, dir.value);
       this.updateClient(client);
   }
@@ -194,15 +194,15 @@ export class ProfileClientComponent implements OnInit {
    * Metodo para eliminar la cuenta de un cliente
    */
   deleteAccount() {
-    var response = this.restClientService.deleteClient(this.actualClient.identificacion);
+    const response = this.restClientService.deleteClient(this.actualClient.identificacion);
     response.subscribe(
-      (value:any) => {
+      (value: any) => {
         window.localStorage.clear();
         this.router.navigate(['']);
-      }, (error:any) => {
+      }, (error: any) => {
         console.log(error.statusText);
         console.log(error.status);
-        this.utilsService.showInfoModal("Error", "No se ha podido eliminar su cuenta.", "saveMsjLabel", "msjText", 'saveMsj');
+        this.utilsService.showInfoModal('Error', 'No se ha podido eliminar su cuenta.', 'saveMsjLabel', 'msjText', 'saveMsj');
       });
   }
 
@@ -218,9 +218,9 @@ export class ProfileClientComponent implements OnInit {
    * @param province Provincia
    */
   async loadCanton(province: string) {
-    var index = this.provinces.indexOf(province) + 1;
+    const index = this.provinces.indexOf(province) + 1;
 
-    if (index == 0) {
+    if (index === 0) {
       console.log('invalid province id: ' + index);
       return;
     }
@@ -233,16 +233,17 @@ export class ProfileClientComponent implements OnInit {
    * @param canton Canton
    */
   async loadDistrict(canton: string) {
-    // 
-    var cantonId = this.cantons.indexOf(canton) + 1;
+    //
+    const cantonId = this.cantons.indexOf(canton) + 1;
+    let provinceId;
     if (this.updating) {
-      var provinceId = this.provinces.indexOf((document.getElementById("province") as HTMLSelectElement).value) + 1;
+      provinceId = this.provinces.indexOf((document.getElementById('province') as HTMLSelectElement).value) + 1;
     } else {
-      var provinceId = this.provinces.indexOf(this.actualClient.provincia) + 1;
+      provinceId = this.provinces.indexOf(this.actualClient.provincia) + 1;
     }
 
 
-    if (cantonId == 0) {
+    if (cantonId === 0) {
       console.log('invalid canton id: ' + cantonId);
       return;
     }
@@ -263,7 +264,7 @@ export class ProfileClientComponent implements OnInit {
    * Metodo para mostrar al usuario un modal para tomar una decision de si o no
    */
   askUser(): void {
-    this.utilsService.showInfoModal("Eliminar", "¿Esta seguro que desea eliminar su cuenta?",
-    "optionMsjLabel", "optionText", "optionMsj");
+    this.utilsService.showInfoModal('Eliminar', '¿Esta seguro que desea eliminar su cuenta?',
+    'optionMsjLabel', 'optionText', 'optionMsj');
   }
 }

@@ -4,7 +4,7 @@ import { Producer } from '../models/producer';
 import { AfilliationRequest } from '../models/affiliationRequest';
 import { Category } from '../models/category';
 import { Product } from '../models/product';
-import { Client } from '../models/client'
+import { Client } from '../models/client';
 
 /* Este servicio se utiliza para solicitar, enviar y recibir datos del servidor
 mediante solicitudes HTTP como GET, POST, PUT y DELETE */
@@ -18,7 +18,7 @@ export class RestclientService {
     headers : {
       'Content-Type': 'application/json'
     }
-  }
+  };
 
   constructor(protected http: HttpClient) {}
 
@@ -43,7 +43,7 @@ export class RestclientService {
     // console.log(producer);
     // console.log('\n');
     return this.http.post(`https://localhost:${this.PORT}/api/Productores`, JSON.stringify(producer), this.options);
-    
+
   }
 
   /**
@@ -82,6 +82,12 @@ export class RestclientService {
     // console.log(id);
     // console.log('\n');
     return this.http.delete(`https://localhost:${this.PORT}/api/Productores/${id}`, this.options);
+  }
+
+  getAffiliationRequests() {
+    console.log('Obteniendo solicitudes de afiliacion');
+    console.log('\n');
+    return this.http.get(`https://localhost:${this.PORT}/api/Afiliaciones`, this.options);
   }
 
   /**
@@ -213,8 +219,8 @@ export class RestclientService {
    * @param nameProduct Nombre del producto que se desea obtener
    */
   getProduct(idProducer: string, nameProduct: string) {
-    console.log("Obteniendo producto: " + nameProduct + " de productor: " + idProducer); 
-    var url = `https://localhost:${this.PORT}/api/Productos/${nameProduct}/${idProducer}`;
+    console.log('Obteniendo producto: ' + nameProduct + ' de productor: ' + idProducer);
+    const url = `https://localhost:${this.PORT}/api/Productos/${nameProduct}/${idProducer}`;
     return this.http.get(url, this.options);
   }
 
@@ -239,14 +245,15 @@ export class RestclientService {
     // console.log('\n');
     // console.log(product);
     // console.log('\n');
-    return this.http.put(`https://localhost:${this.PORT}/api/Productos/${product.nombre}/${product.idProductor}`, JSON.stringify(product), this.options);
+    return this.http.put(`https://localhost:${this.PORT}/api/Productos/${product.nombre}/${product.idProductor}`,
+      JSON.stringify(product), this.options);
   }
 
   /**
    * Solicitud HTTP DELETE para eliminar un producto
    * @param id id del producto específico que se desea eliminar
    */
-  deleteProduct(nombre: string, idProducer:string) {
+  deleteProduct(nombre: string, idProducer: string) {
     console.log('Eliminando producto: ' + nombre);
     // console.log('\n');
     // console.log(id);
@@ -259,12 +266,12 @@ export class RestclientService {
    * @param id Nombre de usuario
    * @param pass Contraseña
    */
-  loginClient(id:string, pass:string) {
-    var url = `https://localhost:${this.PORT}/api/ClienteLog`;
-    var auth = {
+  loginClient(id: string, pass: string) {
+    const url = `https://localhost:${this.PORT}/api/ClienteLog`;
+    const auth = {
       id: id,
       password: pass
-    }
+    };
     return this.http.post(url, JSON.stringify(auth), this.options);
   }
 
@@ -272,8 +279,8 @@ export class RestclientService {
    * Solicitud HTTP GET para obtener un cliente específico
    * @param id Id del cliente que se desea obtener
    */
-  getClient(id:string) {
-    var url = `https://localhost:${this.PORT}/api/Clientes/${id}`;
+  getClient(id: string) {
+    const url = `https://localhost:${this.PORT}/api/Clientes/${id}`;
     return this.http.get(url, this.options);
   }
 
@@ -281,7 +288,7 @@ export class RestclientService {
    * Solicitud HTTP GET para obtener todos los clientes guardados
    */
   getClients() {
-    var url = `https://localhost:${this.PORT}/api/Clientes`;
+    const url = `https://localhost:${this.PORT}/api/Clientes`;
     return this.http.get(url, this.options);
   }
 
@@ -289,9 +296,9 @@ export class RestclientService {
    * Solicitud HTTP POST para crear un cliente
    * @param client Objeto de tipo Client
    */
-  createClient(client:Client) {
+  createClient(client: Client) {
     console.log('Creando cliente ' + client.nombre);
-    var url = `https://localhost:${this.PORT}/api/Clientes`;
+    const url = `https://localhost:${this.PORT}/api/Clientes`;
     return this.http.post(url, JSON.stringify(client), this.options);
   }
 
@@ -299,9 +306,9 @@ export class RestclientService {
    * Solicitud HTTP PUT para modificar un cliente
    * @param client Objeto de tipo Client
    */
-  updateClient(client:Client) {
+  updateClient(client: Client) {
     console.log('Actualizando cliente ' + client.nombre);
-    var url = `https://localhost:${this.PORT}/api/Clientes/${client.identificacion}`;
+    const url = `https://localhost:${this.PORT}/api/Clientes/${client.identificacion}`;
     return this.http.put(url, JSON.stringify(client), this.options);
   }
 
@@ -309,9 +316,9 @@ export class RestclientService {
    * Solicitud HTTP DELETE para eliminar un cliente
    * @param id id del cliente específico que se desea eliminar
    */
-  deleteClient(id:string) {
+  deleteClient(id: string) {
     console.log('Eliminando cliente id: ' + id);
-    var url = `https://localhost:${this.PORT}/api/Clientes/${id}`;
+    const url = `https://localhost:${this.PORT}/api/Clientes/${id}`;
     return this.http.delete(url, this.options);
   }
 
@@ -319,9 +326,25 @@ export class RestclientService {
    * Solicitud HTTP POST para enviar una solicitud de afiliación de un productor
    * @param producer Objeto de tipo Producer
    */
-  sendAffiliationRequest(producer:Producer) {
+  sendAffiliationRequest(producer: Producer) {
     console.log('Enviando solicitud de afiliacion id: ' + producer.identificacion);
-    var url = `https://localhost:${this.PORT}/api/Afiliaciones`;
+    const url = `https://localhost:${this.PORT}/api/Afiliaciones`;
     return this.http.post(url, JSON.stringify(producer), this.options);
+  }
+
+  getClientCart(clientId: string) {
+    console.log('Obteniendo objetos del carrito del cliente: ' + clientId);
+    const url = `https://localhost:${this.PORT}/api/Carrito/${clientId}`;
+    return this.http.get(url, this.options);
+  }
+
+  /**
+   * Solicitud HTTP POST para agregar producto al carrito
+   * @param product Objeto de tipo Product
+   */
+  addProductToCart(clientId: string, product: any) {
+    console.log('Agregando ' + product.nombre + ' a carrito de cliente: ' + clientId);
+    const url = `https://localhost:${this.PORT}/api/Carrito/${clientId}`;
+    return this.http.post(url, JSON.stringify(product), this.options);
   }
 }
