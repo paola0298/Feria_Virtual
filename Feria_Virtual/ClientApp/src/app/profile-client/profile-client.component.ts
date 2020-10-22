@@ -31,7 +31,7 @@ export class ProfileClientComponent implements OnInit {
   }
 
   /**
-   * Metodo para obtener la información del cliente actual
+   * Metodo que se conecta al servicio para obtener la información del cliente actual
    */
   getClient() {
     var idClient = window.localStorage.getItem("userId");
@@ -48,7 +48,7 @@ export class ProfileClientComponent implements OnInit {
   }
 
   /**
-   * Metodo para actualizar la información de un cliente
+   * Metodo que se conecta al servicio para actualizar la información de un cliente
    * @param client Objeto tipo Client
    */
   updateClient(client:Client) {
@@ -191,7 +191,7 @@ export class ProfileClientComponent implements OnInit {
   }
 
   /**
-   * Metodo para eliminar la cuenta de un cliente
+   * Metodo que se conecta al servicio para eliminar la cuenta de un cliente
    */
   deleteAccount() {
     var response = this.restClientService.deleteClient(this.actualClient.identificacion);
