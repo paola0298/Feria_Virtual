@@ -13,14 +13,31 @@ namespace Feria_Virtual
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            // CreateHostBuilder(args).Build().Run();
+            var configuration = new ConfigurationBuilder()
+                .AddCommandLine(args)
+                .Build();
+
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseUrls("https://0.0.0.0:5001")
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .UseConfiguration(configuration)
+                .Build();
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel()
+                        .UseUrls("https://localhost:5001", "https://192.168.0.14:5001")
+                        .UseIISIntegration()
+                        .UseStartup<Startup>()
+                        .Build();
                 });
     }
 }
