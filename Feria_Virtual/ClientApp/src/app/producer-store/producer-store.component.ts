@@ -58,20 +58,33 @@ export class ProducerStoreComponent implements OnInit {
 
   addToCart(product: Product) {
     this.restClientService
-      .addProductToCart(this.idActualClient,
-        {
-          idCliente: this.idActualClient,
-          nombreProducto: product.nombre,
-          cantidad: 1
-        })
+      .addProductToCart(this.idActualClient, {
+        idCliente: this.idActualClient,
+        idProducto: product.id,
+        cantidad: 1,
+      })
       .subscribe(
         (response: any) => {
-          console.log(response);
+          this.utilsService.showInfoModal(
+            'Exito',
+            'Se ha agregado ' + product.nombre + ' al carrito',
+            'saveMsjLabel',
+            'msjText',
+            'saveMsj'
+          );
         },
         (error: any) => {
           console.log(error.statusText);
           console.log(error.status);
         }
       );
+  }
+
+  /**
+   * Metodo para cerrar un modal
+   * @param id Id del modal a cerrar
+   */
+  closeModal(id: string): void {
+    document.getElementById(id).style.setProperty('display', 'none');
   }
 }

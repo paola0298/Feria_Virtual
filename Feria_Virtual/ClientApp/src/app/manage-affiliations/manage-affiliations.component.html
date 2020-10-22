@@ -24,9 +24,35 @@
 
             <div class="dropdown-menu" aria-labelledby="tableMenu" id="context-menu">
                 <a class="dropdown-item btn btn-default" (click)="accept()">Aceptar</a>  
-                <a class="dropdown-item btn" (click)="deny()">Rechazar</a> 
+                <a class="dropdown-item btn" (click)="askUser()">Rechazar</a> 
             </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- The Reject with comment Modal -->
+<div class="modal" id="rejectAffiliation">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="optionMsjLabel"></h4>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <a id="optionText"></a>
+      </div>
+      <!-- Modal input -->
+      <div>
+        <label for="comment">Comentario: </label>
+        <input type="text" id="comment" name="comment"><br><br>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal" (click)="deny()">Rechazar</button>
+        <button type="button" class="btn btn-info" data-dismiss="modal" (click)="closeModal('rejectAffiliation')">Cancelar</button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -113,13 +113,14 @@ export class RestclientService {
     console.log('\n');
     console.log(affiliationRequest);
     console.log('\n');
-    return comment
+    console.log(comment && comment !== '');
+    return comment && comment !== ''
       ? this.http.put(
           `https://localhost:${this.PORT}/api/Afiliaciones/${affiliationRequest.id}`,
           JSON.stringify({
             id: affiliationRequest.id,
             estado: 2,
-            comment: comment,
+            comentario: comment,
           }), this.options
         )
       : this.http.put(
@@ -218,7 +219,7 @@ export class RestclientService {
    * @param idProducer Id del productor del que se desea obtener el producto
    * @param nameProduct Nombre del producto que se desea obtener
    */
-  getProduct(idProduct:Number) {
+  getProduct(idProduct: Number) {
     console.log('Obteniendo producto: ' + idProduct);
     const url = `https://localhost:${this.PORT}/api/Productos/${idProduct}`;
     return this.http.get(url, this.options);
@@ -245,7 +246,7 @@ export class RestclientService {
     // console.log('\n');
     // console.log(product);
     // console.log('\n');
-    var url = "";
+    let url = '';
     if (photoUpdate == null) {
       url = `https://localhost:${this.PORT}/api/Productos/${product.id}`;
     } else {
@@ -254,13 +255,13 @@ export class RestclientService {
     return this.http.put(url, JSON.stringify(product), this.options);
   }
 
-  
+
 
   /**
    * Solicitud HTTP DELETE para eliminar un producto
    * @param id id del producto específico que se desea eliminar
    */
-  deleteProduct(idProduct:Number) {
+  deleteProduct(idProduct: Number) {
     console.log('Eliminando producto: ' + idProduct);
     // console.log('\n');
     // console.log(id);
@@ -353,5 +354,20 @@ export class RestclientService {
     console.log('Agregando ' + product.nombre + ' a carrito de cliente: ' + clientId);
     const url = `https://localhost:${this.PORT}/api/Carrito/${clientId}`;
     return this.http.post(url, JSON.stringify(product), this.options);
+  }
+
+  /**
+   * Solicitud HTTP DELETE para eliminar un elemento del carrito
+   * @param id id del producto del carrito específico que se desea eliminar
+   */
+  deleteCartProduct(clientId: string, id: string) {
+    console.log('Eliminando producto id: ' + id + ' del carrito');
+    const url = `https://localhost:${this.PORT}/api/Carrito/${clientId}/${id}`;
+    return this.http.delete(url, this.options);
+  }
+
+  createOrder(clientId: string){
+    const url = `https://localhost:${this.PORT}/api/Orden/${clientId}`;
+    return this.http.post(url, JSON.stringify({}), this.options);
   }
 }

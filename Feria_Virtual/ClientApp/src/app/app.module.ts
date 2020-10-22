@@ -24,6 +24,7 @@ import { MenuClientComponent } from './menu-client/menu-client.component';
 import { ManageAffiliationsComponent } from './manage-affiliations/manage-affiliations.component';
 import { AvailableProducersComponent } from './available-producers/available-producers.component';
 import { ProducerStoreComponent } from './producer-store/producer-store.component';
+import { ManageOrderComponent } from './manage-order/manage-order.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { ProducerStoreComponent } from './producer-store/producer-store.componen
     MenuClientComponent,
     ManageAffiliationsComponent,
     AvailableProducersComponent,
-    ProducerStoreComponent
+    ProducerStoreComponent,
+    ManageOrderComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -69,6 +71,7 @@ import { ProducerStoreComponent } from './producer-store/producer-store.componen
       { path: 'manage-affiliations', component: ManageAffiliationsComponent},
       { path: 'available-producers', component: AvailableProducersComponent},
       { path: 'producer-store', component: ProducerStoreComponent},
+      { path: 'manage-order', component: ManageOrderComponent},
     ])
   ],
   providers: [RestclientService],

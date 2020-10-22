@@ -77,28 +77,38 @@ export class ManageAffiliationsComponent implements OnInit {
   }
 
   deny() {
+    const comment =
+      (document.getElementById('comment') as HTMLInputElement).value !== ''
+        ? (document.getElementById('comment') as HTMLInputElement).value
+        : null;
+    document
+      .getElementById('rejectAffiliation')
+      .style.setProperty('display', 'none');
+    console.log(this.actualAffiliationRequest);
     this.restClientService
-      .rejectAffiliationRequest(this.actualAffiliationRequest)
+      .rejectAffiliationRequest(this.actualAffiliationRequest, comment)
       .subscribe(
         (response: any) => {
           this.queryAffiliationRequests();
           console.log(this.actualProducer);
-          this.restClientService.deleteProducer(this.actualProducer.identificacion).subscribe(
-            (responseDelete: any) => {
-              console.log(response);
-            },
-            (error: any) => {
-              console.log(error.statusText);
-              console.log(error.status);
-              this.utilsService.showInfoModal(
-                'Error',
-                'Hubo un problema al actualizar al productor.',
-                'saveMsjLabel',
-                'msjText',
-                'saveMsj'
-              );
-            }
-          );
+          this.restClientService
+            .deleteProducer(this.actualProducer.identificacion)
+            .subscribe(
+              (responseDelete: any) => {
+                console.log(response);
+              },
+              (error: any) => {
+                console.log(error.statusText);
+                console.log(error.status);
+                this.utilsService.showInfoModal(
+                  'Error',
+                  'Hubo un problema al actualizar al productor.',
+                  'saveMsjLabel',
+                  'msjText',
+                  'saveMsj'
+                );
+              }
+            );
         },
         (error: any) => {
           console.log(error.statusText);
@@ -112,5 +122,26 @@ export class ManageAffiliationsComponent implements OnInit {
           );
         }
       );
+  }
+
+  /**
+   * Metodo para cerrar un modal
+   * @param id Id del modal a cerrar
+   */
+  closeModal(id: string): void {
+    document.getElementById(id).style.setProperty('display', 'none');
+  }
+
+  /**
+   * Metodo para mostrar al usuario un modal para tomar una decision de si o no
+   */
+  askUser() {
+    this.utilsService.showInfoModal(
+      'Rechazar',
+      '¿Desea rechazar la solicitud? (Puede agregar un comentario)',
+      'optionMsjLabel',
+      'optionText',
+      'rejectAffiliation'
+    );
   }
 }

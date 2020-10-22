@@ -1,64 +1,112 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Carrito } from '../models/carrito';
 import { Product } from '../models/product';
+import { RestclientService } from '../services/restclient.service';
+import { UtilsService } from '../services/utils.service';
 
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
-  styleUrls: ['./shopping-cart.component.css']
+  styleUrls: ['./shopping-cart.component.css'],
 })
 export class ShoppingCartComponent implements OnInit {
+  private cartProducts: Carrito[];
+  private products: Product[] = [];
+  private idActualClient: string = window.localStorage.getItem('userId');
+  private total: number;
 
-  products: Product[] = [];
-  totalProduct = 0;
-  total = 0;
-  productQuantity = 1;
-
-  productsQuantity: number[] = [1, 2];
-
-
-  constructor() {
-    // var p1: Product = new Product();
-    // var p2: Product = new Product();
-
-    // p1.name = "Papa";
-    // p1.price = 1000;
-    // p1.availability = 10;
-    // p1.category = "Verdura";
-    // p1.saleMode = "Kilogramo";
-    // p1.image = "https://encolombia.com/wp-content/uploads/2013/01/Papa.jpg";
-
-    // p2.name = "Aguacate";
-    // p2.price = 1000;
-    // p2.availability = 10;
-    // p2.category = "Fruta";
-    // p2.saleMode = "Unidad";
-    // p2.image = "https://as01.epimg.net/deporteyvida/imagenes/2017/07/23/portada/1500819395_065005_1500819504_noticia_normal.jpg";
-
-    // this.products.push(p1, p2);
-   }
+  constructor(
+    private utilsService: UtilsService,
+    private restClientService: RestclientService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    // this.calculateTotal();
+    this.getCartProducts();
   }
 
-  calculateTotal() {
+  getCartProducts() {
+    this.restClientService.getClientCart(this.idActualClient).subscribe(
+      (clientCartQuery: Carrito[]) => {
+        this.cartProducts = clientCartQuery;
+        this.cartProducts.forEach(
+          (cp: Carrito) => {
+            this.restClientService
+              .getProduct(cp.idProducto)
+              .subscribe((productQuery: Product) => {
+                this.products.push(productQuery as Product);
+                this.getTotal();
+              });
+          },
+          (error: any) => {
+            console.log(error.statusText);
+            console.log(error.status);
+          }
+        );
+      },
+      (error: any) => {
+        console.log(error.statusText);
+        console.log(error.status);
+      }
+    );
+  }
 
-    const elements = document.getElementsByClassName('productQuantity');
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i] as HTMLInputElement;
-      element.value = this.productsQuantity[i].toString();
-    }
-
-    const quantity = (document.getElementById('productQuantity') as HTMLInputElement);
-    const self = this;
-    quantity.onchange = function (this: GlobalEventHandlers, ev: Event) {
-      console.log((document.getElementById('productQuantity') as HTMLInputElement).value);
-    };
+  calculateTotal(event: any, productId: number) {
+    this.cartProducts.find(
+      (cp: Carrito) => cp.idProducto === productId
+    ).cantidad = event.target.valueAsNumber;
+    this.getTotal();
   }
 
   removeProduct(product: Product) {
-    const index = this.products.indexOf(product);
-    this.products.splice(index, 1);
+    this.restClientService
+      .deleteCartProduct(this.idActualClient, product.id.toString())
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.cartProducts = [];
+          this.products = [];
+          this.getCartProducts();
+        },
+        (error: any) => {
+          console.log(error.statusText);
+          console.log(error.status);
+        }
+      );
   }
 
+  getProductQuantityFromCart(productId: number) {
+    return this.cartProducts.find((cp: Carrito) => productId === cp.idProducto)
+      .cantidad;
+  }
+
+  getTotal() {
+    this.total = 0;
+    if (this.cartProducts.length > 0) {
+      this.cartProducts.forEach((cp: Carrito) => {
+        this.total =
+          this.total +
+          this.products.find((product: Product) => cp.idProducto === product.id)
+            .precio *
+            cp.cantidad;
+      });
+    }
+  }
+
+  async asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
+  }
+
+  continueShopping() {
+    this.router.navigate(['available-producers'] );
+  }
+
+  pay() {
+    this.restClientService.createOrder(this.idActualClient).subscribe((res: any) => {
+      this.router.navigate(['menu-client']);
+    });
+  }
 }

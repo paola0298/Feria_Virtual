@@ -1,11 +1,11 @@
 export class Carrito {
     idCliente: string;
-    nombreProducto: string;
+    idProducto: number;
     cantidad: number;
 
-    constructor(idCliente: string, nombreProducto: string, cantidad: number) {
+    constructor(idCliente: string, idProducto: number, cantidad: number) {
         this.idCliente = idCliente;
-        this.nombreProducto = nombreProducto;
+        this.idProducto = idProducto;
         this.cantidad = cantidad;
     }
 }
