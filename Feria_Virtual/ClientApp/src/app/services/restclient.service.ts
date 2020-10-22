@@ -218,9 +218,9 @@ export class RestclientService {
    * @param idProducer Id del productor del que se desea obtener el producto
    * @param nameProduct Nombre del producto que se desea obtener
    */
-  getProduct(idProducer: string, nameProduct: string) {
-    console.log('Obteniendo producto: ' + nameProduct + ' de productor: ' + idProducer);
-    const url = `https://localhost:${this.PORT}/api/Productos/${nameProduct}/${idProducer}`;
+  getProduct(idProduct:Number) {
+    console.log('Obteniendo producto: ' + idProduct);
+    const url = `https://localhost:${this.PORT}/api/Productos/${idProduct}`;
     return this.http.get(url, this.options);
   }
 
@@ -240,25 +240,32 @@ export class RestclientService {
    * Solicitud HTTP PUT para modificar un producto
    * @param product Objeto de tipo Producer
    */
-  updateProduct(product: Product) {
+  updateProduct(product: Product, photoUpdate?: boolean) {
     console.log('Actualizando producto: ' + product.nombre);
     // console.log('\n');
     // console.log(product);
     // console.log('\n');
-    return this.http.put(`https://localhost:${this.PORT}/api/Productos/${product.nombre}/${product.idProductor}`,
-      JSON.stringify(product), this.options);
+    var url = "";
+    if (photoUpdate == null) {
+      url = `https://localhost:${this.PORT}/api/Productos/${product.id}`;
+    } else {
+      url = `https://localhost:${this.PORT}/api/Productos/${product.id}/${photoUpdate}`;
+    }
+    return this.http.put(url, JSON.stringify(product), this.options);
   }
+
+  
 
   /**
    * Solicitud HTTP DELETE para eliminar un producto
    * @param id id del producto específico que se desea eliminar
    */
-  deleteProduct(nombre: string, idProducer: string) {
-    console.log('Eliminando producto: ' + nombre);
+  deleteProduct(idProduct:Number) {
+    console.log('Eliminando producto: ' + idProduct);
     // console.log('\n');
     // console.log(id);
     // console.log('\n');
-    return this.http.delete(`https://localhost:${this.PORT}/api/Productos/${nombre}/${idProducer}`, this.options);
+    return this.http.delete(`https://localhost:${this.PORT}/api/Productos/${idProduct}`, this.options);
   }
 
   /**

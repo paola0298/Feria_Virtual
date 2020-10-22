@@ -71,6 +71,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
+                                <th class="text-center align-middle" scope="col">Identificador</th>
                                 <th class="text-center align-middle" scope="col">Nombre</th>
                                 <th class="text-center align-middle" scope="col">Disponibilidad</th>
                                 <th class="text-center align-middle" scope="col">Precio</th>
@@ -81,6 +82,7 @@
                         </thead>
                         <tbody *ngFor="let product of products; let i = index">
                             <tr>
+                                <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.id }}</td>
                                 <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.nombre }}</td>
                                 <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.disponibilidad }}</td>
                                 <td (contextmenu)="onProducerClick($event, product)" class="text-center align-middle">{{ product.precio }}</td>

@@ -78,8 +78,8 @@ export class ProductComponent implements OnInit {
    * Metodo para obtener un producto desde el servicio
    * @param nameProduct Nombre del producto
    */
-  getProduct(nameProduct: string) {
-    const response = this.restClientService.getProduct(this.idActualProducer, nameProduct);
+  getProduct(idProduct: Number) {
+    const response = this.restClientService.getProduct(idProduct);
     response.subscribe(
       (value: Product) => {
         this.actualProduct = value;
@@ -95,8 +95,8 @@ export class ProductComponent implements OnInit {
    * @param htmlElements Elementos html input para limpiar los campos
    * @param selectElements Elementos html select para limpiar los campos
    */
-  modifyProduct(product: Product, htmlElements: HTMLInputElement[], selectElements: HTMLSelectElement[]) {
-    const response = this.restClientService.updateProduct(product);
+  modifyProduct(product: Product, photoUpdate:boolean, htmlElements: HTMLInputElement[], selectElements: HTMLSelectElement[]) {
+    const response = this.restClientService.updateProduct(product, photoUpdate);
     response.subscribe(
       (value: any) => {
         this.getProducts();
@@ -142,7 +142,7 @@ export class ProductComponent implements OnInit {
       saleMode.value, imageUrl);
 
     if (this.updating) {
-      this.modifyProduct(product, [name, availability, price, image], [category, saleMode]);
+      this.modifyProduct(product, true, [name, availability, price, image], [category, saleMode]);
     } else {
       this.createProduct(product, [name, availability, price, image], [category, saleMode]);
     }
@@ -169,7 +169,7 @@ export class ProductComponent implements OnInit {
    */
   deleteProduct() {
     document.getElementById('optionMsj').style.setProperty('display', 'none');
-    const response = this.restClientService.deleteProduct(this.actualProduct.nombre, this.idActualProducer);
+    const response = this.restClientService.deleteProduct(this.actualProduct.id );
     response.subscribe(
       (value: any) => {
         console.log('Deleted');
@@ -233,7 +233,7 @@ export class ProductComponent implements OnInit {
    */
   onProducerClick(event: any, product: Product): boolean {
     this.utilsService.showContextMenu(event);
-    this.getProduct(product.nombre);
+    this.getProduct(product.id);
     return false;
   }
 
