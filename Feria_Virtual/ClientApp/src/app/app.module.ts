@@ -21,6 +21,9 @@ import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { MenuAdminComponent } from './menu-admin/menu-admin.component';
 import { MenuProducerComponent } from './menu-producer/menu-producer.component';
 import { MenuClientComponent } from './menu-client/menu-client.component';
+import { ManageAffiliationsComponent } from './manage-affiliations/manage-affiliations.component';
+import { AvailableProducersComponent } from './available-producers/available-producers.component';
+import { ProducerStoreComponent } from './producer-store/producer-store.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,10 @@ import { MenuClientComponent } from './menu-client/menu-client.component';
     LoginAdminComponent,
     MenuAdminComponent,
     MenuProducerComponent,
-    MenuClientComponent
+    MenuClientComponent,
+    ManageAffiliationsComponent,
+    AvailableProducersComponent,
+    ProducerStoreComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -59,7 +65,10 @@ import { MenuClientComponent } from './menu-client/menu-client.component';
       { path: 'login-admin', component: LoginAdminComponent},
       { path: 'menu-admin', component: MenuAdminComponent},
       { path: 'menu-producer', component: MenuProducerComponent},
-      { path: 'menu-client', component:MenuClientComponent},
+      { path: 'menu-client', component: MenuClientComponent},
+      { path: 'manage-affiliations', component: ManageAffiliationsComponent},
+      { path: 'available-producers', component: AvailableProducersComponent},
+      { path: 'producer-store', component: ProducerStoreComponent},
     ])
   ],
   providers: [RestclientService],

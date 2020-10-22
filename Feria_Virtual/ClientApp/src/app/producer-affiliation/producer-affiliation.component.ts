@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UtilsService } from 'src/app/services/utils.service'
+import { UtilsService } from 'src/app/services/utils.service';
 import { Producer } from '../models/producer';
-import { RestclientService } from '../services/restclient.service'
+import { RestclientService } from '../services/restclient.service';
 
 @Component({
   selector: 'app-producer-affiliation',
@@ -17,7 +17,7 @@ export class ProducerAffiliationComponent implements OnInit {
 
   constructor(private utilsService: UtilsService, private restClientService: RestclientService) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.getProvinces();
   }
 
@@ -27,14 +27,14 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param htmlElements Elementos html input para limpiar los campos
    * @param selectElements Elementos html select para limpiar los campos
    */
-  sendAffiliation(producer: Producer, htmlElements:HTMLInputElement[], selectElements:HTMLSelectElement[]) {
-    var response = this.restClientService.sendAffiliationRequest(producer);
+  sendAffiliation(producer: Producer, htmlElements: HTMLInputElement[], selectElements: HTMLSelectElement[]) {
+    const response = this.restClientService.sendAffiliationRequest(producer);
     response.subscribe(
-      (value:any) => {
-        this.utilsService.showInfoModal("Exito", "Su solicitud esta siendo vertificada.", "saveMsjLabel", "msjText", 'saveMsj');
-        this.utilsService.cleanField(htmlElements, selectElements, ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
+      (value: any) => {
+        this.utilsService.showInfoModal('Exito', 'Su solicitud esta siendo vertificada.', 'saveMsjLabel', 'msjText', 'saveMsj');
+        this.utilsService.cleanField(htmlElements, selectElements, ['Seleccione una provincia', 'Seleccione un cantón', 'Seleccione un distrito']);
         this.deliveryZones = [];
-    }, (error:any) => {
+    }, (error: any) => {
       console.log(error.statusText);
       console.log(error.status);
     });
@@ -44,33 +44,34 @@ export class ProducerAffiliationComponent implements OnInit {
    * Metodo para guardar la solicitud de afiliacion de un productor
    */
   saveProducer(): void {
-    let id = (document.getElementById("id") as HTMLInputElement);
-    let name = (document.getElementById("name") as HTMLInputElement);
-    let lastName1 = (document.getElementById("last-name1") as HTMLInputElement);
-    let lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
-    let sinpe = (document.getElementById("sinpe") as HTMLInputElement);
-    let phone = (document.getElementById("phone") as HTMLInputElement);
-    let birth = (document.getElementById("birth") as HTMLInputElement);
-    let province = (document.getElementById("province") as HTMLSelectElement);
-    let canton = (document.getElementById("canton") as HTMLSelectElement);
-    let district = (document.getElementById("district") as HTMLSelectElement);
-    let pass = (document.getElementById("pass") as HTMLInputElement);
-    let passConfirm = (document.getElementById("passConfirm") as HTMLInputElement);
-    
+    const id = (document.getElementById('id') as HTMLInputElement);
+    const name = (document.getElementById('name') as HTMLInputElement);
+    const lastName1 = (document.getElementById('last-name1') as HTMLInputElement);
+    const lastName2 = (document.getElementById('last-name2') as HTMLInputElement);
+    const sinpe = (document.getElementById('sinpe') as HTMLInputElement);
+    const phone = (document.getElementById('phone') as HTMLInputElement);
+    const birth = (document.getElementById('birth') as HTMLInputElement);
+    const province = (document.getElementById('province') as HTMLSelectElement);
+    const canton = (document.getElementById('canton') as HTMLSelectElement);
+    const district = (document.getElementById('district') as HTMLSelectElement);
+    const pass = (document.getElementById('pass') as HTMLInputElement);
+    const passConfirm = (document.getElementById('passConfirm') as HTMLInputElement);
 
-    if (id.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || sinpe.value == '' || phone.value == '' || birth.value == '' ||
-        this.deliveryZones.length == 0 || passConfirm.value == '' || pass.value == '' || province.value == 'Seleccione una provincia' || 
-        canton.value == 'Seleccione un cantón' || district.value == 'Seleccione un distrito') {
-        this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
+
+    if (id.value === '' || name.value === '' || lastName1.value === '' || lastName2.value === '' || sinpe.value === '' ||
+        phone.value === '' || birth.value === '' || this.deliveryZones.length === 0 || passConfirm.value === '' ||
+        pass.value === '' || province.value === 'Seleccione una provincia' ||
+        canton.value === 'Seleccione un cantón' || district.value === 'Seleccione un distrito') {
+        this.utilsService.showInfoModal('Error', 'Por favor complete todos los campos.', 'saveMsjLabel', 'msjText', 'saveMsj');
         return;
     }
 
-    if (passConfirm.value != pass.value) {
-      this.utilsService.showInfoModal("Error", "La contraseña debe ser igual en ambos campos", "saveMsjLabel", "msjText", 'saveMsj');
+    if (passConfirm.value !== pass.value) {
+      this.utilsService.showInfoModal('Error', 'La contraseña debe ser igual en ambos campos', 'saveMsjLabel', 'msjText', 'saveMsj');
       return;
     }
 
-    var producer = new Producer(name.value, id.value, pass.value, lastName1.value, lastName2.value, sinpe.value,
+    const producer = new Producer(name.value, id.value, pass.value, lastName1.value, lastName2.value, sinpe.value,
       phone.value, birth.value, province.value, canton.value, district.value, this.deliveryZones);
     this.sendAffiliation(producer, [id, name, lastName1, lastName2, sinpe, phone, birth, pass, passConfirm],
       [province, canton, district]);
@@ -89,7 +90,7 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param provinceId Id de la provincia seleccionada
    */
   async getCantons(provinceId: string) {
-    console.log("loading canton")
+    console.log('loading canton');
     this.cantons = await this.utilsService.getCantons(provinceId);
     console.log(this.cantons);
   }
@@ -101,7 +102,7 @@ export class ProducerAffiliationComponent implements OnInit {
    */
   async getDistricts(idCanton: string, idProvince: string) {
     this.districts = await this.utilsService.getDistricts(idCanton, idProvince);
-    console.log(this.districts)
+    console.log(this.districts);
   }
 
   /**
@@ -109,7 +110,7 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param province Provincia seleccionada
    */
   loadCanton(province: string): void {
-    var index = this.provinces.indexOf(province) + 1;
+    const index = this.provinces.indexOf(province) + 1;
     this.getCantons(index.toString());
   }
 
@@ -118,33 +119,33 @@ export class ProducerAffiliationComponent implements OnInit {
    * @param canton Canton seleccionado
    */
   loadDistrict(canton: string): void {
-    var idCanton = this.cantons.indexOf(canton) + 1;
-    var idProvince = this.provinces.indexOf((document.getElementById("province") as HTMLSelectElement).value) + 1;
+    const idCanton = this.cantons.indexOf(canton) + 1;
+    const idProvince = this.provinces.indexOf((document.getElementById('province') as HTMLSelectElement).value) + 1;
     console.log(idCanton + '\n' + idProvince);
     this.getDistricts(idCanton.toString(), idProvince.toString());
   }
 
 
   addDeliveryZone() {
-    console.log("Adding delivery zone");
-    let newZone = (document.getElementById("delivery") as HTMLInputElement).value;
-    if (newZone != '') {
+    console.log('Adding delivery zone');
+    const newZone = (document.getElementById('delivery') as HTMLInputElement).value;
+    if (newZone !== '') {
       this.deliveryZones.push(newZone);
-      (document.getElementById("delivery") as HTMLInputElement).value = "";
+      (document.getElementById('delivery') as HTMLInputElement).value = '';
     } else {
-      this.utilsService.showInfoModal("Error", "Por favor ingrese un lugar de entrega", "saveMsjLabel", "msjText", 'saveMsj');
+      this.utilsService.showInfoModal('Error', 'Por favor ingrese un lugar de entrega', 'saveMsjLabel', 'msjText', 'saveMsj');
     }
-    
+
   }
 
   deleteDeliveryZone(zone: string) {
-    console.log("removing " + zone);
-    let index = this.deliveryZones.indexOf(zone);
+    console.log('removing ' + zone);
+    const index = this.deliveryZones.indexOf(zone);
     this.deliveryZones.splice(index, 1);
   }
 
-  closeModal(modal:string) {
+  closeModal(modal: string) {
     document.getElementById(modal).style.setProperty('display', 'none');
   }
-  
+
 }

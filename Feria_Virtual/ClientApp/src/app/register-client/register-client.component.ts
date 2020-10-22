@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UtilsService } from 'src/app/services/utils.service'
+import { UtilsService } from 'src/app/services/utils.service';
 import { RestclientService } from 'src/app/services/restclient.service';
 import { Client } from '../models/client';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,22 +15,22 @@ export class RegisterClientComponent implements OnInit {
   provinces = [];
   cantons = [];
   districts = [];
-  created:boolean = false;
+  created = false;
 
-  constructor(private utilsService: UtilsService, private restClientService: RestclientService, 
+  constructor(private utilsService: UtilsService, private restClientService: RestclientService,
     private router: Router) { }
 
   ngOnInit() {
     this.getProvinces();
    }
 
-   createClient(client:Client) {
-     var response = this.restClientService.createClient(client);
+   createClient(client: Client) {
+     const response = this.restClientService.createClient(client);
      response.subscribe(
-       (value:Client) => {
+       (value: Client) => {
         this.created = true;
-        this.utilsService.showInfoModal("Exito", "Registro completado", "saveMsjLabel", "msjText", 'saveMsj');
-       }, (error:any) => {
+        this.utilsService.showInfoModal('Exito', 'Registro completado', 'saveMsjLabel', 'msjText', 'saveMsj');
+       }, (error: any) => {
         console.log(error.statusText);
         console.log(error.status);
        });
@@ -38,39 +38,37 @@ export class RegisterClientComponent implements OnInit {
 
 
   saveClient() {
-    let idClient = (document.getElementById("idClient") as HTMLInputElement);
-    let name = (document.getElementById("name") as HTMLInputElement);
-    let lastName1 = (document.getElementById("last-name1") as HTMLInputElement);
-    let lastName2 = (document.getElementById("last-name2") as HTMLInputElement);
-    let username = (document.getElementById("username") as HTMLInputElement);
-    let pass = (document.getElementById("pass") as HTMLInputElement);
-    let passConfirm = (document.getElementById("passConfirm") as HTMLInputElement);
-    let birth = (document.getElementById("birth") as HTMLInputElement);
-    let province = document.getElementById("province") as HTMLSelectElement;
-    let canton = document.getElementById("canton") as HTMLSelectElement;
-    let district = document.getElementById("district") as HTMLSelectElement;
-    let dir = (document.getElementById("dir") as HTMLInputElement);
-    let phone = (document.getElementById("phone") as HTMLInputElement);
+    const idClient = (document.getElementById('idClient') as HTMLInputElement);
+    const name = (document.getElementById('name') as HTMLInputElement);
+    const lastName1 = (document.getElementById('last-name1') as HTMLInputElement);
+    const lastName2 = (document.getElementById('last-name2') as HTMLInputElement);
+    const username = (document.getElementById('username') as HTMLInputElement);
+    const pass = (document.getElementById('pass') as HTMLInputElement);
+    const passConfirm = (document.getElementById('passConfirm') as HTMLInputElement);
+    const birth = (document.getElementById('birth') as HTMLInputElement);
+    const province = document.getElementById('province') as HTMLSelectElement;
+    const canton = document.getElementById('canton') as HTMLSelectElement;
+    const district = document.getElementById('district') as HTMLSelectElement;
+    const dir = (document.getElementById('dir') as HTMLInputElement);
+    const phone = (document.getElementById('phone') as HTMLInputElement);
 
-    //TODO verificacion de contraseña sean igual
-    if (idClient.value == '' || name.value == '' || lastName1.value == '' || lastName2.value == '' || username.value == '' || phone.value == '' || birth.value == '' ||
-      dir.value == '' || pass.value == '' || passConfirm.value == '' || province.value == 'Seleccione una provincia' ||
-      canton.value == 'Seleccione un cantón' || district.value == 'Seleccione un distrito' || dir.value == '') {
-        this.utilsService.showInfoModal("Error", "Por favor complete todos los campos.", "saveMsjLabel", "msjText", 'saveMsj');
+    if (idClient.value === '' || name.value === '' || lastName1.value === '' || lastName2.value === '' || username.value === '' ||
+      phone.value === '' || birth.value === '' || dir.value === '' || pass.value === '' || passConfirm.value === '' || province.value === 'Seleccione una provincia' ||
+      canton.value === 'Seleccione un cantón' || district.value === 'Seleccione un distrito' || dir.value === '') {
+        this.utilsService.showInfoModal('Error', 'Por favor complete todos los campos.', 'saveMsjLabel', 'msjText', 'saveMsj');
         return;
-    } 
-    
-    if (pass.value != passConfirm.value) {
-      this.utilsService.showInfoModal("Error", "La contraseña debe ser igual en ambos campos", "saveMsjLabel", "msjText", 'saveMsj');
+    }
+
+    if (pass.value !== passConfirm.value) {
+      this.utilsService.showInfoModal('Error', 'La contraseña debe ser igual en ambos campos', 'saveMsjLabel', 'msjText', 'saveMsj');
       return;
     }
-  
-    var client = new Client(idClient.value, phone.value, birth.value, lastName1.value, lastName2.value,
+    const client = new Client(idClient.value, phone.value, birth.value, lastName1.value, lastName2.value,
       province.value, canton.value, district.value, username.value, pass.value, name.value, dir.value);
     this.createClient(client);
       // this.utilsService.cleanField([idClient, name, lastName1, lastName2, username, pass, phone, dir, passConfirm, birth],
       //   [province, canton, district], ["Seleccione una provincia", "Seleccione un cantón", "Seleccione un distrito"]);
-    
+
   }
 
    /**
@@ -103,7 +101,7 @@ export class RegisterClientComponent implements OnInit {
    * @param province Provincia seleccionada
    */
   loadCanton(province: string): void {
-    var index = this.provinces.indexOf(province) + 1;
+    const index = this.provinces.indexOf(province) + 1;
     this.getCantons(index.toString());
   }
 
@@ -112,8 +110,8 @@ export class RegisterClientComponent implements OnInit {
    * @param canton Canton seleccionado
    */
   loadDistrict(canton: string): void {
-    var idCanton = this.cantons.indexOf(canton) + 1;
-    var idProvince = this.provinces.indexOf((document.getElementById("province") as HTMLSelectElement).value) + 1;
+    const idCanton = this.cantons.indexOf(canton) + 1;
+    const idProvince = this.provinces.indexOf((document.getElementById('province') as HTMLSelectElement).value) + 1;
     console.log(idCanton + '\n' + idProvince);
     this.getDistricts(idCanton.toString(), idProvince.toString());
   }

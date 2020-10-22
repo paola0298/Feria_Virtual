@@ -1,30 +1,30 @@
 export class Client {
-    identificacion:string;
-    telefono:string;
-    fechaNacimiento:string;
-    apellido1:string;
-    apellido2:string;
-    provincia:string;
-    canton:string;
-    distrito:string;
-    usuario:string;
-    password:string;
-    nombre:string;
-    direccionExacta:string;
+    identificacion: string;
+    telefono: string;
+    fechaNacimiento: string;
+    apellido1: string;
+    apellido2: string;
+    provincia: string;
+    canton: string;
+    distrito: string;
+    usuario: string;
+    password: string;
+    nombre: string;
+    direccionExacta: string;
 
     constructor(
-        identificacion:string,
-        telefono:string,
-        fechaNacimiento:string,
-        apellido1:string,
-        apellido2:string,
-        provincia:string,
-        canton:string,
-        distrito:string,
-        usuario:string,
-        password:string,
-        nombre:string,
-        direccionExacta:string
+        identificacion: string,
+        telefono: string,
+        fechaNacimiento: string,
+        apellido1: string,
+        apellido2: string,
+        provincia: string,
+        canton: string,
+        distrito: string,
+        usuario: string,
+        password: string,
+        nombre: string,
+        direccionExacta: string
 
     ) {
         this.identificacion = identificacion;
