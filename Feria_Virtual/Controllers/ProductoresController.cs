@@ -58,6 +58,25 @@ namespace Feria_Virtual.Controllers
             return Ok(inRegion);
         }
 
+        [HttpGet("region/{idCliente}")]
+        public async Task<IActionResult> GetInRegionAsync(string idCliente)
+        {
+            var clientes = await JsonHandler.LoadFileAsync<Cliente>(FilePath.Clientes);
+            var productores = await JsonHandler.LoadFileAsync<Productor>(FilePath.Productores);
+
+            var cliente = clientes.FirstOrDefault(c => c.Identificacion == idCliente);
+
+            if (cliente == null)
+                return BadRequest();
+
+            var inRegion = productores.FindAll(
+                p => p.Provincia == cliente.Provincia &&
+                p.Canton == cliente.Canton &&
+                p.Distrito == cliente.Distrito);
+
+            return Ok(inRegion);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductorAsync(string id)
         {
@@ -72,11 +91,12 @@ namespace Feria_Virtual.Controllers
             var allCalificaciones = await JsonHandler.LoadFileAsync<Calificacion>(FilePath.Calificacion);
             var calificaciones = allCalificaciones.FindAll(c => c.IdProductor == id);
 
-            if (calificaciones.Count > 0) {
+            if (calificaciones.Count > 0)
+            {
                 productor.Calificaciones = calificaciones.Count;
                 productor.Calificacion = calificaciones.Sum(c => c.Valor) / calificaciones.Count;
             }
-            
+
             return Ok(productor);
         }
 
