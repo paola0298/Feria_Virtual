@@ -21,6 +21,36 @@ namespace Feria_Virtual.Controllers
             return Ok(carrito.FindAll(p => p.IdCliente == idCliente));
         }
 
+        [HttpGet("completo/{idCliente}")]
+        public async Task<IActionResult> GetCarritoAllAsync(string idCliente)
+        {
+            var carrito = await JsonHandler.LoadFileAsync<Carrito>(FilePath.Carrito)
+                .ConfigureAwait(false);
+            var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos)
+                .ConfigureAwait(false);
+
+            List<CarritoFullItem> items = new List<CarritoFullItem>();
+
+            foreach (var car in carrito.FindAll(p => p.IdCliente == idCliente))
+            {
+                var producto = productos.FirstOrDefault(p => p.Id == car.IdProducto);
+
+                if (producto == null)
+                    continue;
+
+                items.Add(new CarritoFullItem
+                {
+                    Nombre = producto.Nombre,
+                    Foto = producto.Foto,
+                    IdProducto = producto.Id,
+                    Cantidad = car.Cantidad,
+                    Precio = car.Cantidad * producto.Precio
+                });
+            }
+
+            return Ok(items);
+        }
+
         [HttpPost("{idCliente}")]
         public async Task<IActionResult> AddCarritoAsync(string idCliente, Carrito carrito)
         {
@@ -42,6 +72,10 @@ namespace Feria_Virtual.Controllers
             if (producto == null || carrito.Cantidad > producto.Disponibilidad)
                 return BadRequest();
 
+            productos.Remove(producto);
+            producto.Disponibilidad -= carrito.Cantidad;
+            productos.Add(producto);
+
             carrito.IdCliente = idCliente;
 
             await JsonHandler.AddToFileAsync(FilePath.Carrito, carrito);
@@ -58,16 +92,37 @@ namespace Feria_Virtual.Controllers
 
             var allCarritos = await JsonHandler.LoadFileAsync<Carrito>(FilePath.Carrito)
                 .ConfigureAwait(false);
+            var productos = await JsonHandler.LoadFileAsync<Producto>(FilePath.Productos)
+                .ConfigureAwait(false);
 
             var oldCarrito = allCarritos.FirstOrDefault(c => c.IdCliente == idCliente && c.IdProducto == idProducto);
 
             if (oldCarrito == null)
                 return NotFound();
 
+            var producto = productos.FirstOrDefault(p => p.Id == carrito.IdProducto);
+
+            if (producto == null)
+                return BadRequest();
+
             allCarritos.Remove(oldCarrito);
+            productos.Remove(producto);
+
+            if (oldCarrito.Cantidad > carrito.Cantidad)
+            {
+                producto.Disponibilidad += oldCarrito.Cantidad - carrito.Cantidad;
+            }
+            else if (oldCarrito.Cantidad < carrito.Cantidad)
+            {
+                producto.Disponibilidad -= carrito.Cantidad - oldCarrito.Cantidad;
+            }
+
             allCarritos.Add(carrito);
+            productos.Add(producto);
 
             await JsonHandler.OvewriteFileAsync(FilePath.Carrito, allCarritos)
+                .ConfigureAwait(false);
+            await JsonHandler.OvewriteFileAsync(FilePath.Productos, productos)
                 .ConfigureAwait(false);
 
             return NoContent();
