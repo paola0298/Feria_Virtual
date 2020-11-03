@@ -20,7 +20,7 @@ namespace Feria_Virtual
 
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseUrls("http://0.0.0.0:5001")
+                .UseUrls("https://127.0.0.1:5001", "http://0.0.0.0:5001")
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseConfiguration(configuration)
